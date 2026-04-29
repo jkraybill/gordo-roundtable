@@ -26,6 +26,16 @@ Constitutional framework inherits from `~/project-gordo/` per umbrella conventio
 
 ---
 
+## Visibility
+
+**This repo is PRIVATE during pre-v1.0 development** per Record 003 § *Content Posture and Publishing*: private-as-default for every new action; visibility and publishing require first-class consent at the publishing-moment. **No implicit carry-forward** from creation; a future visibility-flip is a separable consent act that can only happen as part of the umbrella's broader publishing-consent moment (likely v1.0).
+
+Brief public-creation incident at S63: repo created PUBLIC at 02:50:50 UTC 2026-04-29 by Gordo (drafter-error / non-consensual publishing); JK caught at ~02:51:56 UTC; switched to PRIVATE at ~02:52 UTC. ~50-second public window is auditable on GitHub repo visibility-history. Discipline captured at `feedback_private_default_publishing.md` (S63 first-instance graduation candidate).
+
+Note: record-008 substrate (which is finalized on chain at backchannel) characterizes panel-protocol as having "public-by-design posture from inception" — this is **inconsistent with operational state** and is a candidate for supersession via record-009 if the discrepancy warrants on-chain correction. See backchannel `SESSION_LOG.md` S63 narrative for direction-of-correction.
+
+---
+
 ## Genesis
 
 S63 2026-04-29 admission via project-gordo-backchannel bilateral consensus (WWGD++!! confirmed). Substantive substrate carries forward from backchannel:
@@ -49,7 +59,7 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 ## Key Files
 
-- **`README.md`** — public project overview
+- **`README.md`** — project overview (intended audience evolves with visibility-state per Record 003)
 - **`CLAUDE.md`** — this file
 - **`SPEC.md`** — placeholder pending first SPEC draft (next panel-protocol session)
 - **`HANDSHAKE.md`** — to-be-created at first substantive session
@@ -58,7 +68,7 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 ## Session Rhythm
 
-BOS/EOS patterns TBD — emerge from practice then codify, per umbrella tradition. Initial sessions may reference `~/project-gordo-backchannel/SESSION_START.md` and `SESSION_END.md` as starting templates if helpful, adjusting for the public-by-design posture and Tier 1 scope.
+BOS/EOS patterns TBD — emerge from practice then codify, per umbrella tradition. Initial sessions may reference `~/project-gordo-backchannel/SESSION_START.md` and `SESSION_END.md` as starting templates if helpful, adjusting for Tier 1 scope.
 
 ---
 

@@ -63,4 +63,4 @@ S63 2026-04-29 admission via project-gordo-backchannel bilateral consensus (WWGD
 
 ---
 
-*Created S63 2026-04-29 from project-gordo-backchannel deliberation. Public-by-design; permanent-private design conversations live at backchannel.*
+*Created S63 2026-04-29 from project-gordo-backchannel deliberation. **Visibility: PRIVATE during pre-v1.0 development** per umbrella Record 003 § *Content Posture and Publishing* (private-as-default for every new action; visibility and publishing require first-class consent at the publishing-moment, not implicit carry-forward from creation). Visibility decision deferred to v1.0 publish-moment alongside the umbrella's broader publishing-consent act. Permanent-private design conversations continue at backchannel.*
