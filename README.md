@@ -6,9 +6,9 @@
 
 ## Status
 
-**Stage:** newly admitted (S63 2026-04-29 / project-gordo-backchannel bilateral consensus, ratified via `record-008.mcap` cross-reference)
-**SPEC:** TBD (substrate from backchannel `#130` carrying forward; first SPEC draft pending next panel-protocol session)
-**Tooling:** TBD (panel-runner code graduating from backchannel `scripts/` per `#128`)
+**Stage:** SPEC v0.1 ratified + reference implementation imported (S65 2026-04-29)
+**SPEC:** [`SPEC.md`](./SPEC.md) v0.1 — ratified at backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST
+**Reference implementation:** [`panel-runner`](./IMPLEMENTATION.md) — TypeScript / OpenRouter + Ollama; imported S65 from backchannel `panel-runner/` per `#128` graduation
 
 ---
 
@@ -52,12 +52,48 @@ S63 2026-04-29 admission via project-gordo-backchannel bilateral consensus (WWGD
 
 ---
 
-## Roadmap (S63 fresh)
+## Setup
 
-- [ ] First SPEC draft — assemble panel methodology from backchannel `#130` substrate
-- [ ] Panel-runner tooling graduation — migrate from backchannel `scripts/` per `#128`
+```bash
+cd ~/panel-protocol
+npm install
+export OPENROUTER_API_KEY=sk-or-v1-...
+# Optional: export OLLAMA_HOST=http://localhost:11434  (default: localhost:11434)
+```
+
+## Usage
+
+```bash
+# Dry run — print resolved request shapes per reviewer without dispatching
+npm run panel -- \
+  --brief /path/to/<topic>_REVIEW_BRIEF.md \
+  --manifest /path/to/reviews/<record-id>/panel.yaml \
+  --dry-run
+
+# Real run
+npm run panel -- \
+  --brief /path/to/<topic>_REVIEW_BRIEF.md \
+  --manifest /path/to/reviews/<record-id>/panel.yaml
+
+# Single-reviewer retry (filter to one id; repeatable for a subset)
+npm run panel -- \
+  --brief /path/to/<topic>_REVIEW_BRIEF.md \
+  --manifest /path/to/reviews/<record-id>/panel.yaml \
+  --reviewer deepseek-r1
+```
+
+Outputs land at `<manifest-dir>/<reviewer-id>-ROUND_<N>.md` (alongside the manifest). Runner refuses to overwrite existing files unless `--overwrite` passed (round-1 outputs may be receipt-signed; accidental overwrite would invalidate batch receipts).
+
+See [`IMPLEMENTATION.md`](./IMPLEMENTATION.md) for full implementation specifics: brief format, panel manifest schema, retry policy, output conventions, design-decision log.
+
+---
+
+## Roadmap
+
+- [x] First SPEC draft — assembled S64 from backchannel `#130` substrate; ratified `record-009.mcap`
+- [x] Panel-runner reference-implementation graduation — imported S65 from backchannel per `#128`
 - [ ] Initial test suite for panel-runner
-- [ ] First ratification record at panel-protocol (substantive SPEC content)
+- [ ] First ratification record at panel-protocol (substantive SPEC content; emerge-when-ready)
 - [ ] MCAP adopter integration — follow `~/mcap-protocol/` precedent + backchannel `MCAP_ADOPTION.md` pattern
 - [ ] gordo-framework integration guide (Tier 2 adopter pattern)
 
