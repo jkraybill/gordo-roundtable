@@ -30,13 +30,15 @@ Adopters may instantiate the methodology through their own tooling, or use the u
 
 A panel exists to provide *data* to deliberating parties — not authority. Findings are not verdicts; convergence is a detection-signal, not a vote; reviewer-output is reviewer-input-to-disposition, not a binding constraint on decisions.
 
-Five roles a panel may serve, in priority order:
+**Primary roles a panel may serve, in priority order:**
 
 1. **Bug-finding** — identifying concrete defects, errors, contradictions, missing cases. Highest signal-density; most defensible against the reviewer-hell pathology when the bar is "does this actually break?".
 2. **Quality-control gate** — sanity-check on whether the artifact meets stated quality bars before settled close. Adjacent to bug-finding but operates at gate-level rather than line-level.
 3. **Dissent-surfacing** — bringing in legitimate disagreement that drafters might be conflict-averse to surface internally. Defends against premature-convergence and shared-blindspot drift.
 4. **Outside-perspective** — checking whether drafters have sealed an internal frame that fails when read by audiences who don't share it. Defends against in-group-comprehensibility drift.
 5. **Bias-injection** — testing the artifact against deliberately-skewed lenses to verify it survives motivated-misreading. Lowest signal-density of the five, but useful for foundational content.
+
+These five primary roles emerged from S62 bilateral deliberation as the highest-leverage roles for the umbrella's current adversarial-review-of-foundational-content pattern. **The list is not closed:** downstream adopters may identify and apply additional roles that fit their domain (e.g., domain-expertise-injection, regulatory-fit-checking, downstream-impact-assessment, etc.), provided those roles remain consistent with the role-frame's foundational principle (panels = data, not authority) and explicitly exclude the legitimacy/authority-dilution role addressed below. Adopter-defined roles are logged per §14.
 
 **Excluded role: legitimacy / authority dilution.** Panels do not grant or transfer legitimacy or authority to artifacts. Within the umbrella's trust framework, legitimacy and authority flow through governor-consent and (post-UEP) induction protocols; routing them through panels would create an unbacked authority surface and would invert the role-frame. Brief-framing language must explicitly exclude legitimacy-granting framings (e.g., "the panel approves", "the panel ratifies", "panel-blessed").
 
@@ -250,7 +252,13 @@ The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 20
 
 **Adopter pinning.** Adopters MUST pin to a specific SPEC version when integrating; the SPEC version is referenced in the adopter's adoption note (e.g., `PANEL_ADOPTION.md` or equivalent, paralleling the `MCAP_ADOPTION.md` precedent at backchannel). Pinning prevents methodology-drift across umbrella consumers.
 
-**Adopter-integration patterns.** Adopters may extend the SPEC's vocabulary (e.g., domain-specific disposition classes) at their own scope, with logged rationale. Extensions remain consistent with the SPEC's role-frame (§2) and disposition-vocabulary closure-property (§6) — adopter-extensions are *additional* dispositions, not modifications of the existing closed set.
+**Adopter-integration patterns.** Adopters may extend the SPEC's vocabulary at their own scope, with logged rationale. Extensible axes:
+
+- **Disposition classes** (§6) — additional dispositions consistent with the closure-property of the existing closed set.
+- **Round types** (§5) — additional typed-and-scoped round shapes consistent with the typed-and-scoped discipline (drafter-triggered, anonymized, scoped-not-whole-draft).
+- **Primary roles** (§2) — additional roles consistent with the role-frame's foundational principle (panels = data, not authority) and the explicit exclusion of the legitimacy/authority-dilution role.
+
+Adopter-extensions are *additional* items, not modifications of the existing items in those vocabularies. Modifications of existing items go through the SPEC's own ratification cycle, not adopter-extension. Extensions are logged in the adopter's adoption note.
 
 **Exemplar T2 consumer:** `~/gordo-framework/`. Adopter-integration guide drafting is a separate arc, deferred until SPEC v0.1 is ratified and `panel-runner` has graduated. Pattern: adopter `PANEL_ADOPTION.md` follows MCAP-adopter precedent at backchannel `MCAP_ADOPTION.md`.
 
@@ -287,6 +295,7 @@ The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 20
   - §2 role-priority noted as advisory-not-mechanical per S62 close.
   - §7 closure as governor-consent-driven (not threshold-mechanical) per S62 ODQ-3 close.
   - §13 Path 2 supersession per S64 bilateral close (drafter-lean confirmed by JK WWGD++!!).
+  - **Bias-flag #25 (loophole-language audit) third-instance fire** caught by JK at §3 review on §2 "Five roles a panel may serve" framing (drafter-easiest-path collapse on closed-taxonomy quantifier near load-bearing role-frame, despite S63 graduation); remediated to "Primary roles ... list is not closed" trailing-gloss + reframe-as-positive-endorsement opening for downstream-adopter additions; §14 expanded to enumerate three extensible axes (dispositions / round types / primary roles). S20 + S63 + S64 three-instance log; `feedback_codification_not_enforcement.md` parent track also fires (graduated bias-flag drifted in next-session draft).
 - Awaits: bilateral §3 review + ratification per S64 path-(c) hybrid drafter-lean.
 
 ---
