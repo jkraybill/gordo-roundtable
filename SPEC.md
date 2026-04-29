@@ -11,11 +11,18 @@
 
 `panel-protocol` is the umbrella's reference embodiment of one specific shape of the Tier 0 *external-review principle*: structured panel-style review of a draft artifact by multiple non-UEP'd reviewers, producing structured findings for drafter disposition.
 
-**In scope:** methodology for panel-shaped review — composition, round mechanics, disposition vocabulary, convergence grammar, paramount-objection threshold.
+**SPEC scope:** methodology for panel-shaped review — composition, round mechanics, disposition vocabulary, convergence grammar, paramount-objection threshold. The SPEC defines the methodology and the interface contract that any implementation must satisfy.
 
-**Not in scope:** the Tier 0 principle itself (lives at `~/project-gordo/CONSTITUTION.md`); other embodiments of external review that may emerge over time (this SPEC is narrow-by-design); tooling implementation specifics (`panel-runner` `#128` orchestration is methodology-instantiating, not methodology-defining).
+**Not in SPEC scope:** the Tier 0 principle itself (lives at `~/project-gordo/CONSTITUTION.md`); other embodiments of external review that may emerge over time (this SPEC is narrow-by-design); implementation specifics (which live as separate artifacts in this repo).
 
-The SPEC is methodology-as-reference-implementation: adopters may instantiate it through their own tooling, or use the umbrella's `panel-runner` reference implementation when that graduates from backchannel.
+**panel-protocol repo scope** (broader than this SPEC, paralleling the `~/mcap-protocol/` precedent where SPEC + axioms + reference implementation + CLI all colocate):
+
+- **SPEC** (this document) — the methodology
+- **Reference implementation** — `panel-runner` migrating in from backchannel `scripts/` per `#128`
+- **Tooling** (CLI, integration patterns)
+- **Tests** (TBD; emerging alongside implementation)
+
+Adopters may instantiate the methodology through their own tooling, or use the umbrella's reference implementation directly. Multiple instantiations are admissible; the SPEC's interface contract is what binds them.
 
 ---
 
@@ -194,16 +201,16 @@ Panel diversity (per §4) produces a graded signal-strength on each finding: how
 
 ---
 
-## §11 Tooling Reference
+## §11 Reference Implementation
 
-The umbrella's reference implementation of the methodology is **`panel-runner`**, currently at backchannel `scripts/` and tracked at backchannel `#128` for graduation to this T1 repo. When `panel-runner` graduates, this section will reference the panel-protocol-internal tooling location.
+The reference implementation of this methodology lives in this repo, paralleling the MCAP precedent (`~/mcap-protocol/` colocates spec + axioms + reference implementation + CLI). Initial implementation: **`panel-runner`**, currently at backchannel `scripts/` and tracked for graduation here at backchannel `#128`. Once graduated, `panel-runner` becomes the umbrella's reference instantiation of the SPEC.
 
 **Implementation principles:**
-- Methodology is the SPEC; tooling is an instantiation.
+- Methodology is the SPEC; the reference implementation instantiates it.
 - Multiple instantiations are admissible (adopters may build their own).
-- The SPEC's interface contract is round-mechanics + brief shape + finding-shape + disposition vocabulary; tooling implements that contract.
+- The SPEC's interface contract is round-mechanics + brief shape + finding-shape + disposition vocabulary; any implementation satisfies that contract.
 
-**LangGraph candidate refactor-target.** The state-machine model (round-1 parallel-blind → aggregation → optional round-N+1 typed-and-scoped) maps cleanly to LangGraph's graph-based-multi-agent-workflow primitive. If `panel-runner` complexity grows during graduation, LangGraph is the candidate substrate for restructure. Methodology-portable across orchestration substrates is a stated goal.
+**LangGraph candidate refactor-target.** The state-machine model (round-1 parallel-blind → aggregation → optional round-N+1 typed-and-scoped) maps cleanly to LangGraph's graph-based-multi-agent-workflow primitive. If the reference implementation grows in complexity during graduation, LangGraph is the candidate substrate for restructure. Methodology-portable across orchestration substrates is a stated goal.
 
 ---
 
