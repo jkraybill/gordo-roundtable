@@ -22,7 +22,7 @@ Tier 1 primitive in the Project Gordo umbrella: `panel-protocol` embodies the um
 
 Constitutional framework inherits from `~/project-gordo/` per umbrella conventions. Umbrella values, process standards, WWGD grammar, z-grammar, and EOS signal ("Catch ya on the flipside!") all apply inbound.
 
-`HANDSHAKE.md` formalization deferred to first substantive panel-protocol session — emerge-then-codify per umbrella tradition. Until then, treat the umbrella's standing constitutional framework as governing.
+`HANDSHAKE.md` anchors panel-protocol's constitutional inheritance at a specific T0 master SHA + canonical-file SHA-256 hashes. Verification protocol per `HANDSHAKE.md` § Verification checklist. Anchor refresh follows the framework's existing convention (refresh when T0 advances substantively past the anchored SHA).
 
 ---
 
@@ -63,20 +63,28 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 - **`README.md`** — public-by-design project overview (intended audience: future public consumers; current operational state PRIVATE per Record 003)
 - **`CLAUDE.md`** — this file
-- **`SPEC.md`** — placeholder pending first SPEC draft (next panel-protocol session)
-- **`HANDSHAKE.md`** — to-be-created at first substantive session
+- **`SPEC.md`** — Panel Methodology Standard v0.1 (ratified backchannel `record-009.mcap` 2026-04-29)
+- **`IMPLEMENTATION.md`** — implementation notes for `panel-runner` reference instantiation (TS / OpenRouter + Ollama)
+- **`HANDSHAKE.md`** — constitutional anchor (T0 master SHA + canonical-file SHA-256 hashes); JK signed-commit is the attestation act
+- **`src/`** — `panel-runner` reference implementation; CLI = `npm run panel`; see README.md for setup/usage
 
 ---
 
 ## Session Rhythm
 
-BOS/EOS patterns TBD — emerge from practice then codify, per umbrella tradition. Initial sessions may reference `~/project-gordo-backchannel/SESSION_START.md` and `SESSION_END.md` as starting templates if helpful, adjusting for the public-by-design posture and Tier 1 scope.
+**Hub-convention applies (pre-RC1).** Per backchannel `CLAUDE.md` § Session Hub (S18 bilateral consensus), backchannel is the default entry point for all umbrella work pre-v1.0 RC1, including cross-tier deliberation that touches panel-protocol. To date, all panel-protocol substantive work (S62/S63/S64/S65) has happened during backchannel hub-sessions: cross-repo commits land at panel-protocol; session narrative lives at backchannel `SESSION_LOG.md`.
+
+**Standalone panel-protocol session-rhythm deferred.** `SESSION_START.md` / `SESSION_END.md` / panel-protocol's own `ratification/` directory will emerge if and when panel-protocol has work that doesn't trace to a backchannel hub-session — likely post-v1.0 RC1 when hub-convention is re-deliberated (backchannel `#79`). Codifying these now would risk premature-codification of rhythm that hasn't been lived.
+
+**During hub-sessions:** treat this `CLAUDE.md` as ad-hoc reference per the cross-repo editing honor-system (backchannel `CLAUDE.md` § Session Hub). Substantive substance-MCAP records for panel-protocol substance currently land at backchannel `ratification/` (record-008 admission; record-009 SPEC v0.1).
 
 ---
 
 ## Open Threads
 
-Tracked at backchannel `#130` (panel methodology) + `#128` (panel-runner tooling) until panel-protocol stands up its own issue tracker. Mirror to GitHub Issues at panel-protocol once remote is created.
+Tracked at backchannel GitHub Issues for now per hub-convention. Notable: `#129` (T1 vs T2 placement triage — resolved by SPEC §11 ratification at record-009) + future panel-protocol-specific items.
+
+panel-protocol's own GitHub Issues will be enabled when standalone session-rhythm emerges post-RC1.
 
 ---
 
