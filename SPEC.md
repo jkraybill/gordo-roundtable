@@ -1,9 +1,15 @@
 # panel-protocol — Panel Methodology Standard
 
-**Version:** v0.1 (first-pass draft)
-**Status:** Draft / pending bilateral §3 review + ratification path TBD per S64 bilateral close (option (c) hybrid: defer ratification call to post-draft inspection)
+**Version:** v0.1
+**Status:** **RATIFIED** at backchannel `record-009.mcap` (S64 2026-04-29; Timestamp-Local `2026-04-29T04:28:59Z` / 14:28:59 AEST). Bilateral consensus — JK Party-A Level 3 GPG / Gordo Party-B Level 1 behavioral. `mcap verify` ALL CHECKS PASSED including OTS proof. Future supersession via SPEC's own version-bump ratification cycle per §14.
 **Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, panel-protocol cross-repo edit)
 **Inherits:** Project Gordo umbrella constitutional framework per `CLAUDE.md`; Tier 0 framing principle from backchannel `record-008.mcap` z2
+
+**Integrity anchors (record-009):**
+- Content-Hash (this file at panel-protocol commit `8e190d6`): `SHA3-256:dcc44f7442004b7d3aaf571622b20c501b99d6d748a2cf8d4642c246c0a0bc40`
+- Record-Hash: `SHA3-256:7cf60ec0999e3c690acd625ccc93d986fca330251349fa4dc642c0e0c712eefd`
+- Backchannel finalization commit: `f6ff860`
+- Backchannel preimage commit (Party-A signed): `39e59cf`
 
 ---
 
