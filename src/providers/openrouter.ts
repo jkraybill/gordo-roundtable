@@ -23,7 +23,7 @@ export async function dispatchOpenRouter(
   const requestBody: Record<string, unknown> = {
     model: reviewer.model,
     messages,
-    max_tokens: 32000,
+    max_tokens: 64000,
   };
   if (reviewer.reasoning_effort) {
     requestBody.reasoning = { effort: reviewer.reasoning_effort };
