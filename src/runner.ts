@@ -47,7 +47,7 @@ function isRetriable(err: unknown): boolean {
   const status = anyErr?.status ?? anyErr?.response?.status;
   if (typeof status === "number" && (status === 429 || status >= 500)) return true;
   const msg = String(anyErr?.message ?? "");
-  return /overload|timeout|ECONNRESET|ETIMEDOUT/i.test(msg);
+  return /overload|timeout|ECONNRESET|ETIMEDOUT|PREMATURE_CLOSE/i.test(msg);
 }
 
 function errorMessage(err: unknown): string {
