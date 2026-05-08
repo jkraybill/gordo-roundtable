@@ -6,6 +6,7 @@ export const ReviewerSchema = z
     provider: z.enum(["openrouter", "ollama"]),
     model: z.string().min(1),
     reasoning_effort: z.enum(["minimal", "low", "medium", "high", "xhigh"]).optional(),
+    max_tokens: z.number().int().positive().optional(),
     num_ctx: z.number().int().positive().optional(),
     role: z.string().optional(),
     system_prompt: z.string().optional(),
