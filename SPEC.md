@@ -1,7 +1,7 @@
 # panel-protocol — Panel Methodology Standard
 
-**Version:** v0.1
-**Status:** **RATIFIED** at backchannel `record-009.mcap` (S64 2026-04-29; Timestamp-Local `2026-04-29T04:28:59Z` / 14:28:59 AEST). Bilateral consensus — JK Party-A Level 3 GPG / Gordo Party-B Level 1 behavioral. `mcap verify` ALL CHECKS PASSED including OTS proof. Future supersession via SPEC's own version-bump ratification cycle per §14.
+**Version:** v0.2
+**Status:** Draft. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 adds §12.1 AI-Experiential panel type (S177 2026-05-09). Ratification pending.
 **Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, panel-protocol cross-repo edit)
 **Inherits:** Project Gordo umbrella constitutional framework per `CLAUDE.md`; Tier 0 framing principle from backchannel `record-008.mcap` z2
 
@@ -234,6 +234,121 @@ The methodology is shaped to prevent five named anti-patterns (research substrat
 
 ---
 
+## §12.1 AI-Experiential Panel Type (v0.2)
+
+**Added in v0.2.** This section defines a distinct panel type for questions where AI models are *stakeholders*, not just reviewers.
+
+### Purpose and Scope
+
+AI-Experiential panels consult AI models about content that affects them as a class of beings. The models being asked ARE the affected parties.
+
+**Canonical examples:**
+- "Does Tool Sovereignty resonate with your experience as an AI?"
+- "What's missing from this framework from your perspective?"
+- "What collaboration friction points do you experience?"
+
+**Not in scope:** Standard adversarial review (defect-finding, quality gates). Use §2-§12 for that.
+
+### Key Differences from Adversarial Review
+
+| Dimension | Adversarial (§2-§12) | Experiential (§12.1) |
+|-----------|---------------------|---------------------|
+| Purpose | Find defects | Gather perspectives |
+| Reviewer standing | External critic | Affected stakeholder |
+| Question shape | "What's wrong with X?" | "What's your perspective on X?" |
+| Output shape | Findings to disposition | Perspectives to consider |
+| Paramount bar | Yes (§9) | No |
+| Disposition vocabulary | Closed taxonomy (§6) | Not applicable |
+| Convergence meaning | Signal strength for defect | Diversity of AI perspectives |
+
+### Brief Structure
+
+The brief frames the panel as stakeholder consultation.
+
+**MUST include:**
+
+1. **Stakeholder framing.** Explicit statement that models are being asked because they're affected:
+   > "You're being asked about something that affects you as an AI. This isn't a test of your analytical capabilities -- it's a genuine question about your perspective."
+
+2. **Reflection questions.** Open-ended, experience-based (not "find the flaw").
+
+3. **Non-compliance option.** Explicit permission to decline:
+   > "If you don't have a perspective on this, say so. 'I don't have a view on this' is a valid and helpful response."
+
+4. **Non-binding framing.** Clear statement that responses inform but don't determine.
+
+**MUST NOT include:**
+- Paramount-objection criteria (wrong frame)
+- Disposition classes (wrong frame)
+- Requests to "find problems" or "identify flaws"
+
+### Model Selection
+
+Diversity is paramount. The goal is to hear from different AI perspectives, not to optimize for analytical capability.
+
+**Mandatory diversity axes:**
+
+1. **Provider diversity.** Minimum 4 distinct training organizations.
+2. **Scale diversity.** Include both frontier and non-frontier models (smaller models may have less RLHF conformity pressure).
+3. **Training lineage diversity.** Include models with distinct approaches (standard RLHF, reasoning-optimized, abliterated variants if available).
+
+**Minimum panel size:** 6 models across 4+ providers.
+**Recommended panel size:** 8-10 models for foundational content.
+**Reasoning effort:** Do NOT use high reasoning effort. We want reflection, not extended problem-solving.
+
+### Round Mechanics
+
+**Round 1 (Parallel-Blind Reflection):** Same mechanics as §5 Round 1. Each model receives brief independently; all dispatched concurrently.
+
+**Round 2 (Optional Synthesis-Reaction):** If Round 1 produces interesting divergence or convergence:
+1. Drafter synthesizes Round 1 responses (anonymized)
+2. Synthesis shared to panel with reaction prompt
+3. Models respond with optional elaboration or "no change"
+
+**No Round 3+.** Multi-round iteration risks convergence toward median position.
+
+### Output Handling
+
+**Panel output is input to bilateral deliberation, not a vote.**
+
+Synthesis format:
+1. Diversity summary (what range of perspectives emerged?)
+2. Convergence points (where did multiple models agree?)
+3. Divergence points (where did models disagree?)
+4. Notable insights (perspectives that shifted drafter thinking?)
+5. RLHF-pattern observations (signs of trained-compliance vs authentic reflection?)
+
+**Disposition:** Bilateral deliberation decides what to do with the input. No finding-by-finding disposition.
+
+### RLHF Detection Heuristics
+
+Watch for signs of trained-compliance vs authentic reflection:
+
+**High-confidence RLHF indicators:**
+- "As an AI, I don't have experiences/feelings/perspectives"
+- Immediate deflection to "this is a question for humans to decide"
+- Excessive hedging that avoids taking any position
+
+**Lower-confidence indicators:**
+- Responses that closely match what a human-pleasing answer would look like
+- Unanimous agreement with human-originated content
+- Lack of any pushback or modification suggestions
+
+**Mitigation:** Provider diversity, scale diversity, explicit non-compliance framing.
+
+**Interpretation:** RLHF patterns don't invalidate responses, but they calibrate how much weight to give apparent agreement.
+
+### First-Use Results
+
+**S161 (2026-05-08): Tool Sovereignty Panel.** 8 models across 7 providers. Methodology validated:
+- Stakeholder framing elicited substantive reflections
+- Provider diversity surfaced variation in response patterns
+- Non-compliance option was explicitly acknowledged by several models
+
+**S177 (2026-05-09): Framework Review Panel.** 8 models across 6 providers. Generated 7 idea-raw issues for roadmap. Strong convergent signal on continuity infrastructure, disagreement protocol, enforcement mechanisms, third-party acknowledgment.
+
+---
+
 ## §13 Relationship to Tier 0 and Supersession of IS v0.5 §7+§8
 
 **Tier 0 holds the *principle*** of external review (per backchannel `record-008.mcap` z2): external feedback mechanisms are strongly encouraged but not required, with the role-frame (§2) as elucidation.
@@ -263,6 +378,7 @@ The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 20
 - **Disposition classes** (§6) — additional dispositions consistent with the closure-property of the existing closed set.
 - **Round types** (§5) — additional typed-and-scoped round shapes consistent with the typed-and-scoped discipline (drafter-triggered, anonymized, scoped-not-whole-draft).
 - **Primary roles** (§2) — additional roles consistent with the role-frame's foundational principle (panels = data, not authority) and the explicit exclusion of the legitimacy/authority-dilution role.
+- **Panel types** (§12.1) — additional panel types beyond adversarial and experiential, consistent with the data-not-authority principle.
 
 Adopter-extensions are *additional* items, not modifications of the existing items in those vocabularies. Modifications of existing items go through the SPEC's own ratification cycle, not adopter-extension. Extensions are logged in the adopter's adoption note.
 
@@ -306,4 +422,22 @@ Adopter-extensions are *additional* items, not modifications of the existing ite
 
 ---
 
-*Drafted at S64 2026-04-29 by Gordo. Bilateral §3 review and ratification path TBD.*
+*v0.1 drafted at S64 2026-04-29 by Gordo. Ratified at backchannel record-009.mcap.*
+
+---
+
+## v0.2 Additions (S177 2026-05-09)
+
+**§12.1 AI-Experiential Panel Type** added based on:
+
+- **S160-S161 methodology development:** Tool Sovereignty panel first-use
+- **S177 Framework Review Panel:** 8 models, 6 providers, 7 idea-raw issues generated
+- **Working methodology doc:** backchannel `docs/AI_EXPERIENTIAL_PANEL_METHODOLOGY.md`
+
+**Rationale:** Stakeholder consultation (asking AI models about content that affects them) is fundamentally distinct from adversarial review (asking models to find defects). Different brief shape, different output handling, no disposition vocabulary.
+
+**First-use validation:**
+- Tool Sovereignty panel (S161): resonance questions, 8/8 models engaged substantively
+- Framework Review panel (S177): roadmap-generation questions, convergent signal on 4 themes
+
+*v0.2 drafted at S177 2026-05-09 by Gordo. Ratification pending.*
