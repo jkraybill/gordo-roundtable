@@ -127,14 +127,46 @@ program
     let okCount = 0;
     let errCount = 0;
     let skippedCount = preSkipped.length;
+    let totalCostUsd = 0;
+    let totalPromptTokens = 0;
+    let totalCompletionTokens = 0;
+    const costByModel = new Map<string, number>();
+
     for (const s of settled) {
-      const { result, writeRes } = s;
+      const { reviewer, result, writeRes } = s;
       if (result.status === "ok" && writeRes.written) okCount++;
       else if (result.status === "ok" && !writeRes.written) skippedCount++;
       else errCount++;
+
+      if (result.usage) {
+        totalPromptTokens += result.usage.prompt_tokens;
+        totalCompletionTokens += result.usage.completion_tokens;
+        if (result.usage.cost_usd) {
+          totalCostUsd += result.usage.cost_usd;
+          costByModel.set(
+            reviewer.model,
+            (costByModel.get(reviewer.model) ?? 0) + result.usage.cost_usd,
+          );
+        }
+      }
     }
+
     console.log("---");
     console.log(`ok: ${okCount}; error: ${errCount}; skipped: ${skippedCount}`);
+
+    if (totalPromptTokens > 0 || totalCompletionTokens > 0) {
+      console.log(`tokens: ${totalPromptTokens.toLocaleString()} prompt + ${totalCompletionTokens.toLocaleString()} completion = ${(totalPromptTokens + totalCompletionTokens).toLocaleString()} total`);
+    }
+    if (totalCostUsd > 0) {
+      console.log(`cost: $${totalCostUsd.toFixed(4)} USD`);
+      if (costByModel.size > 1) {
+        console.log("  by model:");
+        for (const [model, cost] of Array.from(costByModel.entries()).sort((a, b) => b[1] - a[1])) {
+          console.log(`    ${model}: $${cost.toFixed(4)}`);
+        }
+      }
+    }
+
     if (errCount > 0) process.exitCode = 2;
   });
 

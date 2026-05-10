@@ -32,4 +32,10 @@ export interface ReviewerResult {
   content?: string;
   error?: string;
   duration_ms: number;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+    cost_usd?: number;
+  };
 }

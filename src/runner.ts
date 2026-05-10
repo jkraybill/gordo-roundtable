@@ -23,6 +23,7 @@ export async function dispatchOne(
         reasoning: result.reasoning,
         content: result.content,
         duration_ms: Date.now() - start,
+        usage: result.usage,
       };
     } catch (err) {
       lastError = err;

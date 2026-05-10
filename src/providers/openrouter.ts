@@ -3,11 +3,18 @@ import type { Reviewer } from "../types.js";
 
 const BASE_URL = "https://openrouter.ai/api/v1";
 
+export interface OpenRouterUsage {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  cost_usd?: number;
+}
+
 export async function dispatchOpenRouter(
   reviewer: Reviewer,
   briefText: string,
   systemPrompt: string | undefined,
-): Promise<{ reasoning?: string; content: string }> {
+): Promise<{ reasoning?: string; content: string; usage?: OpenRouterUsage }> {
   if (!process.env.OPENROUTER_API_KEY) {
     throw new Error("OPENROUTER_API_KEY env var not set");
   }
@@ -60,7 +67,23 @@ export async function dispatchOpenRouter(
   const message = choice.message ?? {};
   const content: string = typeof message.content === "string" ? message.content : "";
   const reasoning = extractReasoning(message);
-  return { reasoning, content };
+
+  // Extract usage data (OpenRouter returns this in the response)
+  let usage: OpenRouterUsage | undefined;
+  if (response?.usage) {
+    const u = response.usage;
+    usage = {
+      prompt_tokens: u.prompt_tokens ?? 0,
+      completion_tokens: u.completion_tokens ?? 0,
+      total_tokens: u.total_tokens ?? 0,
+    };
+    // OpenRouter includes cost in x-openrouter headers or usage.cost field
+    if (typeof (u as any).cost === "number") {
+      usage.cost_usd = (u as any).cost;
+    }
+  }
+
+  return { reasoning, content, usage };
 }
 
 function extractReasoning(message: any): string | undefined {

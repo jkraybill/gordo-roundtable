@@ -25,11 +25,13 @@ interface OllamaStreamChunk {
   error?: string;
 }
 
+import type { OpenRouterUsage } from "./openrouter.js";
+
 export async function dispatchOllama(
   reviewer: Reviewer,
   briefText: string,
   systemPrompt: string | undefined,
-): Promise<{ reasoning?: string; content: string }> {
+): Promise<{ reasoning?: string; content: string; usage?: OpenRouterUsage }> {
   const host = process.env.OLLAMA_HOST ?? "http://localhost:11434";
   const numCtx = reviewer.num_ctx ?? DEFAULT_NUM_CTX;
 
