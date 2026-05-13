@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "project": "panel-protocol",
+  "declared_at": "2026-05-13",
+  "chain": [
+    { "name": "panel-protocol", "url": "https://github.com/jkraybill/panel-protocol", "created": "2026-04-29" },
+    { "name": "project-gordo", "url": "https://github.com/jkraybill/project-gordo", "root": true }
+  ],
+  "tag": "project-gordo-umbrella"
+}
