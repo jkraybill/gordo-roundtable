@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "project": "panel-protocol",
-  "declared_at": "2026-05-13",
+  "project": "gordo-roundtable",
+  "declared_at": "2026-05-14",
   "chain": [
-    { "name": "panel-protocol", "url": "https://github.com/jkraybill/panel-protocol", "created": "2026-04-29" },
+    { "name": "gordo-roundtable", "url": "https://github.com/jkraybill/gordo-roundtable", "created": "2026-04-29", "renamed_from": "panel-protocol" },
     { "name": "project-gordo", "url": "https://github.com/jkraybill/project-gordo", "root": true }
   ],
   "tag": "project-gordo-umbrella"

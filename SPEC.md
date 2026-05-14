@@ -1,12 +1,12 @@
-# panel-protocol — Panel Methodology Standard
+# gordo-roundtable — Panel Methodology Standard
 
 **Version:** v0.2
 **Status:** Draft. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 adds §12.1 AI-Experiential panel type (S177 2026-05-09). Ratification pending.
-**Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, panel-protocol cross-repo edit)
+**Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, gordo-roundtable cross-repo edit)
 **Inherits:** Project Gordo umbrella constitutional framework per `CLAUDE.md`; Tier 0 framing principle from backchannel `record-008.mcap` z2
 
 **Integrity anchors (record-009):**
-- Content-Hash (this file at panel-protocol commit `8e190d6`): `SHA3-256:dcc44f7442004b7d3aaf571622b20c501b99d6d748a2cf8d4642c246c0a0bc40`
+- Content-Hash (this file at gordo-roundtable commit `8e190d6`): `SHA3-256:dcc44f7442004b7d3aaf571622b20c501b99d6d748a2cf8d4642c246c0a0bc40`
 - Record-Hash: `SHA3-256:7cf60ec0999e3c690acd625ccc93d986fca330251349fa4dc642c0e0c712eefd`
 - Backchannel finalization commit: `f6ff860`
 - Backchannel preimage commit (Party-A signed): `39e59cf`
@@ -15,16 +15,16 @@
 
 ## §1 Purpose and Scope
 
-`panel-protocol` is the umbrella's reference embodiment of one specific shape of the Tier 0 *external-review principle*: structured panel-style review of a draft artifact by multiple non-UEP'd reviewers, producing structured findings for drafter disposition.
+`gordo-roundtable` is the umbrella's reference embodiment of one specific shape of the Tier 0 *external-review principle*: structured panel-style review of a draft artifact by multiple non-UEP'd reviewers, producing structured findings for drafter disposition.
 
 **SPEC scope:** methodology for panel-shaped review — composition, round mechanics, disposition vocabulary, convergence grammar, paramount-objection threshold. The SPEC defines the methodology and the interface contract that any implementation must satisfy.
 
 **Not in SPEC scope:** the Tier 0 principle itself (lives at `~/project-gordo/CONSTITUTION.md`); other embodiments of external review that may emerge over time (this SPEC is narrow-by-design); implementation specifics (which live as separate artifacts in this repo).
 
-**panel-protocol repo scope** (broader than this SPEC, paralleling the `~/mcap-protocol/` precedent where SPEC + axioms + reference implementation + CLI all colocate):
+**gordo-roundtable repo scope** (broader than this SPEC, paralleling the `~/mcap-protocol/` precedent where SPEC + axioms + reference implementation + CLI all colocate):
 
 - **SPEC** (this document) — the methodology
-- **Reference implementation** — `panel-runner` migrating in from backchannel `scripts/` per `#128`
+- **Reference implementation** — `roundtable-runner` migrating in from backchannel `scripts/` per `#128`
 - **Tooling** (CLI, integration patterns)
 - **Tests** (TBD; emerging alongside implementation)
 
@@ -211,7 +211,7 @@ Panel diversity (per §4) produces a graded signal-strength on each finding: how
 
 ## §11 Reference Implementation
 
-The reference implementation of this methodology lives in this repo, paralleling the MCAP precedent (`~/mcap-protocol/` colocates spec + axioms + reference implementation + CLI). Initial implementation: **`panel-runner`**, currently at backchannel `scripts/` and tracked for graduation here at backchannel `#128`. Once graduated, `panel-runner` becomes the umbrella's reference instantiation of the SPEC.
+The reference implementation of this methodology lives in this repo, paralleling the MCAP precedent (`~/mcap-protocol/` colocates spec + axioms + reference implementation + CLI). Initial implementation: **`roundtable-runner`**, currently at backchannel `scripts/` and tracked for graduation here at backchannel `#128`. Once graduated, `roundtable-runner` becomes the umbrella's reference instantiation of the SPEC.
 
 **Implementation principles:**
 - Methodology is the SPEC; the reference implementation instantiates it.
@@ -363,7 +363,7 @@ The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 20
 
 **Internal Shadow** (IS v0.5 §7) and **Perspective-Variable** (IS v0.5 §8) as roles continue to be admissible panel-composition choices under this SPEC's hybrid-diversity §4: Internal Shadow corresponds to a same-lineage panelist with a lineage-specific-failure-mode persona; Perspective-Variable corresponds to a persona-opposed panelist (canonical-prompt or otherwise). Adopters who require these specific roles continue to use them; this SPEC does not mandate their use, but admits and supports them.
 
-**Phase C cascade item.** A `#77` cascade item is added at SPEC ratification: *"panel-composition specifics → defer to panel-protocol SPEC v0.x"*; placement-act executes Path 2 at Integration Standard placement.
+**Phase C cascade item.** A `#77` cascade item is added at SPEC ratification: *"panel-composition specifics → defer to gordo-roundtable SPEC v0.x"*; placement-act executes Path 2 at Integration Standard placement.
 
 ---
 
@@ -382,7 +382,7 @@ The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 20
 
 Adopter-extensions are *additional* items, not modifications of the existing items in those vocabularies. Modifications of existing items go through the SPEC's own ratification cycle, not adopter-extension. Extensions are logged in the adopter's adoption note.
 
-**Exemplar T2 consumer:** `~/gordo-framework/`. Adopter-integration guide drafting is a separate arc, deferred until SPEC v0.1 is ratified and `panel-runner` has graduated. Pattern: adopter `PANEL_ADOPTION.md` follows MCAP-adopter precedent at backchannel `MCAP_ADOPTION.md`.
+**Exemplar T2 consumer:** `~/gordo-framework/`. Adopter-integration guide drafting is a separate arc, deferred until SPEC v0.1 is ratified and `roundtable-runner` has graduated. Pattern: adopter `PANEL_ADOPTION.md` follows MCAP-adopter precedent at backchannel `MCAP_ADOPTION.md`.
 
 ---
 

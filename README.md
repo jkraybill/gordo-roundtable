@@ -1,4 +1,4 @@
-# panel-protocol
+# gordo-roundtable
 
 **External-review embodiment primitive in the Project Gordo umbrella (Tier 1).**
 
@@ -8,13 +8,13 @@
 
 **Stage:** SPEC v0.1 ratified + reference implementation imported (S65 2026-04-29)
 **SPEC:** [`SPEC.md`](./SPEC.md) v0.1 — ratified at backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST
-**Reference implementation:** [`panel-runner`](./IMPLEMENTATION.md) — TypeScript / OpenRouter + Ollama; imported S65 from backchannel `panel-runner/` per `#128` graduation
+**Reference implementation:** [`roundtable-runner`](./IMPLEMENTATION.md) — TypeScript / OpenRouter + Ollama; imported S65 from backchannel `roundtable-runner/` per `#128` graduation
 
 ---
 
 ## What This Is
 
-`panel-protocol` is one specific embodiment of the umbrella-level *external review* principle. When a deliberating party (or set of parties) wants structured input from non-UEP'd first-class parties (human, AI, or otherwise), this protocol provides a methodology + tooling for running that review.
+`gordo-roundtable` is one specific embodiment of the umbrella-level *external review* principle. When a deliberating party (or set of parties) wants structured input from non-UEP'd first-class parties (human, AI, or otherwise), this protocol provides a methodology + tooling for running that review.
 
 Tier 0 (`~/project-gordo/`) holds the *principle*: external review is strongly encouraged but not required, with elucidated roles. Tier 1 (this repo) holds *one embodiment* of that principle, available for adoption by downstream Tier 2 / Tier 3 consumers (e.g., `~/gordo-framework/`).
 
@@ -28,16 +28,16 @@ Other embodiments may emerge over time. This protocol is narrow-by-design — me
 - **Tier 1 primitives:**
   - `~/mcap-protocol/` — identity-verification / consent-attestation
   - `~/pact-protocol/` — trust calibration (paused, restart pending)
-  - `~/panel-protocol/` — external-review embodiment (this repo, S63-admitted)
+  - `~/gordo-roundtable/` — external-review embodiment (this repo, S63-admitted)
   - UEP — induction + governance (envisioned)
 - **Tier 2:** `~/gordo-framework/` — composite/distribution layer; consumes T1 primitives
-- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where panel-protocol design originated and where bilateral ratification records live for content not (yet) public-safe
+- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated and where bilateral ratification records live for content not (yet) public-safe
 
 ---
 
 ## Constitutional Inheritance
 
-Constitutional framework inherits from `~/project-gordo/` per umbrella conventions. Umbrella values, process standards, WWGD grammar, z-grammar, and EOS signal ("Catch ya on the flipside!") all apply. `HANDSHAKE.md` formalization deferred to first substantive panel-protocol session per the framework's emerge-then-codify tradition.
+Constitutional framework inherits from `~/project-gordo/` per umbrella conventions. Umbrella values, process standards, WWGD grammar, z-grammar, and EOS signal ("Catch ya on the flipside!") all apply. `HANDSHAKE.md` formalization deferred to first substantive gordo-roundtable session per the framework's emerge-then-codify tradition.
 
 ---
 
@@ -55,7 +55,7 @@ S63 2026-04-29 admission via project-gordo-backchannel bilateral consensus (WWGD
 ## Setup
 
 ```bash
-cd ~/panel-protocol
+cd ~/gordo-roundtable
 npm install
 export OPENROUTER_API_KEY=sk-or-v1-...
 # Optional: export OLLAMA_HOST=http://localhost:11434  (default: localhost:11434)
@@ -92,8 +92,8 @@ See [`IMPLEMENTATION.md`](./IMPLEMENTATION.md) for full implementation specifics
 
 - [x] First SPEC draft — assembled S64 from backchannel `#130` substrate; ratified `record-009.mcap`
 - [x] Panel-runner reference-implementation graduation — imported S65 from backchannel per `#128`
-- [ ] Initial test suite for panel-runner
-- [ ] First ratification record at panel-protocol (substantive SPEC content; emerge-when-ready)
+- [ ] Initial test suite for roundtable-runner
+- [ ] First ratification record at gordo-roundtable (substantive SPEC content; emerge-when-ready)
 - [ ] MCAP adopter integration — follow `~/mcap-protocol/` precedent + backchannel `MCAP_ADOPTION.md` pattern
 - [ ] gordo-framework integration guide (Tier 2 adopter pattern)
 

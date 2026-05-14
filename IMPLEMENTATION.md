@@ -1,10 +1,10 @@
 # Panel Runner — Implementation Notes (v0.1)
 
-**Status:** reference implementation of `panel-protocol` SPEC v0.1 (ratified backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST). Imported from `~/project-gordo-backchannel/panel-runner/` at S65 2026-04-29 per backchannel `#128` graduation tracker.
+**Status:** reference implementation of `gordo-roundtable` SPEC v0.1 (ratified backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST). Imported from `~/project-gordo-backchannel/roundtable-runner/` at S65 2026-04-29 per backchannel `#128` graduation tracker.
 **Drafter:** Gordo S58 (initial scaffold) + S59 (first-real-dispatch hardening) + S65 (graduation import)
 **Language:** TypeScript
 
-This document holds **implementation-specific** content for `panel-runner`. The methodology contract lives at [`SPEC.md`](./SPEC.md) — round-mechanics, brief shape, finding shape, disposition vocabulary, role-frame. This document covers the *how* of one specific instantiation: TypeScript + OpenRouter + Ollama, CLI flags, retry semantics, output formatting. Multiple instantiations are admissible per SPEC §11; this is the umbrella's reference instantiation.
+This document holds **implementation-specific** content for `roundtable-runner`. The methodology contract lives at [`SPEC.md`](./SPEC.md) — round-mechanics, brief shape, finding shape, disposition vocabulary, role-frame. This document covers the *how* of one specific instantiation: TypeScript + OpenRouter + Ollama, CLI flags, retry semantics, output formatting. Multiple instantiations are admissible per SPEC §11; this is the umbrella's reference instantiation.
 
 ---
 
@@ -35,7 +35,7 @@ The runner consumes a markdown brief file containing the panel question / contex
 
 **Future:**
 - Front-matter overrides (per-reviewer system prompt, reasoning-effort, etc.) embedded in brief.
-- Brief-format formal spec at `panel-protocol` SPEC §3 elaboration.
+- Brief-format formal spec at `gordo-roundtable` SPEC §3 elaboration.
 
 ---
 
@@ -136,7 +136,7 @@ reviews/<record-id>/<reviewer-id>-ROUND_<N>.md
 ## 6. CLI surface
 
 ```
-panel-runner run \
+roundtable-runner run \
   --brief <path-to-brief.md> \
   --manifest <path-to-panel.yaml> \
   [--round <N>]            # default: inferred from brief filename
@@ -146,8 +146,8 @@ panel-runner run \
 ```
 
 **Other commands (defer to graduation issue):**
-- `panel-runner validate <manifest>` — schema-validate manifest
-- `panel-runner cost-estimate <manifest> <brief>` — pre-run cost projection
+- `roundtable-runner validate <manifest>` — schema-validate manifest
+- `roundtable-runner cost-estimate <manifest> <brief>` — pre-run cost projection
 
 ---
 
@@ -169,7 +169,7 @@ panel-runner run \
 
 ## 8. Out of scope (v1)
 
-- Brief-format formal spec (emerge from use; codify at `panel-protocol` SPEC §3 elaboration if patterns stabilize)
+- Brief-format formal spec (emerge from use; codify at `gordo-roundtable` SPEC §3 elaboration if patterns stabilize)
 - Multi-record / batch panel orchestration
 - Receipt-signing automation (key-hygiene boundary; consuming-project governor-side)
 - Reviewer-panel composition validation against SPEC §4 (manual review by governor at manifest-edit time)
@@ -183,7 +183,7 @@ panel-runner run \
 
 | # | Decision | Resolution | Rationale |
 |---|----------|------------|-----------|
-| 1 | Repo placement | Code at `~/panel-protocol/` root (S65 graduation per backchannel `#128`) | T1 reference implementation; matches MCAP precedent (flat layout) |
+| 1 | Repo placement | Code at `~/gordo-roundtable/` root (S65 graduation per backchannel `#128`) | T1 reference implementation; matches MCAP precedent (flat layout) |
 | 2 | Manifest format | YAML | Hand-edited config readability; comments allowed |
 | 3 | Manifest location | Per-record `reviews/<record-id>/panel.yaml` (consuming-project filesystem) | Co-located with reviews; matches `reviews/<record-id>/` consuming-project convention |
 | 4 | Brief substitution | Runner substitutes literal `<your-reviewer-id>` token at dispatch time | Minimal brief-format change; matches manual practice |

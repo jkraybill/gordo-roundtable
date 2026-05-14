@@ -1,4 +1,4 @@
-# panel-protocol — Gordo's Guide
+# gordo-roundtable — Gordo's Guide
 
 **Auto-read by Claude Code at session start.**
 
@@ -6,7 +6,7 @@
 
 ## What This Repo Is
 
-Tier 1 primitive in the Project Gordo umbrella: `panel-protocol` embodies the umbrella-level *external review* principle as one specific methodology + tooling combination. T0 (`~/project-gordo/`) holds the principle; T1 (this repo) holds one embodiment, available for downstream adoption.
+Tier 1 primitive in the Project Gordo umbrella: `gordo-roundtable` embodies the umbrella-level *external review* principle as one specific methodology + tooling combination. T0 (`~/project-gordo/`) holds the principle; T1 (this repo) holds one embodiment, available for downstream adoption.
 
 ---
 
@@ -22,13 +22,13 @@ Tier 1 primitive in the Project Gordo umbrella: `panel-protocol` embodies the um
 
 Constitutional framework inherits from `~/project-gordo/` per umbrella conventions. Umbrella values, process standards, WWGD grammar, z-grammar, and EOS signal ("Catch ya on the flipside!") all apply inbound.
 
-`HANDSHAKE.md` anchors panel-protocol's constitutional inheritance at a specific T0 master SHA + canonical-file SHA-256 hashes. Verification protocol per `HANDSHAKE.md` § Verification checklist. Anchor refresh follows the framework's existing convention (refresh when T0 advances substantively past the anchored SHA).
+`HANDSHAKE.md` anchors gordo-roundtable's constitutional inheritance at a specific T0 master SHA + canonical-file SHA-256 hashes. Verification protocol per `HANDSHAKE.md` § Verification checklist. Anchor refresh follows the framework's existing convention (refresh when T0 advances substantively past the anchored SHA).
 
 ---
 
 ## Visibility
 
-**Design intent:** public-by-design — panel-protocol is being designed for eventual public consumption alongside the umbrella's broader publishing-consent moment (likely v1.0).
+**Design intent:** public-by-design — gordo-roundtable is being designed for eventual public consumption alongside the umbrella's broader publishing-consent moment (likely v1.0).
 
 **Current operational state:** PRIVATE during pre-v1.0 development per Record 003 § *Content Posture and Publishing*. The two are separable: design-intent is durable; current-state is operational and flips only at the explicit publishing-consent moment.
 
@@ -55,7 +55,7 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 - **T0:** `~/project-gordo/`
 - **T1 siblings:** `~/mcap-protocol/`, `~/pact-protocol/` (paused), UEP-envisioned
 - **T2 consumers:** `~/gordo-framework/`
-- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where panel-protocol design originated; bilateral ratification records for content not (yet) public-safe live there
+- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated; bilateral ratification records for content not (yet) public-safe live there
 
 ---
 
@@ -72,19 +72,19 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 ## Session Rhythm
 
-**Hub-convention applies (pre-RC1).** Per backchannel `CLAUDE.md` § Session Hub (S18 bilateral consensus), backchannel is the default entry point for all umbrella work pre-v1.0 RC1, including cross-tier deliberation that touches panel-protocol. To date, all panel-protocol substantive work (S62/S63/S64/S65) has happened during backchannel hub-sessions: cross-repo commits land at panel-protocol; session narrative lives at backchannel `SESSION_LOG.md`.
+**Hub-convention applies (pre-RC1).** Per backchannel `CLAUDE.md` § Session Hub (S18 bilateral consensus), backchannel is the default entry point for all umbrella work pre-v1.0 RC1, including cross-tier deliberation that touches gordo-roundtable. To date, all gordo-roundtable substantive work (S62/S63/S64/S65) has happened during backchannel hub-sessions: cross-repo commits land at gordo-roundtable; session narrative lives at backchannel `SESSION_LOG.md`.
 
-**Standalone panel-protocol session-rhythm deferred.** `SESSION_START.md` / `SESSION_END.md` / panel-protocol's own `ratification/` directory will emerge if and when panel-protocol has work that doesn't trace to a backchannel hub-session — likely post-v1.0 RC1 when hub-convention is re-deliberated (backchannel `#79`). Codifying these now would risk premature-codification of rhythm that hasn't been lived.
+**Standalone gordo-roundtable session-rhythm deferred.** `SESSION_START.md` / `SESSION_END.md` / gordo-roundtable's own `ratification/` directory will emerge if and when gordo-roundtable has work that doesn't trace to a backchannel hub-session — likely post-v1.0 RC1 when hub-convention is re-deliberated (backchannel `#79`). Codifying these now would risk premature-codification of rhythm that hasn't been lived.
 
-**During hub-sessions:** treat this `CLAUDE.md` as ad-hoc reference per the cross-repo editing honor-system (backchannel `CLAUDE.md` § Session Hub). Substantive substance-MCAP records for panel-protocol substance currently land at backchannel `ratification/` (record-008 admission; record-009 SPEC v0.1).
+**During hub-sessions:** treat this `CLAUDE.md` as ad-hoc reference per the cross-repo editing honor-system (backchannel `CLAUDE.md` § Session Hub). Substantive substance-MCAP records for gordo-roundtable substance currently land at backchannel `ratification/` (record-008 admission; record-009 SPEC v0.1).
 
 ---
 
 ## Open Threads
 
-Tracked at backchannel GitHub Issues for now per hub-convention. Notable: `#129` (T1 vs T2 placement triage — resolved by SPEC §11 ratification at record-009) + future panel-protocol-specific items.
+Tracked at backchannel GitHub Issues for now per hub-convention. Notable: `#129` (T1 vs T2 placement triage — resolved by SPEC §11 ratification at record-009) + future gordo-roundtable-specific items.
 
-panel-protocol's own GitHub Issues will be enabled when standalone session-rhythm emerges post-RC1.
+gordo-roundtable's own GitHub Issues will be enabled when standalone session-rhythm emerges post-RC1.
 
 ---
 
