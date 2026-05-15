@@ -1,103 +1,95 @@
-# gordo-roundtable
+# Gordo Roundtable
 
-**External-review embodiment primitive in the Project Gordo umbrella (Tier 1).**
-
----
-
-## Status
-
-**Stage:** SPEC v0.1 ratified + reference implementation imported (S65 2026-04-29)
-**SPEC:** [`SPEC.md`](./SPEC.md) v0.1 — ratified at backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST
-**Reference implementation:** [`roundtable-runner`](./IMPLEMENTATION.md) — TypeScript / OpenRouter + Ollama; imported S65 from backchannel `roundtable-runner/` per `#128` graduation
+**External review for human-AI collaboration.**
 
 ---
 
-## What This Is
+## What Problem Does This Solve?
 
-`gordo-roundtable` is one specific embodiment of the umbrella-level *external review* principle. When a deliberating party (or set of parties) wants structured input from non-UEP'd first-class parties (human, AI, or otherwise), this protocol provides a methodology + tooling for running that review.
+When a human and AI collaborate closely, they develop shared assumptions. Some of those assumptions are wrong. The longer they work together, the harder it gets to see the blind spots.
 
-Tier 0 (`~/project-gordo/`) holds the *principle*: external review is strongly encouraged but not required, with elucidated roles. Tier 1 (this repo) holds *one embodiment* of that principle, available for adoption by downstream consumers (e.g., `~/gordo-forge/`).
-
-Other embodiments may emerge over time. This protocol is narrow-by-design — methodology + tooling for the panel-shaped review pattern specifically.
+Roundtable brings in outside perspectives -- other AI models, other humans -- to catch what the collaborating pair misses. Not to override their judgment, but to surface things worth examining.
 
 ---
 
-## Position in the Project Gordo Umbrella
+## How It Works
 
-- **Tier 0:** `~/project-gordo/` — constitutional root
-- **Tier 1 primitives:**
-  - `~/gordo-seal/` — identity-verification / consent-attestation
-  - `~/gordo-roundtable/` — external-review embodiment (this repo)
-  - `~/gordo-ledger/` — persistent memory management
-  - Gauge — trust calibration (paused)
-  - Gate — induction + governance (envisioned)
-- **Tier 2:** `~/gordo-forge/` — AI-guided onboarding and project scaffolding
-- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated and where bilateral ratification records live for content not (yet) public-safe
-
----
-
-## Constitutional Inheritance
-
-Constitutional framework inherits from `~/project-gordo/` per umbrella conventions. Umbrella values, process standards, WWGD grammar, z-grammar, and EOS signal ("Catch ya on the flipside!") all apply. `HANDSHAKE.md` formalization deferred to first substantive gordo-roundtable session per the framework's emerge-then-codify tradition.
-
----
-
-## Genesis
-
-S63 2026-04-29 admission via project-gordo-backchannel bilateral consensus (WWGD++!! confirmed). Pre-existing substrate carries forward from backchannel:
-
-- `#130` panel methodology overhaul issue: 7 Open Design Questions settled bilaterally S62 2026-04-29
-- `research/130_panel_methodology_research.md` (backchannel): 438 lines / 7600 words deep-research substrate covering Modified Delphi (RAND-UCLA), Rust RFC FCP, sociocracy paramount-objection, bug-bounty severity-class, FDA Adv Committees pre-structured-questions, Wisc 2025 anonymization, etc.
-- Non-UEP panel role-frame ratified S62: priority 1/4/6/3/2 (bug-finding > QC > dissent-surfacing > outside-perspective > bias-injection); EXPLICITLY EXCLUDE role 5 (legitimacy/authority dilution)
-- T0 framing principle (S63 JK-authored): "the use of external feedback mechanisms is strongly encouraged, but not required. Here's how the umbrella views the role of external feedback mechanisms: [role-frame]"
-
----
-
-## Setup
+You write a review brief describing what you want feedback on. You configure a panel of reviewers (different AI models, typically). Roundtable dispatches the brief to each reviewer and collects their responses.
 
 ```bash
-cd ~/gordo-roundtable
+npm install
+npm run panel -- \
+  --brief ./my-review-brief.md \
+  --manifest ./reviews/panel.yaml
+```
+
+Each reviewer writes their response independently. You get multiple perspectives without the reviewers influencing each other.
+
+---
+
+## What Reviewers Are For
+
+The framework is explicit about what external review is and isn't:
+
+**Good uses:**
+- Finding bugs and gaps (highest priority)
+- Quality checking before release
+- Surfacing dissent you might have dismissed too quickly
+- Getting outside perspective on internal debates
+
+**Not for:**
+- Granting legitimacy ("the panel approved it")
+- Diluting responsibility ("we did what the reviewers said")
+
+Reviewers provide data, not authority. The collaborating pair still owns the decision.
+
+---
+
+## Getting Started
+
+**Prerequisites:** Node.js, an OpenRouter API key (or local Ollama for open models).
+
+```bash
+git clone https://github.com/jkraybill/gordo-roundtable.git
+cd gordo-roundtable
 npm install
 export OPENROUTER_API_KEY=sk-or-v1-...
-# Optional: export OLLAMA_HOST=http://localhost:11434  (default: localhost:11434)
 ```
 
-## Usage
+Create a review brief (what you want feedback on) and a panel manifest (which models to ask). See `SPEC.md` for the format.
 
 ```bash
-# Dry run — print resolved request shapes per reviewer without dispatching
-npm run panel -- \
-  --brief /path/to/<topic>_REVIEW_BRIEF.md \
-  --manifest /path/to/reviews/<record-id>/panel.yaml \
-  --dry-run
+# Dry run first
+npm run panel -- --brief ./brief.md --manifest ./panel.yaml --dry-run
 
 # Real run
-npm run panel -- \
-  --brief /path/to/<topic>_REVIEW_BRIEF.md \
-  --manifest /path/to/reviews/<record-id>/panel.yaml
-
-# Single-reviewer retry (filter to one id; repeatable for a subset)
-npm run panel -- \
-  --brief /path/to/<topic>_REVIEW_BRIEF.md \
-  --manifest /path/to/reviews/<record-id>/panel.yaml \
-  --reviewer deepseek-r1
+npm run panel -- --brief ./brief.md --manifest ./panel.yaml
 ```
 
-Outputs land at `<manifest-dir>/<reviewer-id>-ROUND_<N>.md` (alongside the manifest). Runner refuses to overwrite existing files unless `--overwrite` passed (round-1 outputs may be receipt-signed; accidental overwrite would invalidate batch receipts).
-
-See [`IMPLEMENTATION.md`](./IMPLEMENTATION.md) for full implementation specifics: brief format, panel manifest schema, retry policy, output conventions, design-decision log.
+Outputs land alongside the manifest: `<reviewer-id>-ROUND_1.md`.
 
 ---
 
-## Roadmap
+## Part of Project Gordo
 
-- [x] First SPEC draft — assembled S64 from backchannel `#130` substrate; ratified `record-009.mcap`
-- [x] Panel-runner reference-implementation graduation — imported S65 from backchannel per `#128`
-- [ ] Initial test suite for roundtable-runner
-- [ ] First ratification record at gordo-roundtable (substantive SPEC content; emerge-when-ready)
-- [ ] Seal adopter integration — follow `~/gordo-seal/` precedent + backchannel `MCAP_ADOPTION.md` pattern
-- [ ] gordo-forge integration guide (Tier 2 adopter pattern)
+Roundtable is a Tier 1 primitive in the [Project Gordo](https://github.com/jkraybill/project-gordo) umbrella. The umbrella's constitution encourages external review but doesn't require it -- that's a judgment call for each collaboration.
+
+This repo provides one specific methodology and tooling for panel-based review. Other external review patterns could exist alongside it.
 
 ---
 
-*Created S63 2026-04-29 from project-gordo-backchannel deliberation. **Public-by-design** (designed for eventual public consumption alongside the umbrella's v1.0 publishing-consent moment); **currently PRIVATE during pre-v1.0 development** per Record 003 § *Content Posture and Publishing*. Permanent-private design conversations continue at backchannel.*
+## Current Status
+
+- **SPEC:** v0.1 ratified
+- **Implementation:** TypeScript, OpenRouter + Ollama support
+- **Stage:** Working, used in production for Project Gordo's own reviews
+
+---
+
+## License
+
+MIT. Use freely, attribute if you share.
+
+---
+
+*Created by JK + Gordo. External review catches what close collaboration misses.*
