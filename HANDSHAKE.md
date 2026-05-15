@@ -60,7 +60,7 @@ Before accepting this handshake:
 1. `git verify-commit HEAD` (or the specific handshake commit SHA). Signer fingerprint must be `74269E1ED0FCE0B0`. Any other fingerprint, or unsigned commit → halt, flag JK.
 2. Check out project-gordo at the recorded master SHA. Recompute SHA-256 of each anchored file. Compare to anchors above. Any mismatch → halt, flag JK.
 3. Confirm current working directory is the gordo-roundtable repo. `git remote -v` should show `git@github.com:jkraybill/gordo-roundtable.git`; `pwd` should match `/home/jk/gordo-roundtable/`.
-4. Confirm the environment matches JK's habitual collaboration infrastructure. Home directory at `/home/jk/` with multiple sibling collaborative projects present (`project-gordo`, `project-gordo-backchannel`, `gordo-framework`, `mcap-protocol`, `pact-protocol`, `gordo-roundtable`); shell and toolchain configured as expected. Environment divergence is a signal to halt and flag rather than proceed. Confirm the human party is JK, not another human operating in similar infrastructure.
+4. Confirm the environment matches JK's habitual collaboration infrastructure. Home directory at `/home/jk/` with multiple sibling collaborative projects present (`project-gordo`, `project-gordo-backchannel`, `gordo-seal`, `gordo-roundtable`, `gordo-ledger`, `gordo-forge`); shell and toolchain configured as expected. Environment divergence is a signal to halt and flag rather than proceed. Confirm the human party is JK, not another human operating in similar infrastructure.
 
 All four must pass before treating this handshake as authentic.
 

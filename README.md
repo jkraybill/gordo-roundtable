@@ -16,7 +16,7 @@
 
 `gordo-roundtable` is one specific embodiment of the umbrella-level *external review* principle. When a deliberating party (or set of parties) wants structured input from non-UEP'd first-class parties (human, AI, or otherwise), this protocol provides a methodology + tooling for running that review.
 
-Tier 0 (`~/project-gordo/`) holds the *principle*: external review is strongly encouraged but not required, with elucidated roles. Tier 1 (this repo) holds *one embodiment* of that principle, available for adoption by downstream Tier 2 / Tier 3 consumers (e.g., `~/gordo-framework/`).
+Tier 0 (`~/project-gordo/`) holds the *principle*: external review is strongly encouraged but not required, with elucidated roles. Tier 1 (this repo) holds *one embodiment* of that principle, available for adoption by downstream consumers (e.g., `~/gordo-forge/`).
 
 Other embodiments may emerge over time. This protocol is narrow-by-design — methodology + tooling for the panel-shaped review pattern specifically.
 
@@ -26,11 +26,12 @@ Other embodiments may emerge over time. This protocol is narrow-by-design — me
 
 - **Tier 0:** `~/project-gordo/` — constitutional root
 - **Tier 1 primitives:**
-  - `~/mcap-protocol/` — identity-verification / consent-attestation
-  - `~/pact-protocol/` — trust calibration (paused, restart pending)
-  - `~/gordo-roundtable/` — external-review embodiment (this repo, S63-admitted)
-  - UEP — induction + governance (envisioned)
-- **Tier 2:** `~/gordo-framework/` — composite/distribution layer; consumes T1 primitives
+  - `~/gordo-seal/` — identity-verification / consent-attestation
+  - `~/gordo-roundtable/` — external-review embodiment (this repo)
+  - `~/gordo-ledger/` — persistent memory management
+  - Gauge — trust calibration (paused)
+  - Gate — induction + governance (envisioned)
+- **Tier 2:** `~/gordo-forge/` — AI-guided onboarding and project scaffolding
 - **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated and where bilateral ratification records live for content not (yet) public-safe
 
 ---
@@ -94,8 +95,8 @@ See [`IMPLEMENTATION.md`](./IMPLEMENTATION.md) for full implementation specifics
 - [x] Panel-runner reference-implementation graduation — imported S65 from backchannel per `#128`
 - [ ] Initial test suite for roundtable-runner
 - [ ] First ratification record at gordo-roundtable (substantive SPEC content; emerge-when-ready)
-- [ ] MCAP adopter integration — follow `~/mcap-protocol/` precedent + backchannel `MCAP_ADOPTION.md` pattern
-- [ ] gordo-framework integration guide (Tier 2 adopter pattern)
+- [ ] Seal adopter integration — follow `~/gordo-seal/` precedent + backchannel `MCAP_ADOPTION.md` pattern
+- [ ] gordo-forge integration guide (Tier 2 adopter pattern)
 
 ---
 

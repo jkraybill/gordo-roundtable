@@ -53,8 +53,8 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 ## Position
 
 - **T0:** `~/project-gordo/`
-- **T1 siblings:** `~/mcap-protocol/`, `~/pact-protocol/` (paused), UEP-envisioned
-- **T2 consumers:** `~/gordo-framework/`
+- **T1 siblings:** `~/gordo-seal/`, `~/gordo-ledger/`, Gauge (paused), Gate (envisioned)
+- **T2:** `~/gordo-forge/`
 - **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated; bilateral ratification records for content not (yet) public-safe live there
 
 ---
