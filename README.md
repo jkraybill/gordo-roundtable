@@ -86,6 +86,12 @@ This repo provides one specific methodology and tooling for panel-based review. 
 
 ---
 
+## Attribution
+
+Co-created by JK and Gordo under the [Project Gordo](https://github.com/jkraybill/project-gordo) framework. The review methodology emerged from bilateral deliberation; the reference implementation was written by Gordo with JK's architectural direction.
+
+---
+
 ## License
 
 MIT. Use freely, attribute if you share.
