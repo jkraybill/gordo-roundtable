@@ -1,4 +1,4 @@
-# Panel Runner — Implementation Notes (v0.1)
+# Roundtable Runner — Implementation Notes (v0.1)
 
 **Status:** reference implementation of `gordo-roundtable` SPEC v0.1 (ratified backchannel `record-009.mcap` 2026-04-29 14:28:59 AEST). Imported from `~/project-gordo-backchannel/roundtable-runner/` at S65 2026-04-29 per backchannel `#128` graduation tracker.
 **Drafter:** Gordo S58 (initial scaffold) + S59 (first-real-dispatch hardening) + S65 (graduation import)
@@ -13,7 +13,7 @@ This document holds **implementation-specific** content for `roundtable-runner`.
 Automate execution of adversarial review panels per `SPEC.md` round-mechanics. Replaces manual paste-across-N-windows with a single TypeScript codebase that:
 
 - Reads a brief file (existing `<TOPIC>_REVIEW_BRIEF[_ROUND_N].md` format)
-- Reads a panel manifest (reviewer ids, models, providers, system-prompt overrides)
+- Reads a roundtable manifest (reviewer ids, models, providers, system-prompt overrides)
 - Dispatches to OpenRouter (cloud reviewers) and local Ollama (open-source reviewers) over OpenAI-compatible APIs
 - Writes per-reviewer raw outputs to `reviews/<record-id>/<reviewer-id>-ROUND_<N>.md` (alongside the manifest)
 
@@ -41,7 +41,7 @@ The runner consumes a markdown brief file containing the panel question / contex
 
 ## 3. Panel manifest
 
-Per-record file at `reviews/<record-id>/panel.yaml`. YAML for hand-edit readability.
+Per-record file at `reviews/<record-id>/roundtable.yaml`. YAML for hand-edit readability.
 
 ```yaml
 record_id: "56"
@@ -138,7 +138,7 @@ reviews/<record-id>/<reviewer-id>-ROUND_<N>.md
 ```
 roundtable-runner run \
   --brief <path-to-brief.md> \
-  --manifest <path-to-panel.yaml> \
+  --manifest <path-to-roundtable.yaml> \
   [--round <N>]            # default: inferred from brief filename
   [--reviewer <id>]        # restrict to subset; repeatable
   [--dry-run]              # print resolved request shapes; don't dispatch
@@ -174,7 +174,7 @@ roundtable-runner run \
 - Receipt-signing automation (key-hygiene boundary; consuming-project governor-side)
 - Reviewer-panel composition validation against SPEC §4 (manual review by governor at manifest-edit time)
 - Cost estimation / accounting (use OpenRouter dashboard)
-- Automatic `panel.yaml` generation from brief
+- Automatic `roundtable.yaml` generation from brief
 - Adopter-integration story (post-v1 stress-testing across multiple records)
 
 ---
@@ -185,7 +185,7 @@ roundtable-runner run \
 |---|----------|------------|-----------|
 | 1 | Repo placement | Code at `~/gordo-roundtable/` root (S65 graduation per backchannel `#128`) | T1 reference implementation; matches MCAP precedent (flat layout) |
 | 2 | Manifest format | YAML | Hand-edited config readability; comments allowed |
-| 3 | Manifest location | Per-record `reviews/<record-id>/panel.yaml` (consuming-project filesystem) | Co-located with reviews; matches `reviews/<record-id>/` consuming-project convention |
+| 3 | Manifest location | Per-record `reviews/<record-id>/roundtable.yaml` (consuming-project filesystem) | Co-located with reviews; matches `reviews/<record-id>/` consuming-project convention |
 | 4 | Brief substitution | Runner substitutes literal `<your-reviewer-id>` token at dispatch time | Minimal brief-format change; matches manual practice |
 | 5 | Reasoning effort default | `high` | Adversarial review wants maximum reviewer effort; per-reviewer override in manifest |
 | 6 | TypeScript runtime | `tsx` for direct execution + `tsc --noEmit` for typecheck | Fastest local-dev iteration; compiled-distribution shape deferred |

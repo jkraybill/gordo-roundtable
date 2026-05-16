@@ -9,7 +9,7 @@ export interface WriteOptions {
 }
 
 export function outputPath(opts: WriteOptions, reviewerId: string): string {
-  // Outputs live alongside the manifest (manifest at reviews/<record-id>/panel.yaml,
+  // Outputs live alongside the manifest (manifest at reviews/<record-id>/roundtable.yaml,
   // outputs at reviews/<record-id>/<reviewer-id>-ROUND_<N>.md per SPEC §4).
   return join(dirname(opts.manifestPath), `${reviewerId}-ROUND_${opts.round}.md`);
 }

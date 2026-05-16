@@ -14,13 +14,13 @@ Roundtable brings in outside perspectives -- other AI models, other humans -- to
 
 ## How It Works
 
-You write a review brief describing what you want feedback on. You configure a panel of reviewers (different AI models, typically). Roundtable dispatches the brief to each reviewer and collects their responses.
+You write a review brief describing what you want feedback on. You configure a roundtable of reviewers (different AI models, typically). Roundtable dispatches the brief to each reviewer and collects their responses.
 
 ```bash
 npm install
-npm run panel -- \
+npm run roundtable -- \
   --brief ./my-review-brief.md \
-  --manifest ./reviews/panel.yaml
+  --manifest ./reviews/roundtable.yaml
 ```
 
 Each reviewer writes their response independently. You get multiple perspectives without the reviewers influencing each other.
@@ -56,14 +56,14 @@ npm install
 export OPENROUTER_API_KEY=sk-or-v1-...
 ```
 
-Create a review brief (what you want feedback on) and a panel manifest (which models to ask). See `SPEC.md` for the format.
+Create a review brief (what you want feedback on) and a roundtable manifest (which models to ask). See `SPEC.md` for the format.
 
 ```bash
 # Dry run first
-npm run panel -- --brief ./brief.md --manifest ./panel.yaml --dry-run
+npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml --dry-run
 
 # Real run
-npm run panel -- --brief ./brief.md --manifest ./panel.yaml
+npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml
 ```
 
 Outputs land alongside the manifest: `<reviewer-id>-ROUND_1.md`.
@@ -74,7 +74,7 @@ Outputs land alongside the manifest: `<reviewer-id>-ROUND_1.md`.
 
 Roundtable is a Tier 1 primitive in the [Project Gordo](https://github.com/jkraybill/project-gordo) umbrella. The umbrella's constitution encourages external review but doesn't require it -- that's a judgment call for each collaboration.
 
-This repo provides one specific methodology and tooling for panel-based review. Other external review patterns could exist alongside it.
+This repo provides one specific methodology and tooling for roundtable-based review. Other external review patterns could exist alongside it.
 
 ---
 

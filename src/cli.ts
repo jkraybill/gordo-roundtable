@@ -16,14 +16,14 @@ interface RunFlags {
 
 const program = new Command();
 program
-  .name("panel-runner")
-  .description("Adversarial review panel runner — Integration Standard v0.5 §7+§8")
+  .name("roundtable-runner")
+  .description("Adversarial review roundtable runner — Integration Standard v0.5 §7+§8")
   .version("0.1.0");
 
 program
   .command("run")
   .requiredOption("--brief <path>", "path to brief markdown file")
-  .requiredOption("--manifest <path>", "path to panel manifest YAML")
+  .requiredOption("--manifest <path>", "path to roundtable manifest YAML")
   .option("--round <n>", "round number; default inferred from brief filename")
   .option(
     "--reviewer <id>",

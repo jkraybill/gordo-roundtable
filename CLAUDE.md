@@ -64,9 +64,9 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 - **`README.md`** — public-by-design project overview (intended audience: future public consumers; current operational state PRIVATE per Record 003)
 - **`CLAUDE.md`** — this file
 - **`SPEC.md`** — Panel Methodology Standard v0.1 (ratified backchannel `record-009.mcap` 2026-04-29)
-- **`IMPLEMENTATION.md`** — implementation notes for `panel-runner` reference instantiation (TS / OpenRouter + Ollama)
+- **`IMPLEMENTATION.md`** — implementation notes for `roundtable-runner` reference instantiation (TS / OpenRouter + Ollama)
 - **`HANDSHAKE.md`** — constitutional anchor (T0 master SHA + canonical-file SHA-256 hashes); JK signed-commit is the attestation act
-- **`src/`** — `panel-runner` reference implementation; CLI = `npm run panel`; see README.md for setup/usage
+- **`src/`** — `roundtable-runner` reference implementation; CLI = `npm run roundtable`; see README.md for setup/usage
 
 ---
 
