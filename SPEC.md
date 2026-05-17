@@ -21,7 +21,7 @@
 
 **Not in SPEC scope:** the Tier 0 principle itself (lives at `~/project-gordo/CONSTITUTION.md`); other embodiments of external review that may emerge over time (this SPEC is narrow-by-design); implementation specifics (which live as separate artifacts in this repo).
 
-**gordo-roundtable repo scope** (broader than this SPEC, paralleling the `~/mcap-protocol/` precedent where SPEC + axioms + reference implementation + CLI all colocate):
+**gordo-roundtable repo scope** (broader than this SPEC, paralleling the `~/gordo-seal/` precedent where SPEC + axioms + reference implementation + CLI all colocate):
 
 - **SPEC** (this document) — the methodology
 - **Reference implementation** — `roundtable-runner` migrating in from backchannel `scripts/` per `#128`
@@ -215,7 +215,7 @@ Panel diversity (per §4) produces a graded signal-strength on each finding: how
 
 ## §11 Reference Implementation
 
-The reference implementation of this methodology lives in this repo, paralleling the MCAP precedent (`~/mcap-protocol/` colocates spec + axioms + reference implementation + CLI). Initial implementation: **`roundtable-runner`**, currently at backchannel `scripts/` and tracked for graduation here at backchannel `#128`. Once graduated, `roundtable-runner` becomes the umbrella's reference instantiation of the SPEC.
+The reference implementation of this methodology lives in this repo, paralleling the Seal precedent (`~/gordo-seal/` colocates spec + axioms + reference implementation + CLI). Initial implementation: **`roundtable-runner`**, currently at backchannel `scripts/` and tracked for graduation here at backchannel `#128`. Once graduated, `roundtable-runner` becomes the umbrella's reference instantiation of the SPEC.
 
 **Implementation principles:**
 - Methodology is the SPEC; the reference implementation instantiates it.
