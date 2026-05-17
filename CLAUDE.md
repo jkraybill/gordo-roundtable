@@ -70,6 +70,20 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 ---
 
+## Operational Artifacts
+
+**Briefs and reviews belong in the hub, not here.**
+
+gordo-roundtable is a T1 primitive (methodology + tooling). Operational artifacts from specific deliberations -- briefs, review transcripts, roundtable.yaml configs for particular issues -- belong in the repo conducting the deliberation (typically the hub: `~/project-gordo-backchannel/`).
+
+Correct locations:
+- **This repo:** SPEC, implementation code, reference examples
+- **Hub repo:** briefs, reviews, deliberation-specific roundtable.yaml files
+
+Historical note (S265): operational artifacts from hub deliberations were relocated to backchannel and hard-removed from this repo's history as part of pre-v1 cleanup (#254).
+
+---
+
 ## Session Rhythm
 
 **Hub-convention applies (pre-RC1).** Per backchannel `CLAUDE.md` § Session Hub (S18 bilateral consensus), backchannel is the default entry point for all umbrella work pre-v1.0 RC1, including cross-tier deliberation that touches gordo-roundtable. To date, all gordo-roundtable substantive work (S62/S63/S64/S65) has happened during backchannel hub-sessions: cross-repo commits land at gordo-roundtable; session narrative lives at backchannel `SESSION_LOG.md`.

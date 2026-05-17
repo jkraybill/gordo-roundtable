@@ -22,3 +22,7 @@ node_modules/
 .env
 .env.local
 *.local
+
+# Operational artifacts belong in hub, not here (S265 #254)
+briefs/
+reviews/
