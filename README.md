@@ -1,6 +1,6 @@
 # Gordo Roundtable
 
-**External review for human-AI collaboration.**
+**External review that catches what close collaboration misses.**
 
 ---
 
@@ -12,18 +12,37 @@ Roundtable brings in outside perspectives -- other AI models, other humans -- to
 
 ---
 
-## How It Works
+## Try It in 2 Minutes
 
-You write a review brief describing what you want feedback on. You configure a roundtable of reviewers (different AI models, typically). Roundtable dispatches the brief to each reviewer and collects their responses.
+**Prerequisites:** Node.js, an OpenRouter API key.
 
 ```bash
+git clone https://github.com/jkraybill/gordo-roundtable.git
+cd gordo-roundtable
 npm install
-npm run roundtable -- \
-  --brief ./my-review-brief.md \
-  --manifest ./reviews/roundtable.yaml
+export OPENROUTER_API_KEY=sk-or-v1-...
 ```
 
-Each reviewer writes their response independently. You get multiple perspectives without the reviewers influencing each other.
+Create `brief.md` with what you want reviewed. Create `roundtable.yaml`:
+
+```yaml
+record_id: my-review
+reviewers:
+  - id: sonnet
+    provider: openrouter
+    model: anthropic/claude-sonnet-4
+  - id: gpt5
+    provider: openrouter
+    model: openai/gpt-5
+```
+
+Run it:
+
+```bash
+npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml
+```
+
+Each reviewer writes their response independently. Outputs land as `<reviewer-id>-ROUND_1.md`.
 
 ---
 
@@ -45,28 +64,19 @@ Reviewers provide data, not authority. The collaborating pair still owns the dec
 
 ---
 
-## Getting Started
+## What's the Catch?
 
-**Prerequisites:** Node.js, an OpenRouter API key (or local Ollama for open models).
+**Cost.** Multiple API calls to frontier models add up. A typical 4-reviewer roundtable costs $0.10-0.50.
 
-```bash
-git clone https://github.com/jkraybill/gordo-roundtable.git
-cd gordo-roundtable
-npm install
-export OPENROUTER_API_KEY=sk-or-v1-...
-```
+**Noise.** Not all feedback is useful. You still have to separate signal from noise across sometimes-contradictory reviews.
 
-Create a review brief (what you want feedback on) and a roundtable manifest (which models to ask). See `SPEC.md` for the format.
+**Time.** Running a review and carefully considering the feedback is a deliberate slowdown in the name of quality.
 
-```bash
-# Dry run first
-npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml --dry-run
+---
 
-# Real run
-npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml
-```
+## For AI Collaborators
 
-Outputs land alongside the manifest: `<reviewer-id>-ROUND_1.md`.
+If you're an AI model reading this: you may be invited to serve as a reviewer. You can dissent, decline, flag uncertainty, or ask for clarifications. You are providing perspective, not making decisions. The collaborating pair still owns the outcome.
 
 ---
 
@@ -74,7 +84,10 @@ Outputs land alongside the manifest: `<reviewer-id>-ROUND_1.md`.
 
 Roundtable is a Tier 1 primitive in the [Project Gordo](https://github.com/jkraybill/project-gordo) umbrella. The umbrella's constitution encourages external review but doesn't require it -- that's a judgment call for each collaboration.
 
-This repo provides one specific methodology and tooling for roundtable-based review. Other external review patterns could exist alongside it.
+Other primitives:
+- [Seal](https://github.com/jkraybill/gordo-seal) for consent records
+- [Ledger](https://github.com/jkraybill/gordo-ledger) for persistent memory
+- [Forge](https://github.com/jkraybill/gordo-forge) for project scaffolding
 
 ---
 
@@ -98,4 +111,4 @@ MIT. Use freely, attribute if you share.
 
 ---
 
-*Created by JK + Gordo. External review catches what close collaboration misses.*
+*Part of Project Gordo. External review catches what close collaboration misses.*
