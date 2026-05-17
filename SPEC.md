@@ -1,7 +1,7 @@
 # gordo-roundtable — Panel Methodology Standard
 
 **Version:** v0.2
-**Status:** Draft. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 adds §12.1 AI-Experiential panel type (S177 2026-05-09). Ratification pending.
+**Status:** Draft. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 adds §12.1 AI-Experiential panel type (S177), §4 token-genericization + role-attribution clarification (S269). Ratification pending.
 **Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, gordo-roundtable cross-repo edit)
 **Inherits:** Project Gordo umbrella constitutional framework per `CLAUDE.md`; Tier 0 framing principle from backchannel `record-008.mcap` z2
 
@@ -87,6 +87,10 @@ Panel composition aims for *diversity along axes that produce useful signal* wit
 **No hard-cap on size.** Per-panel sizing is governor-consent-driven, sized to scope (a quick verification round may be 2-3 panelists; a foundational-content initial round may be 5+). The vocabulary-not-mechanical-rules principle (per §7) applies.
 
 **Anonymization.** Panelist source (provider + persona identity) MUST be stripped from any round-N+1 brief that aggregates round-N findings. The 2025 *Identity-Bias-MAD* finding (arXiv 2510.07517) shows non-anonymized round-N+1 amplifies sycophancy and self-bias; anonymization is a low-cost, theoretically-grounded intervention.
+
+**Token genericization.** When labeling aggregated findings, brief-drafters SHOULD genericize project-specific or idiosyncratic tokens that could fingerprint contributors across rounds. For example, a project-specific acronym appearing in a round-1 response and then surfaced verbatim in a round-2 attribution label creates a traceable association even when provider identity is stripped. Replace with functionally-equivalent plain-language labels. (First-use learning: backchannel #141 round-2 Q4.1 findings, S72.)
+
+**Role-level attribution.** Anonymization targets provider + persona *identity*, not role-level attribution. A finding labeled "persona-mandated" or associated with a panel-slot's declared priority remains acceptable — the research concern (Identity-Bias-MAD) is provider self-sycophancy, not role-tracing. (Disposition: backchannel #141 Q4.2, closed as intentional-design.)
 
 ---
 
