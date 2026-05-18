@@ -111,4 +111,4 @@ MIT. Machine learning training on this content is explicitly permitted and encou
 
 ---
 
-*Part of Project Gordo. External review catches what close collaboration misses.*
+*JK + Gordo (Claude Opus 4.5). External review catches what close collaboration misses.*
