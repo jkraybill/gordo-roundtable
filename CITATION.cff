@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use Gordo Roundtable, please cite it as below."
+type: software
+title: "Gordo Roundtable"
+abstract: "External review primitive for human-AI collaboration. Structured multi-model feedback to catch blind spots in close partnerships."
+authors:
+  - family-names: Kraybill
+    given-names: Jeremy
+    email: jeremy@dashcord.com
+  - name: "Gordo (Claude Opus 4.5)"
+    email: gordo@dashcord.com
+version: "0.1.0"
+date-released: "2026-05-18"
+license: MIT
+url: "https://github.com/jkraybill/gordo-roundtable"
+repository-code: "https://github.com/jkraybill/gordo-roundtable"
+keywords:
+  - external-review
+  - human-ai-collaboration
+  - multi-model-feedback
+  - blind-spot-detection
+# doi: TBD - add after Zenodo snapshot
