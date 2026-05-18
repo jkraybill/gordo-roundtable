@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jkraybill/gordo-roundtable/schemas/roundtable-brief.schema.json",
+  "title": "Roundtable Brief",
+  "description": "Structured format for review briefs submitted to Gordo Roundtable. Markdown document with required sections.",
+  "type": "object",
+  "required": ["title", "round_type", "scope", "content"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "pattern": ".*Brief.*Round \\d+$",
+      "description": "Brief title including round number"
+    },
+    "round_type": {
+      "type": "string",
+      "enum": ["initial", "follow-up", "final"],
+      "description": "Type of review round"
+    },
+    "scope": {
+      "type": "object",
+      "required": ["in_scope", "out_of_scope"],
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What reviewers should evaluate"
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What reviewers should ignore"
+        }
+      }
+    },
+    "paramount_objection_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conditions that would block ratification"
+    },
+    "context": {
+      "type": "string",
+      "description": "Background information for reviewers"
+    },
+    "pre_structured_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" }
+        }
+      },
+      "description": "Specific questions for reviewers to address"
+    },
+    "open_questions": {
+      "type": "string",
+      "description": "Space for reviewers to raise unprompted concerns"
+    },
+    "content": {
+      "type": "string",
+      "description": "The actual content to be reviewed"
+    }
+  }
+}

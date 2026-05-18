@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jkraybill/gordo-roundtable/schemas/roundtable-manifest.schema.json",
+  "title": "Roundtable Manifest",
+  "description": "Configuration for a Gordo Roundtable external review session. Specifies which models to query and how.",
+  "type": "object",
+  "required": ["record_id", "round", "reviewers"],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier for this review (kebab-case)"
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Review round number (1 for initial, 2+ for follow-ups)"
+    },
+    "reviewers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/reviewer"
+      },
+      "description": "List of AI models to query for review"
+    }
+  },
+  "$defs": {
+    "reviewer": {
+      "type": "object",
+      "required": ["id", "provider", "model"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Short identifier for this reviewer (used in output filenames)"
+        },
+        "provider": {
+          "type": "string",
+          "enum": ["openrouter", "anthropic", "openai", "google", "ollama"],
+          "description": "API provider to use"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model identifier (provider-specific format)"
+        },
+        "reasoning_effort": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Thinking/reasoning effort level (for models that support it)"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature (0 = deterministic)"
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum response length"
+        }
+      }
+    }
+  }
+}
