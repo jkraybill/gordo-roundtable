@@ -1,7 +1,7 @@
 {
   "name": "roundtable-runner",
   "private": true,
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc2",
   "description": "Adversarial review roundtable runner per Integration Standard v0.5 §7+§8",
   "type": "module",
   "scripts": {
