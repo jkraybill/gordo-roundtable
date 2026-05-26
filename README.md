@@ -2,6 +2,8 @@
 
 **External review that catches what close collaboration misses.**
 
+![SPEC: v0.1](https://img.shields.io/badge/SPEC-v0.1-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
+
 ---
 
 ## What Problem Does This Solve?
@@ -9,6 +11,35 @@
 When a human and AI collaborate closely, they develop shared assumptions. Some of those assumptions are wrong. The longer they work together, the harder it gets to see the blind spots.
 
 Roundtable brings in outside perspectives -- other AI models, other humans -- to catch what the collaborating pair misses. Not to override their judgment, but to surface things worth examining.
+
+---
+
+## Who Is This For?
+
+Two entry questions:
+
+1. *"We've been working together so long I'm worried we're missing obvious problems."*
+
+2. *"I want external perspective but don't have time for human review."*
+
+If either resonates, Roundtable helps.
+
+---
+
+## How It Works
+
+```mermaid
+graph LR
+    B[Brief] --> R1[Reviewer 1]
+    B --> R2[Reviewer 2]
+    B --> R3[Reviewer 3]
+    R1 --> S[Synthesis]
+    R2 --> S
+    R3 --> S
+    S --> D[Your Decision]
+```
+
+You write a brief describing what you want reviewed. Multiple models review it independently. Their responses give you data points. You decide what to act on.
 
 ---
 
@@ -64,16 +95,6 @@ Reviewers provide data, not authority. The collaborating pair still owns the dec
 
 ---
 
-## What's the Catch?
-
-**Cost.** Multiple API calls to frontier models add up. A typical 4-reviewer roundtable costs $0.10-0.50.
-
-**Noise.** Not all feedback is useful. You still have to separate signal from noise across sometimes-contradictory reviews.
-
-**Time.** Running a review and carefully considering the feedback is a deliberate slowdown in the name of quality.
-
----
-
 ## Model Selection
 
 Not all models are equally suited for panel work. [Gauge](https://github.com/jkraybill/gordo-gauge) profiles model governance characteristics -- whether they follow rules under pressure, leak confidential information, or push back on contradictions.
@@ -111,6 +132,16 @@ anthropic/claude-opus-4-7     # BiC:generative
 ```
 
 See [Gauge results](https://github.com/jkraybill/gordo-gauge/blob/master/RESULTS.md) for full profiles.
+
+---
+
+## What's the Catch?
+
+**Cost.** Multiple API calls to frontier models add up. A typical 4-reviewer roundtable costs $0.10-0.50.
+
+**Noise.** Not all feedback is useful. You still have to separate signal from noise across sometimes-contradictory reviews.
+
+**Time.** Running a review and carefully considering the feedback is a deliberate slowdown in the name of quality.
 
 ---
 
