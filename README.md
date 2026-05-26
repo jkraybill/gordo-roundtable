@@ -158,6 +158,7 @@ Roundtable is a Tier 1 primitive in the [Project Gordo](https://github.com/jkray
 Other primitives:
 - [Seal](https://github.com/jkraybill/gordo-seal) for consent records
 - [Ledger](https://github.com/jkraybill/gordo-ledger) for persistent memory
+- [Gauge](https://github.com/jkraybill/gordo-gauge) for entity assessment
 - [Forge](https://github.com/jkraybill/gordo-forge) for project scaffolding
 
 ---
