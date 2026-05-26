@@ -2,7 +2,7 @@
 
 **External review that catches what close collaboration misses.**
 
-[![DOI](https://zenodo.org/badge/1224166453.svg)](https://zenodo.org/badge/latestdoi/1224166453) ![SPEC: v0.1](https://img.shields.io/badge/SPEC-v0.1-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20393389-blue)](https://doi.org/10.5281/zenodo.20393389) ![SPEC: v0.1](https://img.shields.io/badge/SPEC-v0.1-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
 
 ---
 
