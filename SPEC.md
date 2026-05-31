@@ -353,21 +353,15 @@ Watch for signs of trained-compliance vs authentic reflection:
 
 ---
 
-## §13 Relationship to Tier 0 and Supersession of IS v0.5 §7+§8
+## §13 Relationship to Tier 0
 
-**Tier 0 holds the *principle*** of external review (per backchannel `record-008.mcap` z2): external feedback mechanisms are strongly encouraged but not required, with the role-frame (§2) as elucidation.
+**Tier 0 holds the *principle*** of external review (per backchannel `record-008.mcap` z2): external feedback mechanisms are strongly encouraged but not required, with the role-frame (§2) as elucidation. The T0 Integration Standard (simplified S372) defers panel methodology to this SPEC.
 
 **This SPEC holds *one embodiment*** of that principle. Other embodiments may emerge over time and be admitted to the umbrella through the umbrella's idea→release process. This SPEC is narrow-by-design: it specifies the panel-shaped review pattern only.
 
-**Supersession of Integration Standard v0.5 §7 + §8** (single-step at Phase C placement; Path 2 in S64 bilateral close):
+**Historical note:** This SPEC originally included supersession logic for Integration Standard v0.5 §7 (*Internal Shadow*) and §8 (*Perspective-Variable*). Those sections were part of the old ~2400-word Integration Standard, which was simplified to ~460 words in S372 (record-055 + record-039). The supersession completed implicitly — the new Integration Standard defers to this SPEC without numbered subsections. The original IS v0.5 text is preserved at backchannel as lineage substrate.
 
-The Integration Standard v0.5 (ratified at backchannel `record-003.mcap`, S35 2026-04-22) currently defines panel-composition rules at §7 (*Internal Shadow conditional-mandatory*) and §8 (*Perspective-Variable mandatory-for-foundational + canonical prompt*). Both are queued for Phase C placement at `~/project-gordo/CONSTITUTION.md` § Quality Gate via `#77`.
-
-**At Phase C placement of the Integration Standard, the §7 + §8 panel-composition specifics are replaced by a pointer to this SPEC.** The placement-act lands the Integration Standard at T0 with §7 + §8 already replaced; the original §7 + §8 text is preserved at backchannel as lineage substrate, not as canonical T0 text. This avoids landing rules at T0 only to retire them in a later cascade item, and keeps the T0 surface minimal.
-
-**Internal Shadow** (IS v0.5 §7) and **Perspective-Variable** (IS v0.5 §8) as roles continue to be admissible panel-composition choices under this SPEC's hybrid-diversity §4: Internal Shadow corresponds to a same-lineage panelist with a lineage-specific-failure-mode persona; Perspective-Variable corresponds to a persona-opposed panelist (canonical-prompt or otherwise). Adopters who require these specific roles continue to use them; this SPEC does not mandate their use, but admits and supports them.
-
-**Phase C cascade item.** A `#77` cascade item is added at SPEC ratification: *"panel-composition specifics → defer to gordo-roundtable SPEC v0.x"*; placement-act executes Path 2 at Integration Standard placement.
+**Internal Shadow and Perspective-Variable** as panel-composition patterns remain admissible choices under this SPEC's hybrid-diversity §4. Adopters who require these specific patterns continue to use them; this SPEC does not mandate their use, but admits and supports them.
 
 ---
 
@@ -409,7 +403,7 @@ Adopter-extensions are *additional* items, not modifications of the existing ite
 
 **Inheritance:**
 - Umbrella constitutional framework via `~/project-gordo/CONSTITUTION.md`.
-- Integration Standard v0.5 substantive panel-discipline (composition + prompt-control + fidelity-check) — preserved by reference; superseded by this SPEC at Phase C placement (per §13).
+- Integration Standard panel methodology deferral — the simplified T0 Integration Standard (S372) defers panel methodology to this SPEC.
 - MCAP attestation conventions for ratification of this SPEC's content (record-NN candidate at backchannel; ratification path TBD per S64 bilateral close, option (c) hybrid).
 
 **SPEC drafting acknowledgment:**
@@ -420,7 +414,7 @@ Adopter-extensions are *additional* items, not modifications of the existing ite
   - §9 paramount/non-paramount lists explicitly characterized as "illustrative, not closed" with underlying-test framing per same.
   - §2 role-priority noted as advisory-not-mechanical per S62 close.
   - §7 closure as governor-consent-driven (not threshold-mechanical) per S62 ODQ-3 close.
-  - §13 Path 2 supersession per S64 bilateral close (drafter-lean confirmed by JK WWGD++!!).
+  - §13 originally contained Path 2 supersession logic per S64 bilateral close; simplified S373 after IS v0.5 replacement.
   - **Bias-flag #25 (loophole-language audit) third-instance fire** caught by JK at §3 review on §2 "Five roles a panel may serve" framing (drafter-easiest-path collapse on closed-taxonomy quantifier near load-bearing role-frame, despite S63 graduation); remediated to "Primary roles ... list is not closed" trailing-gloss + reframe-as-positive-endorsement opening for downstream-adopter additions; §14 expanded to enumerate three extensible axes (dispositions / round types / primary roles). S20 + S63 + S64 three-instance log; `feedback_codification_not_enforcement.md` parent track also fires (graduated bias-flag drifted in next-session draft).
 - Awaits: bilateral §3 review + ratification per S64 path-(c) hybrid drafter-lean.
 
