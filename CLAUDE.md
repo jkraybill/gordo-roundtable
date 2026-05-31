@@ -103,3 +103,5 @@ gordo-roundtable's own GitHub Issues will be enabled when standalone session-rhy
 ---
 
 *Created S63 2026-04-29. To be expanded as practice accumulates.*
+
+<!-- Last reviewed: 2026-05-31 14:05 AEST by Gordo -->
