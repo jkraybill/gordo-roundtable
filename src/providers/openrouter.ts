@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import type { Reviewer } from "../types.js";
 
 const BASE_URL = "https://openrouter.ai/api/v1";
+const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 
 export interface OpenRouterUsage {
   prompt_tokens: number;
@@ -21,6 +22,7 @@ export async function dispatchOpenRouter(
   const client = new OpenAI({
     baseURL: BASE_URL,
     apiKey: process.env.OPENROUTER_API_KEY,
+    timeout: TIMEOUT_MS,
   });
 
   const messages: Array<{ role: "system" | "user"; content: string }> = [];
