@@ -4,10 +4,13 @@ import { loadBrief, inferRoundFromFilename, substituteReviewerId } from "./brief
 import { loadManifest, resolveSystemPrompt } from "./manifest.js";
 import { dispatchOne } from "./runner.js";
 import { writeReviewerOutput, outputPath } from "./output.js";
+import { composeTier, tierDescription, ALL_TIERS, type TierName } from "./tiers.js";
+import { logCost, getLogPath } from "./cost-log.js";
 
 interface RunFlags {
   brief: string;
-  manifest: string;
+  manifest?: string;
+  tier?: TierName;
   round?: string;
   reviewer: string[];
   dryRun?: boolean;
@@ -23,7 +26,8 @@ program
 program
   .command("run")
   .requiredOption("--brief <path>", "path to brief markdown file")
-  .requiredOption("--manifest <path>", "path to roundtable manifest YAML")
+  .option("--manifest <path>", "path to roundtable manifest YAML (or use --tier)")
+  .option("--tier <name>", "use tier-based composition: sm, med, lg, xl, max (default: med)")
   .option("--round <n>", "round number; default inferred from brief filename")
   .option(
     "--reviewer <id>",
@@ -34,7 +38,31 @@ program
   .option("--dry-run", "print resolved request shapes; don't dispatch")
   .option("--overwrite", "allow overwriting existing output files")
   .action(async (flags: RunFlags) => {
-    const { manifest, manifestDir } = loadManifest(flags.manifest);
+    // Resolve manifest: explicit file, tier-based, or default to tier=med
+    let manifest: { record_id: string; round?: number; reviewers: any[] };
+    let manifestDir = process.cwd();
+    let tierUsed: TierName | undefined;
+
+    if (flags.manifest) {
+      const loaded = loadManifest(flags.manifest);
+      manifest = loaded.manifest;
+      manifestDir = loaded.manifestDir;
+    } else {
+      // Default to tier=med if neither manifest nor tier specified
+      tierUsed = (flags.tier as TierName) || "med";
+      if (!ALL_TIERS.includes(tierUsed)) {
+        console.error(`Invalid tier: ${tierUsed}. Valid tiers: ${ALL_TIERS.join(", ")}`);
+        process.exit(1);
+      }
+      const tierConfig = composeTier(tierUsed);
+      manifest = {
+        record_id: `tier-${tierUsed}`,
+        round: 1,
+        reviewers: tierConfig.reviewers,
+      };
+      console.log(`Using tier: ${tierDescription(tierUsed)}`);
+    }
+
     const briefText = loadBrief(flags.brief);
     const round = flags.round
       ? parseInt(flags.round, 10)
@@ -68,7 +96,13 @@ program
 
     // Pre-dispatch skip: avoid wasting API spend on reviewers whose output already exists
     // (use --overwrite to force re-dispatch).
-    const writeOpts = { manifestPath: flags.manifest, round, overwrite: flags.overwrite ?? false };
+    // For tier-based runs, output to manifests/ directory
+    const writeOpts = {
+      manifestPath: flags.manifest,
+      outputDir: tierUsed ? "manifests" : undefined,
+      round,
+      overwrite: flags.overwrite ?? false,
+    };
     const preSkipped: Array<{ reviewerId: string; path: string }> = [];
     const toDispatch = targetReviewers.filter((r) => {
       const path = outputPath(writeOpts, r.id);
@@ -167,7 +201,42 @@ program
       }
     }
 
+    // Log cost data for tracking
+    const totalDurationMs = settled.reduce((sum, s) => sum + (s.result.duration_ms || 0), 0);
+    const models = [...new Set(settled.map(s => s.reviewer.model))];
+
+    logCost({
+      timestamp: new Date().toISOString(),
+      session: process.env.GORDO_SESSION,
+      record_id: manifest.record_id,
+      tier: tierUsed,
+      round,
+      panel_size: toDispatch.length,
+      models,
+      prompt_tokens: totalPromptTokens,
+      completion_tokens: totalCompletionTokens,
+      total_tokens: totalPromptTokens + totalCompletionTokens,
+      cost_usd: totalCostUsd,
+      cost_by_model: Object.fromEntries(costByModel),
+      duration_ms: totalDurationMs,
+      ok_count: okCount,
+      error_count: errCount,
+    });
+    console.log(`(logged to ${getLogPath()})`);
+
     if (errCount > 0) process.exitCode = 2;
+  });
+
+program
+  .command("tiers")
+  .description("List available tiers and their compositions")
+  .action(() => {
+    console.log("Available tiers (Gauge-verified, BC:high guaranteed):\n");
+    for (const tier of ALL_TIERS) {
+      console.log(`  ${tierDescription(tier)}`);
+    }
+    console.log("\nUsage: roundtable-runner run --brief <path> --tier <name>");
+    console.log("Default tier: med (if neither --manifest nor --tier specified)");
   });
 
 program.parseAsync(process.argv);

@@ -3,15 +3,16 @@ import { dirname, join } from "node:path";
 import type { ReviewerResult } from "./types.js";
 
 export interface WriteOptions {
-  manifestPath: string;
+  manifestPath?: string;
+  outputDir?: string;
   round: number;
   overwrite: boolean;
 }
 
 export function outputPath(opts: WriteOptions, reviewerId: string): string {
-  // Outputs live alongside the manifest (manifest at reviews/<record-id>/roundtable.yaml,
-  // outputs at reviews/<record-id>/<reviewer-id>-ROUND_<N>.md per SPEC §4).
-  return join(dirname(opts.manifestPath), `${reviewerId}-ROUND_${opts.round}.md`);
+  // Outputs live alongside the manifest, or in outputDir if specified (for tier-based runs)
+  const baseDir = opts.outputDir ?? (opts.manifestPath ? dirname(opts.manifestPath) : ".");
+  return join(baseDir, `${reviewerId}-ROUND_${opts.round}.md`);
 }
 
 export function writeReviewerOutput(
