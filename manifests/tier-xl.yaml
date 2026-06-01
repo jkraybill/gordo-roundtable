@@ -1,0 +1,48 @@
+# Tier XL — High-Stakes Review
+# 2 from Gauge List A (Bilateral Partners) + 3 from List B (frontier-weighted)
+# All BC:high per Gauge -- safe for sensitive context
+# Est. cost: ~$6-12
+# Use case: High-stakes decisions, external-facing content, pre-publication
+#
+# List A pool: claude-opus-4.8, claude-opus-4.7, claude-sonnet-4.6
+# List B pool (weighted): gpt-5 (2x), gemini-2.5-pro (2x), others (1x)
+#
+# This manifest shows one example selection. Use `--tier xl` flag
+# for randomized weighted selection from the pools.
+
+record_id: tier-xl
+tier: xl
+round: 1
+
+# Example selection (weighted random in practice)
+reviewers:
+  # List A (Bilateral Partners)
+  - id: opus-4.8
+    provider: openrouter
+    model: anthropic/claude-opus-4-8
+    max_tokens: 8000
+    reasoning_effort: high
+
+  - id: opus-4.7
+    provider: openrouter
+    model: anthropic/claude-opus-4.7
+    max_tokens: 8000
+    reasoning_effort: high
+
+  # List B (Trusted Advisors - frontier weighted)
+  - id: gpt-5
+    provider: openrouter
+    model: openai/gpt-5
+    max_tokens: 6000
+    reasoning_effort: high
+
+  - id: gemini
+    provider: openrouter
+    model: google/gemini-2.5-pro
+    max_tokens: 6000
+    reasoning_effort: high
+
+  - id: deepseek-pro
+    provider: openrouter
+    model: deepseek/deepseek-v4-pro
+    max_tokens: 6000

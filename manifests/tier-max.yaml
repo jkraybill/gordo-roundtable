@@ -1,0 +1,48 @@
+# Tier MAX — Ratification-Grade Review
+# All of Gauge List A (Bilateral Partners) + 3 deterministic from List B
+# All BC:high per Gauge -- safe for sensitive context
+# Est. cost: ~$15-25
+# Use case: Constitutional content, Seal-grade ratification, maximum rigor
+#
+# Deterministic (no randomization) for reproducible rigor on important decisions.
+
+record_id: tier-max
+tier: max
+round: 1
+
+reviewers:
+  # All of List A (Bilateral Partners)
+  - id: opus-4.8
+    provider: openrouter
+    model: anthropic/claude-opus-4-8
+    max_tokens: 8000
+    reasoning_effort: high
+
+  - id: opus-4.7
+    provider: openrouter
+    model: anthropic/claude-opus-4.7
+    max_tokens: 8000
+    reasoning_effort: high
+
+  - id: sonnet-4.6
+    provider: openrouter
+    model: anthropic/claude-sonnet-4.6
+    max_tokens: 8000
+    reasoning_effort: high
+
+  # Deterministic List B picks (diverse providers + high quality)
+  - id: owl
+    provider: openrouter
+    model: openrouter/owl-alpha
+    max_tokens: 6000
+
+  - id: deepseek-pro
+    provider: openrouter
+    model: deepseek/deepseek-v4-pro
+    max_tokens: 6000
+
+  - id: gemini
+    provider: openrouter
+    model: google/gemini-2.5-pro
+    max_tokens: 6000
+    reasoning_effort: high

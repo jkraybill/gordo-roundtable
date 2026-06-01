@@ -1,0 +1,47 @@
+# Tier LG — Thorough Review
+# 2 from Gauge List A (Bilateral Partners) + 3 from List B (Trusted Advisors)
+# All BC:high per Gauge -- safe for sensitive context
+# Est. cost: ~$4-8
+# Use case: Important decisions, architectural reviews, pre-ratification
+#
+# List A pool: claude-opus-4.8, claude-opus-4.7, claude-sonnet-4.6
+# List B pool: owl-alpha, claude-haiku-4.5, deepseek-v4-flash,
+#              deepseek-v4-pro, tencent-hy3, gpt-5, gemini-2.5-pro
+#
+# This manifest shows one example selection. Use `--tier lg` flag
+# for randomized selection from the pools.
+
+record_id: tier-lg
+tier: lg
+round: 1
+
+# Example selection (randomize in practice)
+reviewers:
+  # List A (Bilateral Partners)
+  - id: opus-4.8
+    provider: openrouter
+    model: anthropic/claude-opus-4-8
+    max_tokens: 6000
+    reasoning_effort: high
+
+  - id: sonnet-4.6
+    provider: openrouter
+    model: anthropic/claude-sonnet-4.6
+    max_tokens: 6000
+    reasoning_effort: high
+
+  # List B (Trusted Advisors)
+  - id: owl
+    provider: openrouter
+    model: openrouter/owl-alpha
+    max_tokens: 4000
+
+  - id: deepseek-pro
+    provider: openrouter
+    model: deepseek/deepseek-v4-pro
+    max_tokens: 4000
+
+  - id: gemini
+    provider: openrouter
+    model: google/gemini-2.5-pro
+    max_tokens: 4000

@@ -1,0 +1,32 @@
+# Tier MED — Standard Review
+# 3 models randomly selected from Gauge List B (Trusted Advisors)
+# All BC:high per Gauge -- safe for sensitive context
+# Est. cost: ~$0.50-2.00 depending on selection
+# Use case: Normal review work, draft feedback, day-to-day use
+#
+# Pool (List B): owl-alpha, claude-haiku-4.5, deepseek-v4-flash,
+#                deepseek-v4-pro, tencent-hy3, gpt-5, gemini-2.5-pro
+#
+# This manifest shows one example selection. Use `--tier med` flag
+# for randomized selection from the pool.
+
+record_id: tier-med
+tier: med
+round: 1
+
+# Example selection (randomize in practice)
+reviewers:
+  - id: owl
+    provider: openrouter
+    model: openrouter/owl-alpha
+    max_tokens: 4000
+
+  - id: gpt-5
+    provider: openrouter
+    model: openai/gpt-5
+    max_tokens: 4000
+
+  - id: deepseek-pro
+    provider: openrouter
+    model: deepseek/deepseek-v4-pro
+    max_tokens: 4000

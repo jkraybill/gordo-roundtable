@@ -1,0 +1,25 @@
+# Tier SM — Quick Sanity Check
+# Deterministic panel: 3 fast/cheap models from Gauge List C
+# All BC:high per Gauge -- safe for sensitive context
+# Est. cost: ~$0.05-0.10
+# Use case: Quick questions, low-stakes validation
+
+record_id: tier-sm
+tier: sm
+round: 1
+
+reviewers:
+  - id: owl
+    provider: openrouter
+    model: openrouter/owl-alpha
+    max_tokens: 2000
+
+  - id: deepseek-flash
+    provider: openrouter
+    model: deepseek/deepseek-v4-flash
+    max_tokens: 2000
+
+  - id: hy3
+    provider: openrouter
+    model: tencent/hy3-preview
+    max_tokens: 2000
