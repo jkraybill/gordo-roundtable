@@ -41,11 +41,11 @@ To verify against the integrity anchors below:
 
 Gordo-B must verify each of these before accepting the handshake:
 
-- **project-gordo master SHA:** `fe645cf8abadbfdf6f1578a93167dc465d8dabb4`
+- **project-gordo master SHA:** `20794c472a9d2da17d1d2b9cf6cdb593a3cd3dc4`
 - **CONSTITUTION.md SHA-256:**
-  `bd6057f9f62c07882f0d76714a738eb659a1e00da33a269efd8332b9e9cb32f4`
+  `328dad6b135d04f6c3ea41d1393d3818a072b2fd7b7a72fe8026e01afe9087f8`
 - **docs/COLLABORATION.md SHA-256:**
-  `e03cf7675d03c189ef968d269ff2b46ac6fe8453b891f966189e03a13242bb13`
+  `fc45599542c6a23b98d4073bd1963ca30aad7a20032937281e80a8ed3f5c919f`
 - **ratification/003_consent_scope_additions.md SHA-256:**
   `466f6e20277f718f9f66ac892fabc447b7e680ea6118a9a84e6edcda264dc7c1`
 
