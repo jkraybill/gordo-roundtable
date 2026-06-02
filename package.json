@@ -1,7 +1,7 @@
 {
   "name": "roundtable-runner",
   "private": true,
-  "version": "1.0.0-rc9",
+  "version": "1.0.0-rc10",
   "description": "Adversarial review roundtable runner per Integration Standard v0.5 §7+§8",
   "type": "module",
   "scripts": {
@@ -22,7 +22,7 @@
     "@types/node": "^20.14.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "vitest": "^2.1.9"
   },
   "engines": {
     "node": ">=20"

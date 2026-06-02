@@ -2,7 +2,7 @@
 
 **External review that catches what close collaboration misses.**
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20393389-blue)](https://doi.org/10.5281/zenodo.20393389) ![SPEC: v0.1](https://img.shields.io/badge/SPEC-v0.1-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20393389-blue)](https://doi.org/10.5281/zenodo.20393389) ![SPEC: v0.1](https://img.shields.io/badge/SPEC-v1.0.0--rc10-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
 
 ---
 
@@ -160,7 +160,7 @@ Other primitives:
 
 ## Current Status
 
-- **SPEC:** v0.1 ratified
+- **SPEC:** v1.0.0-rc10
 - **Implementation:** TypeScript, OpenRouter + Ollama support
 - **Stage:** Working, used in production for Project Gordo's own reviews
 

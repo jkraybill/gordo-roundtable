@@ -1,7 +1,7 @@
 # gordo-roundtable — Panel Methodology Standard
 
-**Version:** v1.0.0-rc8
-**Status:** Release candidate. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 added §12.1 AI-Experiential panel type (S177), §4 token-genericization + role-attribution clarification (S269). v1.0.0-rc8 is umbrella-wide coordinated RC.
+**Version:** v1.0.0-rc10
+**Status:** Release candidate. v0.1 ratified at backchannel `record-009.mcap` (S64 2026-04-29). v0.2 added §12.1 AI-Experiential panel type (S177), §4 token-genericization + role-attribution clarification (S269). v1.0.0-rc10 is umbrella-wide coordinated RC.
 **Drafted:** 2026-04-29 (S64 backchannel-hosted hub session, gordo-roundtable cross-repo edit)
 **Inherits:** Project Gordo umbrella constitutional framework per `CLAUDE.md`; Tier 0 framing principle from backchannel `record-008.mcap` z2
 
