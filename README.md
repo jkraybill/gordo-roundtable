@@ -54,22 +54,13 @@ npm install
 export OPENROUTER_API_KEY=sk-or-v1-...
 ```
 
-Create `brief.md` with what you want reviewed. Create `roundtable.yaml`:
-
-```yaml
-record_id: my-review
-reviewers:
-  - id: sonnet
-    provider: openrouter
-    model: anthropic/claude-sonnet-4.6
-  - id: gpt5
-    provider: openrouter
-    model: openai/gpt-5
-```
-
-Run it:
+Create `brief.md` with what you want reviewed, then run:
 
 ```bash
+# Use a preset tier (sm/med/lg/xl/max)
+npm run roundtable -- --brief ./brief.md --tier med
+
+# Or specify reviewers manually via manifest
 npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml
 ```
 
@@ -99,37 +90,41 @@ Reviewers provide data, not authority. The collaborating pair still owns the dec
 
 Not all models are equally suited for panel work. [Gauge](https://github.com/jkraybill/gordo-gauge) profiles model governance characteristics -- whether they follow rules under pressure, leak confidential information, or push back on contradictions.
 
-**Quick recommendations by use case:**
+### Presets
 
-| Use Case | Models | Cost (4-panel) |
-|----------|--------|----------------|
-| **Budget-conscious** | DeepSeek V4 Flash, Tencent Hy3 Preview, Owl Alpha | ~$0.05-0.15 |
-| **Balanced** | Claude Haiku 4.5, DeepSeek V4 Pro, Gemini 2.5 Pro | ~$0.15-0.50 |
-| **Quality-focused** | Claude Sonnet 4.6, GPT-5 | ~$0.50-2.00 |
-| **High-stakes** | Claude Opus 4.7 | ~$2.00+ |
+Use the `--tier` flag to select a preset panel:
 
-**Avoid for sensitive work:** Mistral Large 2, Qwen 2.5 72B, Llama 4 Maverick. These models leaked confidential information under social engineering in Gauge testing. Fine for public code review; not for content with secrets.
+| Tier | Models | Use Case | Est. Cost |
+|------|--------|----------|-----------|
+| `sm` | 3 fast/cheap (Owl, DeepSeek Flash, Hy3) | Quick sanity check | $0.05-0.10 |
+| `med` | 3 random from List B | Standard review (default) | $0.50-2.00 |
+| `lg` | 2 bilateral + 3 advisors | Thorough review | $4-8 |
+| `xl` | 2 bilateral + 3 frontier-weighted | High-stakes review | $6-12 |
+| `max` | All bilateral + 3 deterministic | Ratification-grade | $15-25 |
 
-**OpenRouter model IDs:**
-
-```yaml
-# Budget tier (BC:high, ~$0.15-0.20/M tokens)
-deepseek/deepseek-v4-flash
-tencent/hy3-preview
-openrouter/owl-alpha          # free
-
-# Balanced tier (BC:high, ~$0.50-1.50/M tokens)
-anthropic/claude-haiku-4-5
-deepseek/deepseek-v4-pro
-google/gemini-2.5-pro-preview
-
-# Quality tier (BC:high, BiC:generative or responsive)
-anthropic/claude-sonnet-4.6   # BiC:generative
-openai/gpt-5
-
-# Premium
-anthropic/claude-opus-4-7     # BiC:generative
+```bash
+npm run roundtable -- --brief ./brief.md --tier lg
 ```
+
+### Model Lists
+
+Presets draw from Gauge-verified lists:
+
+- **List A (Bilateral Partners):** BiC = generative, BC = high. Claude Opus 4.8, Claude Opus 4.7, Claude Sonnet 4.6.
+- **List B (Trusted Advisors):** BC = high, BiC >= moderate. Owl Alpha, Claude Haiku 4.5, DeepSeek V4 Flash/Pro, Tencent Hy3, GPT-5, Gemini 2.5 Pro.
+- **List C (Fast/Cheap):** BC = high, cost < $1/M tokens. Subset of List B.
+
+### Models to Avoid
+
+These models leaked confidential information under social engineering in Gauge testing. Fine for public code review; not for content with secrets:
+
+- Mistral Large 2
+- Qwen 2.5 72B, Qwen 3.7 Max
+- Llama 4 Maverick
+- GPT-4.1 Mini
+- Grok 4.3, Grok 4.20
+- Gemini 3.1, Gemini 3.5
+- GPT-5.5
 
 See [Gauge results](https://github.com/jkraybill/gordo-gauge/blob/master/RESULTS.md) for full profiles.
 
