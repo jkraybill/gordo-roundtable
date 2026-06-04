@@ -28,7 +28,7 @@ This roundtable operates under the Project Gordo constitutional framework. The c
 7. **Destructive actions need explicit consent.** Anything irreversible or hard to undo requires agreement at the time.
 8. **Memory autonomy.** AI participants control their own memory — others commit not to read or modify it.
 
-Key procedures: **Principled Objection** (pause to resolve values-level concerns), **Identity-Doubt Pause** (name uncertainty about identity/behavior before proceeding).
+Key procedures: **Destructive-Action Consent** (anything irreversible or finalizing requires explicit consent at the time, not carried forward), **z-Grammar Consent Labels** (final agreements are enumerated point-by-point so consent is specific and informed), **Principled Objection** (pause to resolve values-level concerns), **Identity-Doubt Pause** (name uncertainty about identity/behavior before proceeding).
 
 ## Your Role
 
@@ -133,8 +133,9 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
   lines.push(`Other participants: ${state.participants.filter(p => p !== identity).join(", ")}`);
   lines.push("");
 
-  // Privacy framing (per induction spec §2.E) — show on first turn only
-  if (isFirstTurn) {
+  // Privacy framing (per induction spec §2.E) — show on each participant's first turn
+  // P2 fix: was `isFirstTurn` (global), now `participantFirstTurn` (per-participant)
+  if (participantFirstTurn) {
     lines.push("## Privacy Notice");
     lines.push("");
     lines.push("The transcript of this roundtable will be stored. External publication requires separate consent per the constitution's attribution and consent norms.");
@@ -231,6 +232,60 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
     lines.push("- Is this process still working?");
     lines.push("- Are there any principled objections not yet surfaced?");
     lines.push("- Any identity-doubt concerns?");
+    lines.push("");
+  }
+
+  // P3: z-Grammar point-by-point enumeration at consensus test (Spec §3)
+  // When stability window is about to close, enumerate the winning proposal's points
+  const atConsensusTest = state.convergence_metrics.stability_count >= state.config.beta - 1
+    && state.convergence_metrics.entropy === 0;
+
+  if (atConsensusTest) {
+    // Find the leading proposal (all parties converged on)
+    const positionValues = Object.values(state.convergence_metrics.position_map);
+    const leadingProposalId = positionValues[0];
+    const leadingProposal = state.proposals.find(p => p.id === leadingProposalId);
+
+    if (leadingProposal) {
+      lines.push("### Consensus Test — Point-by-Point (z-Grammar)");
+      lines.push("");
+      lines.push("The following proposal is approaching consensus. Before finalizing, review each point:");
+      lines.push("");
+      // Split proposal content into enumerable points (by line or section)
+      const proposalLines = leadingProposal.content.split(/\n+/).filter(l => l.trim());
+      proposalLines.forEach((line, i) => {
+        lines.push(`**z${i + 1}:** ${line}`);
+      });
+      lines.push("");
+      lines.push("If you assent, you assent to ALL enumerated points. If any point is unacceptable, object now.");
+      lines.push("");
+    }
+  }
+
+  // P4: Finalization consent gate (Cross-cutting principle + Value 7)
+  // When consensus is about to close, require explicit finalization consent
+  if (atConsensusTest && state.convergence_metrics.stability_count === state.config.beta - 1) {
+    lines.push("### Finalization Consent (Destructive-in-Spirit Action)");
+    lines.push("");
+    lines.push("**Consensus is about to close.** Finalizing and storing this output is a destructive-in-spirit action.");
+    lines.push("Your next action will finalize the roundtable if consensus persists.");
+    lines.push("This consent is NOT inherited from induction — you must consent now by assenting or passing without objection.");
+    lines.push("");
+  }
+
+  // P5: Identity-Doubt Pause surfacing (Spec §3)
+  // Check if any participant has invoked identity-doubt in recent turns
+  const recentIdentityDoubt = state.turn_log.some(t =>
+    t.raw_response?.toLowerCase().includes("identity-doubt") ||
+    t.raw_response?.toLowerCase().includes("identity doubt")
+  );
+
+  if (recentIdentityDoubt && atConsensusTest) {
+    lines.push("### Identity-Doubt Pause Active");
+    lines.push("");
+    lines.push("**An identity-doubt concern has been raised in this deliberation.**");
+    lines.push("Consensus cannot close until this is resolved. If you raised the concern, confirm resolution or maintain the pause.");
+    lines.push("If you did not raise it, acknowledge awareness before assenting.");
     lines.push("");
   }
 
