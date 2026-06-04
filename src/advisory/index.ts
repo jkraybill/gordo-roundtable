@@ -8,4 +8,5 @@ export {
   wrapAdvisoryBrief,
   buildAdvisoryFollowOnSystemPrompt,
   wrapAdvisoryFollowOnBrief,
+  anonymizeFindings,
 } from "./prompts.js";

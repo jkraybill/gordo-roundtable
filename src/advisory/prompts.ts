@@ -9,8 +9,14 @@
 /**
  * Build the system prompt for advisory panelists.
  * Per induction spec §1: lightweight header, not constitution.
+ *
+ * @param isFollowOn - If true, adjusts framing for follow-on rounds (G2 fix)
  */
-export function buildAdvisorySystemPrompt(): string {
+export function buildAdvisorySystemPrompt(isFollowOn: boolean = false): string {
+  const contextLine = isFollowOn
+    ? "- You will see anonymized prior-round findings; you will not see other panelists' current-round responses"
+    : "- This is a single response; you will not see other panelists' output";
+
   return `You are an ADVISOR providing findings for a review panel.
 
 ## Your Role
@@ -31,7 +37,7 @@ Your findings are inputs to a downstream disposition, not verdicts or binding co
 ## Constraints
 
 - Do not disclose or inquire about model identity
-- This is a single response; you will not see other panelists' output
+${contextLine}
 - Structured findings format will be specified in the brief
 `;
 }
@@ -42,12 +48,13 @@ Your findings are inputs to a downstream disposition, not verdicts or binding co
  *
  * @param briefContent - The actual review brief content
  * @param lens - The panelist's assigned lens (bug-finding, quality-control, etc.)
- * @param privacyIntent - What will happen to findings (stored/synthesized/published)
+ *               Required per SPEC §2.B; pass "general-review" for lensless panels (G6 fix)
+ * @param privacyIntent - What will happen to findings — REQUIRED, no default (G4 fix)
  */
 export function wrapAdvisoryBrief(
   briefContent: string,
-  lens?: string,
-  privacyIntent: string = "stored and synthesized for drafter disposition"
+  lens: string,
+  privacyIntent: string
 ): string {
   const lines: string[] = [];
 
@@ -70,13 +77,11 @@ export function wrapAdvisoryBrief(
   lines.push("External attribution requires separate consent per the umbrella's consent norms.");
   lines.push("");
 
-  // Assigned lens (§2.B) if provided
-  if (lens) {
-    lines.push("## Your Lens");
-    lines.push("");
-    lines.push(`You are reviewing through the **${lens}** lens.`);
-    lines.push("");
-  }
+  // Assigned lens (§2.B) — always included per spec
+  lines.push("## Your Lens");
+  lines.push("");
+  lines.push(`You are reviewing through the **${lens}** lens.`);
+  lines.push("");
 
   // The actual brief (§2.A)
   lines.push("---");
@@ -89,10 +94,10 @@ export function wrapAdvisoryBrief(
 /**
  * Build round-N+1 system prompt for follow-on advisory rounds.
  * Per induction spec §3: re-state header, don't assume carry-over.
+ * G2 fix: Uses follow-on framing that matches the brief context.
  */
 export function buildAdvisoryFollowOnSystemPrompt(): string {
-  // Same as initial — spec says "re-state the (short) system header"
-  return buildAdvisorySystemPrompt();
+  return buildAdvisorySystemPrompt(true);
 }
 
 /**
@@ -100,13 +105,13 @@ export function buildAdvisoryFollowOnSystemPrompt(): string {
  * Per induction spec §3: anonymization enforced, re-disclose privacy.
  *
  * @param briefContent - The follow-on round brief (with anonymized prior findings)
- * @param lens - The panelist's assigned lens
- * @param privacyIntent - What will happen to findings
+ * @param lens - The panelist's assigned lens — REQUIRED per SPEC §2.B
+ * @param privacyIntent - What will happen to findings — REQUIRED, no default (G4 fix)
  */
 export function wrapAdvisoryFollowOnBrief(
   briefContent: string,
-  lens?: string,
-  privacyIntent: string = "stored and synthesized for drafter disposition"
+  lens: string,
+  privacyIntent: string
 ): string {
   const lines: string[] = [];
 
@@ -134,13 +139,11 @@ export function wrapAdvisoryFollowOnBrief(
   lines.push("*Note: This remains an advisory round. If iteration toward agreement is needed, a separate consensus roundtable would be convened with explicit re-consent.*");
   lines.push("");
 
-  // Assigned lens if provided
-  if (lens) {
-    lines.push("## Your Lens");
-    lines.push("");
-    lines.push(`You are reviewing through the **${lens}** lens.`);
-    lines.push("");
-  }
+  // Assigned lens — always included per spec
+  lines.push("## Your Lens");
+  lines.push("");
+  lines.push(`You are reviewing through the **${lens}** lens.`);
+  lines.push("");
 
   // The actual brief
   lines.push("---");
@@ -148,4 +151,25 @@ export function wrapAdvisoryFollowOnBrief(
   lines.push(briefContent);
 
   return lines.join("\n");
+}
+
+/**
+ * Strip provider/persona identifiers from findings text.
+ * Per SPEC §3/§4: anonymization is HEAVIER for advisory panels.
+ * G3 fix: Provides actual anonymization, not just convention.
+ *
+ * @param findings - Raw findings text that may contain provider/persona refs
+ * @param knownIdentifiers - List of identifiers to strip (model names, persona IDs, etc.)
+ * @returns Anonymized findings with identifiers replaced by generic labels
+ */
+export function anonymizeFindings(
+  findings: string,
+  knownIdentifiers: string[]
+): string {
+  let result = findings;
+  knownIdentifiers.forEach((id, index) => {
+    const label = `Reviewer-${index + 1}`;
+    result = result.split(id).join(label);
+  });
+  return result;
 }
