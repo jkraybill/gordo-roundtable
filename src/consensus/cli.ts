@@ -38,7 +38,7 @@ export function registerConsensusCommand(program: Command): void {
     .option("--bootstrap-rounds <n>", "Rounds for optional bootstrap phase (0 to skip, default: 3)", "3")
     .option("--state-file <path>", "Path to save state for crash recovery")
     .option("--resume <path>", "Resume from saved state file")
-    .option("--output-dir <path>", "Directory to write results (default: ./consensus-results)")
+    .requiredOption("--output-dir <path>", "Directory to write results (must not be under gordo-roundtable)")
     .option("--dry-run", "Print config without running")
     .action(async (flags: ConsensusFlags) => {
       const participantCount = parseInt(flags.participants, 10);
@@ -101,9 +101,17 @@ export function registerConsensusCommand(program: Command): void {
         state = createInitialState(flags.question, flags.context, config);
       }
 
-      // Ensure output directory exists
-      // Default to cwd, NOT the package directory — invocation artifacts stay in the calling project
-      const outputDir = flags.outputDir || resolve(process.cwd(), "roundtable-results");
+      // Validate and create output directory
+      // STRONG RULE: artifacts must NOT go under gordo-roundtable project
+      const outputDir = resolve(flags.outputDir!);
+      const packageRoot = resolve(dirname(new URL(import.meta.url).pathname), "../..");
+      if (outputDir.startsWith(packageRoot)) {
+        console.error(`Error: --output-dir must not be under gordo-roundtable project`);
+        console.error(`       Got: ${outputDir}`);
+        console.error(`       Package root: ${packageRoot}`);
+        console.error(`       Use a path in your calling project, e.g., ./roundtable-results`);
+        process.exit(1);
+      }
       mkdirSync(outputDir, { recursive: true });
 
       // Track costs

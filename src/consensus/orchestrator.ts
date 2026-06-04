@@ -249,6 +249,7 @@ export async function runConsensusRoundtable(
     const speakerIndex = state.current_speaker_index;
     const speaker = state.participants[speakerIndex];
     const participantConfig = config.participants[speakerIndex];
+    const modelId = participantConfig.model;
 
     // Update transcript before turn
     state = { ...state, transcript_summary: updateTranscriptSummary(state) };
@@ -276,12 +277,15 @@ export async function runConsensusRoundtable(
     };
 
     // Validate action
+    let actionDesc: string;
     const validation = validateAction(state, speaker, dispatchResult.action);
     if (!validation.valid) {
       log(`  Invalid action: ${validation.reason}. Treating as pass.`);
       state = applyAction(state, speaker, { action: "pass" }, logData);
+      actionDesc = "pass (invalid action)";
     } else {
-      log(`  Action: ${dispatchResult.action.action}${dispatchResult.action.target_id ? `(${dispatchResult.action.target_id})` : ""}`);
+      actionDesc = `${dispatchResult.action.action}${dispatchResult.action.target_id ? `(${dispatchResult.action.target_id})` : ""}`;
+      log(`  Action: ${actionDesc}`);
       state = applyAction(state, speaker, dispatchResult.action, logData);
     }
 
