@@ -79,14 +79,17 @@ export const RuleSchema = z.object({
 
 export type Rule = z.infer<typeof RuleSchema>;
 
-// Turn log entry
+// Turn log entry — maximally verbose for post-hoc analysis
 export const TurnLogEntrySchema = z.object({
   turn: z.number(),
   round: z.number(),
   speaker: z.string(),
   action: ParsedActionSchema,
-  raw_response: z.string(),
+  prompt_sent: z.string(),           // Full turn prompt sent to participant
+  raw_response: z.string(),          // Full response content
+  reasoning: z.string().optional(),  // Thinking/reasoning block if present
   timestamp: z.number(),
+  duration_ms: z.number().optional(),
   usage: z.object({
     prompt_tokens: z.number(),
     completion_tokens: z.number(),
@@ -166,6 +169,14 @@ export const ConsensusStateSchema = z.object({
   // Transcript
   transcript_summary: z.string(),
   turn_log: z.array(TurnLogEntrySchema),
+
+  // Identity mapping (sealed, for post-hoc analysis only)
+  // Maps Party A/B/C to actual model identifiers
+  // NOT exposed to participants during deliberation per spec §2.3
+  identity_map: z.record(z.string()).optional(),
+
+  // System prompt used (logged once, same for all)
+  system_prompt: z.string().optional(),
 
   // Termination
   consensus_answer: z.string().nullable(),

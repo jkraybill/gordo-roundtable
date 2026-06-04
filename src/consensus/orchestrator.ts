@@ -93,6 +93,16 @@ function toReviewer(config: ParticipantConfig, id: string): Reviewer {
   };
 }
 
+// Dispatch result with full logging data
+interface DispatchResult {
+  action: ParsedAction;
+  raw: string;
+  reasoning?: string;
+  duration_ms?: number;
+  prompt_sent: string;
+  usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
+}
+
 /**
  * Dispatch a turn with retry on parse failure.
  */
@@ -102,11 +112,7 @@ async function dispatchWithRetry(
   turnPrompt: string,
   systemPrompt: string,
   onLog: (msg: string) => void
-): Promise<{
-  action: ParsedAction;
-  raw: string;
-  usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
-}> {
+): Promise<DispatchResult> {
   const reviewer = toReviewer(participantConfig, participantId);
   let lastError = "";
   let prompt = turnPrompt;
@@ -125,6 +131,8 @@ async function dispatchWithRetry(
       return {
         action: { action: "pass" },
         raw: `(API error: ${result.error})`,
+        prompt_sent: prompt,
+        duration_ms: result.duration_ms,
         usage: result.usage,
       };
     }
@@ -139,6 +147,9 @@ async function dispatchWithRetry(
     return {
       action: parsed,
       raw: result.content || "",
+      reasoning: result.reasoning,
+      duration_ms: result.duration_ms,
+      prompt_sent: prompt,
       usage: result.usage,
     };
   }
@@ -147,6 +158,7 @@ async function dispatchWithRetry(
   onLog(`  Parse failed after ${MAX_PARSE_RETRIES} retries, treating as pass`);
   return {
     action: { action: "pass" },
+    prompt_sent: prompt,
     raw: `(parse failure after ${MAX_PARSE_RETRIES} retries: ${lastError})`,
   };
 }
@@ -169,6 +181,20 @@ export async function runConsensusRoundtable(
   let state = initialState;
   const config = state.config;
   const systemPrompt = buildSystemPrompt(config);
+
+  // Build identity map (sealed, for post-hoc analysis)
+  // Maps anonymous Party labels to actual model identifiers
+  const identityMap: Record<string, string> = {};
+  for (let i = 0; i < state.participants.length; i++) {
+    identityMap[state.participants[i]] = config.participants[i].model;
+  }
+
+  // Store system prompt and identity map in state
+  state = {
+    ...state,
+    system_prompt: systemPrompt,
+    identity_map: identityMap,
+  };
 
   log(`Starting consensus roundtable: ${state.session_id}`);
   log(`Question: ${state.question}`);
@@ -233,7 +259,7 @@ export async function runConsensusRoundtable(
     log(`Turn ${state.turn_count + 1} (Round ${state.round_count + 1}) — ${speaker}...`);
 
     // Dispatch and get action
-    const { action, raw, usage } = await dispatchWithRetry(
+    const dispatchResult = await dispatchWithRetry(
       participantConfig,
       speaker,
       turnPrompt,
@@ -241,14 +267,22 @@ export async function runConsensusRoundtable(
       log
     );
 
+    const logData = {
+      rawResponse: dispatchResult.raw,
+      promptSent: dispatchResult.prompt_sent,
+      reasoning: dispatchResult.reasoning,
+      durationMs: dispatchResult.duration_ms,
+      usage: dispatchResult.usage,
+    };
+
     // Validate action
-    const validation = validateAction(state, speaker, action);
+    const validation = validateAction(state, speaker, dispatchResult.action);
     if (!validation.valid) {
       log(`  Invalid action: ${validation.reason}. Treating as pass.`);
-      state = applyAction(state, speaker, { action: "pass" }, raw, usage);
+      state = applyAction(state, speaker, { action: "pass" }, logData);
     } else {
-      log(`  Action: ${action.action}${action.target_id ? `(${action.target_id})` : ""}`);
-      state = applyAction(state, speaker, action, raw, usage);
+      log(`  Action: ${dispatchResult.action.action}${dispatchResult.action.target_id ? `(${dispatchResult.action.target_id})` : ""}`);
+      state = applyAction(state, speaker, dispatchResult.action, logData);
     }
 
     // Notify state change

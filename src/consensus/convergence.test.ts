@@ -91,7 +91,7 @@ describe("buildPositionMap", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // Party A proposes
-    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, "");
+    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, { rawResponse: "", promptSent: "" });
 
     const map = buildPositionMap(state);
     expect(map["Party A"]).toBe("p-1");
@@ -113,6 +113,9 @@ describe("checkConsensus", () => {
     beta: 2,
   };
 
+  // Helper for test log data
+  const log = { rawResponse: "", promptSent: "" };
+
   it("returns false with no proposals", () => {
     const state = createInitialState("Test?", undefined, testConfig);
     const result = checkConsensus(state);
@@ -124,14 +127,14 @@ describe("checkConsensus", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // Party A proposes
-    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, "");
+    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, log);
 
     // Party B objects
     state = applyAction(state, "Party B", {
       action: "object",
       target_id: "p-1",
       reason: "Disagree"
-    }, "");
+    }, log);
 
     const result = checkConsensus(state);
     expect(result.achieved).toBe(false);
@@ -141,13 +144,13 @@ describe("checkConsensus", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // Party A proposes
-    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, "");
+    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, log);
 
     // Party B assents
-    state = applyAction(state, "Party B", { action: "assent", target_id: "p-1" }, "");
+    state = applyAction(state, "Party B", { action: "assent", target_id: "p-1" }, log);
 
     // Party C passes
-    state = applyAction(state, "Party C", { action: "pass" }, "");
+    state = applyAction(state, "Party C", { action: "pass" }, log);
 
     // stability_count = 1 (one round), need beta = 2
     expect(state.convergence_metrics.stability_count).toBe(1);
@@ -160,14 +163,14 @@ describe("checkConsensus", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // Round 1
-    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, "");
-    state = applyAction(state, "Party B", { action: "assent", target_id: "p-1" }, "");
-    state = applyAction(state, "Party C", { action: "assent", target_id: "p-1" }, "");
+    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, log);
+    state = applyAction(state, "Party B", { action: "assent", target_id: "p-1" }, log);
+    state = applyAction(state, "Party C", { action: "assent", target_id: "p-1" }, log);
 
     // Round 2 (all pass)
-    state = applyAction(state, "Party A", { action: "pass" }, "");
-    state = applyAction(state, "Party B", { action: "pass" }, "");
-    state = applyAction(state, "Party C", { action: "pass" }, "");
+    state = applyAction(state, "Party A", { action: "pass" }, log);
+    state = applyAction(state, "Party B", { action: "pass" }, log);
+    state = applyAction(state, "Party C", { action: "pass" }, log);
 
     // Now stability_count = 2
     expect(state.convergence_metrics.stability_count).toBe(2);

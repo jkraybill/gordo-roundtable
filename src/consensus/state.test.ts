@@ -82,12 +82,18 @@ describe("validateAction", () => {
   });
 });
 
+// Helper to create minimal log data for tests
+const testLogData = (raw: string = "raw response") => ({
+  rawResponse: raw,
+  promptSent: "test prompt",
+});
+
 describe("applyAction", () => {
   it("applies propose action and creates assent", () => {
     const state = createInitialState("Test?", undefined, testConfig);
     const action: ParsedAction = { action: "propose", content: "My answer" };
 
-    const newState = applyAction(state, "Party A", action, "raw response");
+    const newState = applyAction(state, "Party A", action, testLogData());
 
     expect(newState.proposals.length).toBe(1);
     expect(newState.proposals[0].content).toBe("My answer");
@@ -108,14 +114,14 @@ describe("applyAction", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // Party A proposes
-    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, "");
+    state = applyAction(state, "Party A", { action: "propose", content: "Proposal" }, testLogData());
 
     // Party B objects
     state = applyAction(state, "Party B", {
       action: "object",
       target_id: "p-1",
       reason: "I disagree"
-    }, "");
+    }, testLogData());
 
     expect(state.objections.length).toBe(1);
     expect(state.objections[0].objector).toBe("Party B");
@@ -127,9 +133,9 @@ describe("applyAction", () => {
     let state = createInitialState("Test?", undefined, testConfig);
 
     // 3 turns = 1 round
-    state = applyAction(state, "Party A", { action: "pass" }, "");
-    state = applyAction(state, "Party B", { action: "pass" }, "");
-    state = applyAction(state, "Party C", { action: "pass" }, "");
+    state = applyAction(state, "Party A", { action: "pass" }, testLogData());
+    state = applyAction(state, "Party B", { action: "pass" }, testLogData());
+    state = applyAction(state, "Party C", { action: "pass" }, testLogData());
 
     expect(state.turn_count).toBe(3);
     expect(state.round_count).toBe(1);

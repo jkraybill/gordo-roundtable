@@ -11,7 +11,6 @@ import type {
   Proposal,
   Objection,
   Assent,
-  Rule,
   ConvergenceMetrics,
 } from "./types.js";
 import { ConsensusStateSchema } from "./types.js";
@@ -168,6 +167,15 @@ export function validateAction(
   return { valid: true };
 }
 
+// Turn logging data
+export interface TurnLogData {
+  rawResponse: string;
+  promptSent: string;
+  reasoning?: string;
+  durationMs?: number;
+  usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
+}
+
 /**
  * Apply an action to state, returning new state.
  * Assumes action has been validated.
@@ -176,8 +184,7 @@ export function applyAction(
   state: ConsensusState,
   speaker: string,
   action: ParsedAction,
-  rawResponse: string,
-  usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number }
+  logData: TurnLogData
 ): ConsensusState {
   const now = Date.now();
   const newState = structuredClone(state);
@@ -348,15 +355,18 @@ export function applyAction(
       break;
   }
 
-  // Log the turn
+  // Log the turn (maximally verbose)
   newState.turn_log.push({
     turn: newState.turn_count,
     round: newState.round_count,
     speaker,
     action,
-    raw_response: rawResponse,
+    prompt_sent: logData.promptSent,
+    raw_response: logData.rawResponse,
+    reasoning: logData.reasoning,
     timestamp: now,
-    usage,
+    duration_ms: logData.durationMs,
+    usage: logData.usage,
   });
 
   // Advance turn counter
