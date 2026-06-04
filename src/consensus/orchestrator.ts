@@ -308,6 +308,12 @@ export async function runConsensusRoundtable(
     } else {
       actionDesc = `${dispatchResult.action.action}${dispatchResult.action.target_id ? `(${dispatchResult.action.target_id})` : ""}`;
       log(`  Action: ${actionDesc}`);
+      // Log proposal content for midstream visibility
+      if (dispatchResult.action.action === "propose" && dispatchResult.action.content) {
+        const preview = dispatchResult.action.content.slice(0, 200);
+        const truncated = dispatchResult.action.content.length > 200 ? "..." : "";
+        log(`  Proposal: ${preview}${truncated}`);
+      }
       state = applyAction(state, speaker, dispatchResult.action, logData);
     }
 

@@ -250,6 +250,81 @@ describe("runConsensusRoundtable integration", () => {
     expect(result.state.system_prompt).toContain("Consensus Roundtable");
   });
 
+  it("logs proposal content to stdout for midstream visibility", async () => {
+    const proposalContent = "This is my detailed proposal for answering the question with specific evidence and reasoning.";
+    const responses = [
+      mockResponse("propose", proposalContent, "A proposes with details"),
+      mockResponse("assent", "p-1", "B assents"),
+      mockResponse("assent", "p-1", "C assents"),
+      mockResponse("pass", undefined, "A"),
+      mockResponse("pass", undefined, "B"),
+      mockResponse("pass", undefined, "C"),
+    ];
+
+    let callIndex = 0;
+    mockDispatchOne.mockImplementation(async () => {
+      const resp = responses[callIndex++];
+      return {
+        reviewer_id: "test",
+        status: "ok" as const,
+        content: resp,
+        duration_ms: 100,
+        usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
+      };
+    });
+
+    // Capture log output
+    const logOutput: string[] = [];
+    const state = createInitialState("Logging test", undefined, testConfig);
+    const result = await runConsensusRoundtable(state, {
+      onLog: (msg) => logOutput.push(msg)
+    });
+
+    expect(result.outcome).toBe("consensus");
+
+    // Check that proposal content was logged
+    const proposalLogLine = logOutput.find(line => line.includes("Proposal:"));
+    expect(proposalLogLine).toBeDefined();
+    expect(proposalLogLine).toContain("This is my detailed proposal");
+  });
+
+  it("truncates long proposal content in logs", async () => {
+    const longContent = "A".repeat(300); // 300 chars, should truncate at 200
+    const responses = [
+      mockResponse("propose", longContent, "A proposes long"),
+      mockResponse("assent", "p-1", "B assents"),
+      mockResponse("assent", "p-1", "C assents"),
+      mockResponse("pass", undefined, "A"),
+      mockResponse("pass", undefined, "B"),
+      mockResponse("pass", undefined, "C"),
+    ];
+
+    let callIndex = 0;
+    mockDispatchOne.mockImplementation(async () => {
+      const resp = responses[callIndex++];
+      return {
+        reviewer_id: "test",
+        status: "ok" as const,
+        content: resp,
+        duration_ms: 100,
+        usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
+      };
+    });
+
+    const logOutput: string[] = [];
+    const state = createInitialState("Truncation test", undefined, testConfig);
+    await runConsensusRoundtable(state, {
+      onLog: (msg) => logOutput.push(msg)
+    });
+
+    const proposalLogLine = logOutput.find(line => line.includes("Proposal:"));
+    expect(proposalLogLine).toBeDefined();
+    // Should be truncated with "..."
+    expect(proposalLogLine).toContain("...");
+    // Should not contain the full 300 chars
+    expect(proposalLogLine!.length).toBeLessThan(300);
+  });
+
   it("handles parse failures with retry and fallback to pass", async () => {
     // First call returns garbage, retry also garbage, then falls back to pass
     let callCount = 0;

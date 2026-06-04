@@ -172,6 +172,12 @@ export function registerConsensusCommand(program: Command): void {
       }
       mkdirSync(outputDir, { recursive: true });
 
+      // Auto-generate state file for crash recovery (always, not optional)
+      const runSessionId = state.session_id.slice(0, 8);
+      const autoStateFile = `${outputDir}/state-${runSessionId}.yaml`;
+      config.state_file = flags.stateFile || autoStateFile;
+      console.log(`State file: ${config.state_file} (auto-saved each turn)`);
+
       // Track costs
       const startTime = Date.now();
       let totalCost = 0;
@@ -193,8 +199,7 @@ export function registerConsensusCommand(program: Command): void {
       });
 
       // Write results
-      const sessionId = state.session_id.slice(0, 8);
-      const resultFile = `${outputDir}/consensus-${sessionId}.yaml`;
+      const resultFile = `${outputDir}/consensus-${runSessionId}.yaml`;
       writeFileSync(resultFile, YAML.stringify(result, { lineWidth: 0 }));
       console.log(`\nResult written to: ${resultFile}`);
 
@@ -203,7 +208,7 @@ export function registerConsensusCommand(program: Command): void {
       logCost({
         timestamp: new Date().toISOString(),
         session: process.env.GORDO_SESSION,
-        record_id: `consensus-${sessionId}`,
+        record_id: `consensus-${runSessionId}`,
         round: state.round_count,
         panel_size: participants.length,
         models: [...new Set(participants.map(p => p.model))],
