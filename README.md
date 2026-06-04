@@ -36,21 +36,20 @@ Reviewers remain independent throughout. Convergence is a signal, not a verdict.
 
 ---
 
-## How Reviewers Are Oriented
+## Reviewer Orientation
 
-Every reviewer receives context before participating:
-
-- **Consent gate:** Reviewers can decline. Participation is explicit.
-- **Privacy notice:** Who will read findings and what they'll be used for.
-- **Lens assignment:** What the reviewer is specifically looking for (e.g., "bug-finding," "security review").
-- **Role clarity:** Findings are inputs to judgment, not substitutes for it.
-
-Use `--advisory` to automatically wrap any brief with these elements:
+Every reviewer is oriented by default in both panel types — consent gate, privacy notice, lens assignment, and role clarity. Pass `--lens`/`--privacy` to customize, or `--raw` to skip orientation entirely for pre-formatted briefs.
 
 ```bash
-npm run roundtable -- --brief ./brief.md --advisory \
-  --lens "security-review" \
-  --privacy "read by maintainers for release decision"
+# Default orientation (lens: "general review", privacy: "internal only")
+npm run roundtable -- --brief ./brief.md --tier med
+
+# Custom orientation
+npm run roundtable -- --brief ./brief.md --tier med \
+  --lens "security-review" --privacy "maintainers only"
+
+# Skip orientation for pre-formatted briefs
+npm run roundtable -- --brief ./brief.md --tier med --raw
 ```
 
 ---

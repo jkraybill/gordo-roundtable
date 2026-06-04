@@ -9,6 +9,10 @@ import { logCost, getLogPath } from "./cost-log.js";
 import { registerConsensusCommand } from "./consensus/cli.js";
 import { wrapAdvisoryBrief } from "./advisory/prompts.js";
 
+// Default induction values per consensus roundtable S406
+const DEFAULT_LENS = "general review";
+const DEFAULT_PRIVACY = "internal only — not for external publication without consent";
+
 interface RunFlags {
   brief: string;
   manifest?: string;
@@ -17,7 +21,8 @@ interface RunFlags {
   reviewer: string[];
   dryRun?: boolean;
   overwrite?: boolean;
-  advisory?: boolean;
+  raw?: boolean;
+  advisory?: boolean; // deprecated, kept for backwards compat
   lens?: string;
   privacy?: string;
 }
@@ -42,21 +47,17 @@ program
   )
   .option("--dry-run", "print resolved request shapes; don't dispatch")
   .option("--overwrite", "allow overwriting existing output files")
-  .option("--advisory", "wrap brief with advisory panel framing (consent gate, privacy notice, lens)")
-  .option("--lens <lens>", "panelist lens for advisory panels (required with --advisory)")
-  .option("--privacy <intent>", "privacy intent for advisory panels (required with --advisory)")
+  .option("--raw", "skip reviewer orientation (consent, privacy, lens) — for pre-formatted briefs")
+  .option("--lens <lens>", `reviewer lens (default: "${DEFAULT_LENS}")`)
+  .option("--privacy <intent>", `privacy intent (default: "${DEFAULT_PRIVACY}")`)
+  .option("--advisory", "(deprecated) induction is now default; this flag is a no-op")
   .action(async (flags: RunFlags) => {
-    // Validate advisory options
+    // Handle deprecated --advisory flag
     if (flags.advisory) {
-      if (!flags.lens) {
-        console.error("--advisory requires --lens (e.g., --lens bug-finding)");
-        process.exit(1);
-      }
-      if (!flags.privacy) {
-        console.error("--advisory requires --privacy (e.g., --privacy \"read by deliberating parties only\")");
-        process.exit(1);
-      }
+      console.log("⚠ --advisory is deprecated: induction is now default. This flag is a no-op.");
+      console.log("  Use --raw to skip orientation, or --lens/--privacy to customize.");
     }
+
     // Resolve manifest: explicit file, tier-based, or default to tier=med
     let manifest: { record_id: string; round?: number; reviewers: any[] };
     let manifestDir = process.cwd();
@@ -84,10 +85,14 @@ program
 
     let briefText = loadBrief(flags.brief);
 
-    // Wrap brief with advisory framing if --advisory specified
-    if (flags.advisory) {
-      briefText = wrapAdvisoryBrief(briefText, flags.lens!, flags.privacy!);
-      console.log(`Advisory mode: lens="${flags.lens}", privacy="${flags.privacy}"`);
+    // Apply reviewer orientation (default-on per S406 consensus)
+    if (flags.raw) {
+      console.log("Raw mode: skipping reviewer orientation");
+    } else {
+      const lens = flags.lens ?? DEFAULT_LENS;
+      const privacy = flags.privacy ?? DEFAULT_PRIVACY;
+      briefText = wrapAdvisoryBrief(briefText, lens, privacy);
+      console.log(`Reviewer orientation: lens="${lens}", privacy="${privacy}"`);
     }
 
     const round = flags.round
