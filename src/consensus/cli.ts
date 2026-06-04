@@ -5,7 +5,7 @@
 import { Command } from "commander";
 import { randomUUID } from "node:crypto";
 import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname } from "node:path";
+import { dirname, resolve } from "node:path";
 import YAML from "yaml";
 import type { ConsensusConfig, ParticipantConfig } from "./types.js";
 import { createInitialState } from "./state.js";
@@ -102,7 +102,8 @@ export function registerConsensusCommand(program: Command): void {
       }
 
       // Ensure output directory exists
-      const outputDir = flags.outputDir || "./consensus-results";
+      // Default to cwd, NOT the package directory — invocation artifacts stay in the calling project
+      const outputDir = flags.outputDir || resolve(process.cwd(), "roundtable-results");
       mkdirSync(outputDir, { recursive: true });
 
       // Track costs
