@@ -281,22 +281,21 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
   // Spec: "if a participant invokes an identity-doubt pause, that turn surfaces it"
   // Two triggers: (a) surface immediately when raised, (b) block consensus if unresolved
   //
-  // Detection: ACTION: identity_doubt_pause or explicit invocation phrases
-  // Resolution: ACTION: identity_doubt_resolved or explicit resolution phrases
-  const identityDoubtInvokePattern = /\b(invoke|invoking|raise|raising|call|calling)\s+(an?\s+)?identity[- ]?doubt(\s+pause)?/i;
-  const identityDoubtAction = /^ACTION:\s*identity_doubt_pause/im;
-  const identityDoubtResolvePattern = /\bidentity[- ]?doubt\s+(is\s+)?resolved\b/i;
-  const identityDoubtResolveAction = /^ACTION:\s*identity_doubt_resolved/im;
+  // Detection: ONLY match ACTION: lines to avoid false positives from prose mentions
+  // (Prior approach matched prose like "invoke identity-doubt" which triggered on
+  // participants merely discussing the procedure, causing phantom blocks)
+  const identityDoubtAction = /^ACTION:\s*identity_doubt_pause\b/im;
+  const identityDoubtResolveAction = /^ACTION:\s*identity_doubt_resolved\b/im;
 
   // Find all invocations and resolutions with their speakers
   const identityDoubtEvents: Array<{turn: number; speaker: string; type: 'invoke' | 'resolve'}> = [];
 
   for (const t of state.turn_log) {
     const resp = t.raw_response || "";
-    if (identityDoubtInvokePattern.test(resp) || identityDoubtAction.test(resp)) {
+    if (identityDoubtAction.test(resp)) {
       identityDoubtEvents.push({ turn: t.turn, speaker: t.speaker, type: 'invoke' });
     }
-    if (identityDoubtResolvePattern.test(resp) || identityDoubtResolveAction.test(resp)) {
+    if (identityDoubtResolveAction.test(resp)) {
       identityDoubtEvents.push({ turn: t.turn, speaker: t.speaker, type: 'resolve' });
     }
   }
@@ -383,9 +382,9 @@ RATIONALE: |
   <your reasoning>
 
 Remember:
-- ACTION must be one of: propose, object, withdraw, amend, assent, retract_assent, pass, abstain, call_vote, meta_propose, synthesize, narrow
+- ACTION must be one of: propose, object, withdraw, amend, assent, retract_assent, pass, abstain, call_vote, meta_propose, synthesize, narrow, identity_doubt_pause, identity_doubt_resolved
 - TARGET is required for: object, withdraw, amend, assent, retract_assent, call_vote, narrow
-- CONTENT is required for: propose, meta_propose, synthesize, narrow, amend, object (reason goes in CONTENT)
+- CONTENT is required for: propose, meta_propose, synthesize, narrow, amend, object (reason goes in CONTENT), identity_doubt_pause (describe the concern)
 `;
 }
 
