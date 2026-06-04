@@ -11,6 +11,7 @@ import type { ConsensusConfig, ParticipantConfig } from "./types.js";
 import { createInitialState } from "./state.js";
 import { runConsensusRoundtable, resumeFromFile } from "./orchestrator.js";
 import { logCost, getLogPath } from "../cost-log.js";
+import { loadBrief, parseBriefForConsensus } from "../brief.js";
 
 interface PanelFile {
   name: string;
@@ -19,8 +20,7 @@ interface PanelFile {
 }
 
 interface ConsensusFlags {
-  question: string;
-  context?: string;
+  brief: string;
   panel?: string;
   participants: string;
   turnLimit: string;
@@ -64,8 +64,7 @@ export function registerConsensusCommand(program: Command): void {
   program
     .command("consensus")
     .description("Run a consensus roundtable — multi-turn AI deliberation for unanimous agreement")
-    .requiredOption("--question <text>", "The question for the roundtable to answer")
-    .option("--context <text>", "Optional context for the question")
+    .requiredOption("--brief <path>", "Path to brief markdown file (first paragraph = question, rest = context)")
     .option("--panel <path>", "Panel YAML file (built-in: opus, sonnet, mixed; default: opus)")
     .option("--participants <n>", "Number of participants (overrides panel size if specified)")
     .option("--turn-limit <n>", "Maximum turns (default: 100)", "100")
@@ -124,10 +123,18 @@ export function registerConsensusCommand(program: Command): void {
         state_file: flags.stateFile,
       };
 
+      // Parse brief file
+      const briefText = loadBrief(flags.brief);
+      const { question, context } = parseBriefForConsensus(briefText);
+      console.log(`Question: ${question.slice(0, 80)}${question.length > 80 ? "..." : ""}`);
+      if (context) {
+        console.log(`Context: ${context.slice(0, 80)}${context.length > 80 ? "..." : ""}`);
+      }
+
       if (flags.dryRun) {
-        console.log("=== DRY RUN ===\n");
-        console.log("Question:", flags.question);
-        if (flags.context) console.log("Context:", flags.context);
+        console.log("\n=== DRY RUN ===\n");
+        console.log("Question:", question);
+        if (context) console.log("Context:", context);
         console.log("\nConfig:");
         console.log(YAML.stringify(config));
         console.log("\nParticipants:");
@@ -145,7 +152,7 @@ export function registerConsensusCommand(program: Command): void {
         state = resumeFromFile(flags.resume);
         console.log(`Resumed at turn ${state.turn_count}, round ${state.round_count}`);
       } else {
-        state = createInitialState(flags.question, flags.context, config);
+        state = createInitialState(question, context, config);
       }
 
       // Validate and create output directory
