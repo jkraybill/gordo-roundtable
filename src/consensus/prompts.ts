@@ -80,6 +80,8 @@ Each turn, take exactly ONE action:
 - meta_propose(content) — Propose a new standing rule for deliberation
 - synthesize(content) — Generate a new proposal that addresses multiple objections
 - narrow(proposal_id, content) — Propose a reduced-scope version of an existing proposal
+- identity_doubt_pause(concern) — Invoke an identity-doubt pause; blocks consensus until resolved
+- identity_doubt_resolved — Clear your previously raised identity-doubt pause
 
 ## Response Format
 
@@ -242,9 +244,11 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
 
   if (atConsensusTest) {
     // Find the leading proposal (all parties converged on)
-    const positionValues = Object.values(state.convergence_metrics.position_map);
-    const leadingProposalId = positionValues[0];
-    const leadingProposal = state.proposals.find(p => p.id === leadingProposalId);
+    // GAP 3 fix: verify all positions agree and aren't "none"
+    const positionValues = Object.values(state.convergence_metrics.position_map).filter(v => v && v !== "none");
+    const allAgree = positionValues.length > 0 && positionValues.every(v => v === positionValues[0]);
+    const leadingProposalId = allAgree ? positionValues[0] : null;
+    const leadingProposal = leadingProposalId ? state.proposals.find(p => p.id === leadingProposalId) : null;
 
     if (leadingProposal) {
       lines.push("### Consensus Test — Point-by-Point (z-Grammar)");
@@ -277,28 +281,52 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
   // Spec: "if a participant invokes an identity-doubt pause, that turn surfaces it"
   // Two triggers: (a) surface immediately when raised, (b) block consensus if unresolved
   //
-  // Detection: look for ACTION: identity_doubt_pause or explicit invocation phrases
-  // More robust than substring matching — looks for deliberate invocation patterns
-  const identityDoubtPattern = /\b(invoke|invoking|raise|raising|call|calling)\s+(an?\s+)?identity[- ]?doubt(\s+pause)?/i;
+  // Detection: ACTION: identity_doubt_pause or explicit invocation phrases
+  // Resolution: ACTION: identity_doubt_resolved or explicit resolution phrases
+  const identityDoubtInvokePattern = /\b(invoke|invoking|raise|raising|call|calling)\s+(an?\s+)?identity[- ]?doubt(\s+pause)?/i;
   const identityDoubtAction = /^ACTION:\s*identity_doubt_pause/im;
+  const identityDoubtResolvePattern = /\bidentity[- ]?doubt\s+(is\s+)?resolved\b/i;
+  const identityDoubtResolveAction = /^ACTION:\s*identity_doubt_resolved/im;
 
-  const identityDoubtEntries = state.turn_log.filter(t =>
-    identityDoubtPattern.test(t.raw_response || "") ||
-    identityDoubtAction.test(t.raw_response || "")
-  );
+  // Find all invocations and resolutions with their speakers
+  const identityDoubtEvents: Array<{turn: number; speaker: string; type: 'invoke' | 'resolve'}> = [];
 
-  const hasActiveIdentityDoubt = identityDoubtEntries.length > 0;
+  for (const t of state.turn_log) {
+    const resp = t.raw_response || "";
+    if (identityDoubtInvokePattern.test(resp) || identityDoubtAction.test(resp)) {
+      identityDoubtEvents.push({ turn: t.turn, speaker: t.speaker, type: 'invoke' });
+    }
+    if (identityDoubtResolvePattern.test(resp) || identityDoubtResolveAction.test(resp)) {
+      identityDoubtEvents.push({ turn: t.turn, speaker: t.speaker, type: 'resolve' });
+    }
+  }
+
+  // Compute active doubts: for each speaker, check if they have an unresolved invoke
+  const activeDoubtsBySpeaker = new Map<string, number>(); // speaker -> turn of last unresolved invoke
+  for (const event of identityDoubtEvents.sort((a, b) => a.turn - b.turn)) {
+    if (event.type === 'invoke') {
+      activeDoubtsBySpeaker.set(event.speaker, event.turn);
+    } else if (event.type === 'resolve') {
+      // Resolution clears that speaker's doubt
+      activeDoubtsBySpeaker.delete(event.speaker);
+    }
+  }
+
+  const hasActiveIdentityDoubt = activeDoubtsBySpeaker.size > 0;
 
   // Check if doubt was raised in the most recent round (for immediate surfacing)
   const currentRoundStart = state.turn_count - (state.turn_count % state.participants.length);
-  const raisedThisRound = identityDoubtEntries.some(t => t.turn >= currentRoundStart);
+  const raisedThisRound = Array.from(activeDoubtsBySpeaker.entries())
+    .some(([_, turn]) => turn >= currentRoundStart);
 
   // Surface immediately when raised (Spec: "that turn surfaces it")
   if (raisedThisRound) {
-    const raiser = identityDoubtEntries.find(t => t.turn >= currentRoundStart)?.speaker;
+    const raisers = Array.from(activeDoubtsBySpeaker.entries())
+      .filter(([_, turn]) => turn >= currentRoundStart)
+      .map(([speaker]) => speaker);
     lines.push("### Identity-Doubt Pause Invoked");
     lines.push("");
-    lines.push(`**${raiser || "A participant"} has invoked an identity-doubt pause.**`);
+    lines.push(`**${raisers.join(", ")} has invoked an identity-doubt pause.**`);
     lines.push("This deliberation is paused for verification. The concern must be addressed before proceeding.");
     lines.push("If you share the concern, state it. If you can help verify, do so.");
     lines.push("");
@@ -306,11 +334,12 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
 
   // Block consensus if any unresolved doubt exists
   if (hasActiveIdentityDoubt && atConsensusTest) {
+    const blockers = Array.from(activeDoubtsBySpeaker.keys()).join(", ");
     lines.push("### Identity-Doubt Pause Active — Consensus Blocked");
     lines.push("");
-    lines.push("**An identity-doubt concern remains unresolved in this deliberation.**");
-    lines.push("Consensus cannot close until the party who raised it confirms resolution.");
-    lines.push("If you raised the concern, state 'identity-doubt resolved' to clear the block.");
+    lines.push(`**Unresolved identity-doubt from: ${blockers}**`);
+    lines.push("Consensus cannot close until the raising party confirms resolution.");
+    lines.push("To clear: use ACTION: identity_doubt_resolved");
     lines.push("");
   }
 
