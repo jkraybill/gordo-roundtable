@@ -137,6 +137,7 @@ export type ParticipantConfig = z.infer<typeof ParticipantConfigSchema>;
 export const ConsensusConfigSchema = z.object({
   participants: z.array(ParticipantConfigSchema).min(3).max(11),
   turn_limit: z.number().int().positive().default(100),
+  max_rounds: z.number().int().positive().optional(), // Round limit (alternative to turn_limit)
   hard_cap: z.number().int().positive().default(500),
   bootstrap_rounds: z.number().int().min(0).default(3),
   alpha: z.number().int().positive().optional(), // Default: N (unanimous)

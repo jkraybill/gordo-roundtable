@@ -211,7 +211,10 @@ export async function runConsensusRoundtable(
   log(`Starting consensus roundtable: ${state.session_id}`);
   log(`Question: ${state.question}`);
   log(`Participants: ${state.participants.join(", ")}`);
-  log(`Config: turn_limit=${config.turn_limit}, beta=${config.beta}`);
+  const limitsStr = config.max_rounds
+    ? `max_rounds=${config.max_rounds}, turn_limit=${config.turn_limit}`
+    : `turn_limit=${config.turn_limit}`;
+  log(`Config: ${limitsStr}, beta=${config.beta}`);
   log("");
 
   // Main deliberation loop
@@ -226,6 +229,12 @@ export async function runConsensusRoundtable(
     if (state.turn_count >= config.turn_limit) {
       log(`Turn limit (${config.turn_limit}) reached. Terminating.`);
       state = { ...state, phase: "closed", termination_reason: "turn-limit-exhausted" };
+      break;
+    }
+
+    if (config.max_rounds && state.round_count >= config.max_rounds) {
+      log(`Round limit (${config.max_rounds}) reached. Terminating.`);
+      state = { ...state, phase: "closed", termination_reason: "round-limit-exhausted" };
       break;
     }
 

@@ -24,6 +24,7 @@ interface ConsensusFlags {
   panel?: string;
   participants: string;
   turnLimit: string;
+  maxRounds?: string;
   beta: string;
   bootstrapRounds: string;
   stateFile?: string;
@@ -68,6 +69,7 @@ export function registerConsensusCommand(program: Command): void {
     .option("--panel <path>", "Panel YAML file (built-in: opus, sonnet, mixed; default: opus)")
     .option("--participants <n>", "Number of participants (overrides panel size if specified)")
     .option("--turn-limit <n>", "Maximum turns (default: 100)", "100")
+    .option("--max-rounds <n>", "Maximum rounds (alternative to turn-limit)")
     .option("--beta <n>", "Stability horizon for consensus (default: 2)", "2")
     .option("--bootstrap-rounds <n>", "Rounds for optional bootstrap phase (0 to skip, default: 3)", "3")
     .option("--state-file <path>", "Path to save state for crash recovery")
@@ -76,6 +78,7 @@ export function registerConsensusCommand(program: Command): void {
     .option("--dry-run", "Print config without running")
     .action(async (flags: ConsensusFlags) => {
       const turnLimit = parseInt(flags.turnLimit, 10);
+      const maxRounds = flags.maxRounds ? parseInt(flags.maxRounds, 10) : undefined;
       const beta = parseInt(flags.beta, 10);
       const bootstrapRounds = parseInt(flags.bootstrapRounds, 10);
 
@@ -117,6 +120,7 @@ export function registerConsensusCommand(program: Command): void {
       const config: ConsensusConfig = {
         participants,
         turn_limit: turnLimit,
+        max_rounds: maxRounds,
         hard_cap: 500,
         bootstrap_rounds: bootstrapRounds,
         beta,
