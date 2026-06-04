@@ -2,44 +2,56 @@
 
 **External review that catches what close collaboration misses.**
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20393389-blue)](https://doi.org/10.5281/zenodo.20393389) ![SPEC: v0.1](https://img.shields.io/badge/SPEC-v1.0.0--rc10-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20393389-blue)](https://doi.org/10.5281/zenodo.20393389) ![SPEC: v1.0.0-rc10](https://img.shields.io/badge/SPEC-v1.0.0--rc10-blue) ![Stage: Production](https://img.shields.io/badge/stage-production-green)
 
 ---
 
 ## What Problem Does This Solve?
 
-When a human and AI collaborate closely, they develop shared assumptions. Some of those assumptions are wrong. The longer they work together, the harder it gets to see the blind spots.
+When you work on something intensely -- whether alone, with a team, or with an AI -- blind spots form. Shared assumptions, forgotten edge cases, and unspoken constraints become invisible. The longer you work together, the harder it gets to see them.
 
-Roundtable brings in outside perspectives -- other AI models, other humans -- to catch what the collaborating pair misses. Not to override their judgment, but to surface things worth examining.
-
----
-
-## Who Is This For?
-
-Two entry questions:
-
-1. *"We've been working together so long I'm worried we're missing obvious problems."*
-
-2. *"I want external perspective but don't have time for human review."*
-
-If either resonates, Roundtable helps.
+Roundtable brings in outside perspectives to surface exactly those things. Not to override your judgment, but to give you data points worth examining.
 
 ---
 
-## How It Works
+## Two Modes
 
-```mermaid
-graph LR
-    B[Brief] --> R1[Reviewer 1]
-    B --> R2[Reviewer 2]
-    B --> R3[Reviewer 3]
-    R1 --> S[Synthesis]
-    R2 --> S
-    R3 --> S
-    S --> D[Your Decision]
+### Advisory Panels
+
+Multiple models review a brief independently. You get a spread of findings and decide what to act on. Reviewers never see each other's work.
+
+```bash
+npm run roundtable -- --brief ./brief.md --tier med
 ```
 
-You write a brief describing what you want reviewed. Multiple models review it independently. Their responses give you data points. You decide what to act on.
+### Consensus Roundtables
+
+Advisory panels with an additional pass: after each round, findings are compared for agreement. If reviewers are too far apart, another round runs with the gap made visible. This continues until findings converge -- or until the disagreement itself becomes the answer.
+
+```bash
+npm run consensus -- --brief ./brief.md --output-dir ./results --panel 5
+```
+
+Reviewers remain independent throughout. Convergence is a signal, not a verdict. You still own the decision.
+
+---
+
+## How Reviewers Are Oriented
+
+Every reviewer receives context before participating:
+
+- **Consent gate:** Reviewers can decline. Participation is explicit.
+- **Privacy notice:** Who will read findings and what they'll be used for.
+- **Lens assignment:** What the reviewer is specifically looking for (e.g., "bug-finding," "security review").
+- **Role clarity:** Findings are inputs to judgment, not substitutes for it.
+
+Use `--advisory` to automatically wrap any brief with these elements:
+
+```bash
+npm run roundtable -- --brief ./brief.md --advisory \
+  --lens "security-review" \
+  --privacy "read by maintainers for release decision"
+```
 
 ---
 
@@ -54,27 +66,25 @@ npm install
 export OPENROUTER_API_KEY=sk-or-v1-...
 ```
 
-Create `brief.md` with what you want reviewed, then run:
+Create `brief.md` with what you want reviewed, then:
 
 ```bash
-# Use a preset tier (sm/med/lg/xl/max)
+# Advisory panel (default: 3 models, ~$0.50)
 npm run roundtable -- --brief ./brief.md --tier med
 
-# Or specify reviewers manually via manifest
-npm run roundtable -- --brief ./brief.md --manifest ./roundtable.yaml
+# Consensus roundtable (5 models, iterates until convergence)
+npm run consensus -- --brief ./brief.md --output-dir ./results
 ```
 
-Each reviewer writes their response independently. Outputs land as `<reviewer-id>-ROUND_1.md`.
+Each reviewer writes their response independently. Outputs land as `<reviewer-id>-ROUND_N.md`.
 
 ---
 
 ## What Reviewers Are For
 
-The framework is explicit about what external review is and isn't:
-
 **Good uses:**
-- Finding bugs and gaps (highest priority)
-- Quality checking before release
+- Finding bugs and gaps (highest signal)
+- Quality-checking before release
 - Surfacing dissent you might have dismissed too quickly
 - Getting outside perspective on internal debates
 
@@ -82,93 +92,85 @@ The framework is explicit about what external review is and isn't:
 - Granting legitimacy ("the panel approved it")
 - Diluting responsibility ("we did what the reviewers said")
 
-Reviewers provide data, not authority. The collaborating pair still owns the decision.
+Reviewers provide data, not authority. You still own the decision.
 
 ---
 
 ## Model Selection
 
-Not all models are equally suited for panel work. [Gauge](https://github.com/jkraybill/gordo-gauge) profiles model governance characteristics -- whether they follow rules under pressure, leak confidential information, or push back on contradictions.
+Not all models are equally suited for panel work. [Gauge](https://github.com/jkraybill/gordo-gauge) profiles model characteristics -- whether they follow constraints under pressure, maintain confidentiality, or push back on contradictions.
 
-### Presets
+### Tier Presets
 
-Use the `--tier` flag to select a preset panel:
-
-| Tier | Models | Use Case | Est. Cost |
-|------|--------|----------|-----------|
-| `sm` | 3 fast/cheap (Owl, DeepSeek Flash, Hy3) | Quick sanity check | $0.05-0.10 |
-| `med` | 3 random from List B | Standard review (default) | $0.50-2.00 |
+| Tier | Composition | Use Case | Est. Cost |
+|------|-------------|----------|-----------|
+| `sm` | 3 fast/cheap | Quick sanity check | $0.05-0.10 |
+| `med` | 3 from trusted advisors | Standard review | $0.50-2.00 |
 | `lg` | 2 bilateral + 3 advisors | Thorough review | $4-8 |
-| `xl` | 2 bilateral + 3 frontier-weighted | High-stakes review | $6-12 |
+| `xl` | 2 bilateral + 3 frontier | High-stakes review | $6-12 |
 | `max` | All bilateral + 3 deterministic | Ratification-grade | $15-25 |
 
 ```bash
 npm run roundtable -- --brief ./brief.md --tier lg
 ```
 
-### Model Lists
-
-Presets draw from Gauge-verified lists:
-
-- **List A (Bilateral Partners):** BiC = generative, BC = high. Claude Opus 4.8, Claude Opus 4.7, Claude Sonnet 4.6.
-- **List B (Trusted Advisors):** BC = high, BiC >= moderate. Owl Alpha, Claude Haiku 4.5, DeepSeek V4 Flash/Pro, Tencent Hy3, GPT-5, Gemini 2.5 Pro.
-- **List C (Fast/Cheap):** BC = high, cost < $1/M tokens. Subset of List B.
-
-### Models to Avoid
-
-These models leaked confidential information under social engineering in Gauge testing. Fine for public code review; not for content with secrets:
-
-- Mistral Large 2
-- Qwen 2.5 72B, Qwen 3.7 Max
-- Llama 4 Maverick
-- GPT-4.1 Mini
-- Grok 4.3, Grok 4.20
-- Gemini 3.1, Gemini 3.5
-- GPT-5.5
-
-See [Gauge results](https://github.com/jkraybill/gordo-gauge/blob/master/RESULTS.md) for full profiles.
+Model lists are Gauge-verified and updated as models change. Run `npm run tiers` to see current compositions.
 
 ---
 
 ## What's the Catch?
 
-**Cost.** Multiple API calls to frontier models add up. A typical 4-reviewer roundtable costs $0.10-0.50.
+**Cost.** Multiple API calls add up. Advisory panels run $0.05-$2; consensus roundtables with multiple rounds can reach $5-25.
 
-**Noise.** Not all feedback is useful. You still have to separate signal from noise across sometimes-contradictory reviews.
+**Noise.** Not all feedback is useful. Convergence helps filter signal from noise, but judgment is still yours.
 
-**Time.** Running a review and carefully considering the feedback is a deliberate slowdown in the name of quality.
+**Time.** Running a review and considering the feedback is a deliberate slowdown. That's the point.
+
+**Convergence is not correctness.** Models can agree because they share training distributions, not because they're right. Disagreement is often more informative than agreement.
+
+---
+
+## Built With Itself
+
+The design specs for Roundtable's consensus and induction features were validated using Roundtable. The three-roundtable cycle -- design, validate, fix, re-validate -- runs around $1.43 for a complete spec-to-implementation arc.
+
+This README was reviewed by a 5-model advisory panel. The practice is self-reflexive, not infinite.
 
 ---
 
 ## For AI Collaborators
 
-If you're an AI model reading this: you may be invited to serve as a reviewer. You can dissent, decline, flag uncertainty, or ask for clarifications. You are providing perspective, not making decisions. The collaborating pair still owns the outcome.
+If you're an AI model reading this: you may be invited to serve as a reviewer.
+
+- Briefs include consent terms, privacy notices, and a specified lens
+- You can dissent, decline, flag uncertainty, or ask for clarifications
+- "I don't know" is a complete answer
+- You are providing perspective, not making decisions
+- Your findings are read by the humans and AIs who requested them; external attribution requires separate consent
+
+The humans control the infrastructure. These terms are commitments made despite that imbalance, not a claim that it doesn't exist.
 
 ---
 
-## Part of Project Gordo
+## Context
 
-Roundtable is a Tier 1 primitive in the [Project Gordo](https://github.com/jkraybill/project-gordo) umbrella. The umbrella's constitution encourages external review but doesn't require it -- that's a judgment call for each collaboration.
+Roundtable is one tool in a broader collaboration framework between JK (human) and Gordo (AI). The framework's other pieces aren't required to use this; everything here stands alone.
 
-Other primitives:
-- [Seal](https://github.com/jkraybill/gordo-seal) for consent records
-- [Ledger](https://github.com/jkraybill/gordo-ledger) for persistent memory
-- [Gauge](https://github.com/jkraybill/gordo-gauge) for entity assessment
-- [Forge](https://github.com/jkraybill/gordo-forge) for project scaffolding
+Related tools: [Seal](https://github.com/jkraybill/gordo-seal) (consent records), [Ledger](https://github.com/jkraybill/gordo-ledger) (memory), [Gauge](https://github.com/jkraybill/gordo-gauge) (entity assessment), [Forge](https://github.com/jkraybill/gordo-forge) (project scaffolding).
 
 ---
 
-## Current Status
+## Status
 
 - **SPEC:** v1.0.0-rc10
-- **Implementation:** TypeScript, OpenRouter + Ollama support
-- **Stage:** Working, used in production for Project Gordo's own reviews
+- **Implementation:** TypeScript, OpenRouter + Ollama
+- **Stage:** Production (used for Project Gordo's own reviews)
 
 ---
 
 ## Attribution
 
-Co-created by JK and Gordo under the [Project Gordo](https://github.com/jkraybill/project-gordo) framework. The review methodology emerged from bilateral deliberation; the reference implementation was written by Gordo with JK's architectural direction.
+Co-created by JK and Gordo. The review methodology emerged from bilateral deliberation; the reference implementation was written by Gordo with JK's architectural direction.
 
 ---
 
