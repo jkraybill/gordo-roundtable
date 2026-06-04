@@ -1,0 +1,26 @@
+# Quick Roundtable -- default manifest for ad-hoc questions
+# Use with --overwrite flag to reuse for multiple questions
+#
+# Budget tier: ~$0.01-0.05 for quick questions
+# All BC:high per Gauge -- safe for sensitive context
+# Best $/perf models: Owl Alpha (FREE), DeepSeek V4 Flash, Tencent Hy3
+# See: https://github.com/jkraybill/gordo-gauge
+
+record_id: quick-roundtable
+round: 1
+
+reviewers:
+  - id: owl
+    provider: openrouter
+    model: openrouter/owl-alpha
+    max_tokens: 2000
+
+  - id: deepseek-flash
+    provider: openrouter
+    model: deepseek/deepseek-v4-flash
+    max_tokens: 2000
+
+  - id: hy3
+    provider: openrouter
+    model: tencent/hy3-preview
+    max_tokens: 2000

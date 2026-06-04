@@ -26,3 +26,8 @@ node_modules/
 # Operational artifacts belong in hub, not here (S265 #254)
 briefs/
 reviews/
+
+# Local memory indexes (Ledger)
+.gordo-memory/
+.ledger-index/
+config.json
