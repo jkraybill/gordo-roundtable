@@ -180,4 +180,38 @@ describe("checkConsensus", () => {
     expect(result.proposal_id).toBe("p-1");
     expect(result.proposal_content).toBe("Proposal");
   });
+
+  it("returns amendment content when amendment wins consensus (regression: #3)", () => {
+    let state = createInitialState("Test?", undefined, testConfig);
+
+    // Round 1: A proposes, B amends, C assents to amendment
+    state = applyAction(state, "Party A", { action: "propose", content: "Original proposal" }, log);
+    state = applyAction(state, "Party B", { action: "amend", target_id: "p-1", content: "Amended proposal" }, log);
+    state = applyAction(state, "Party C", { action: "assent", target_id: "p-2" }, log);
+
+    // Round 2: A assents to amendment, B and C pass
+    state = applyAction(state, "Party A", { action: "assent", target_id: "p-2" }, log);
+    state = applyAction(state, "Party B", { action: "pass" }, log);
+    state = applyAction(state, "Party C", { action: "pass" }, log);
+
+    // All should be on p-2
+    expect(state.convergence_metrics.position_map).toEqual({
+      "Party A": "p-2",
+      "Party B": "p-2",
+      "Party C": "p-2",
+    });
+
+    // Stability should be 2
+    expect(state.convergence_metrics.stability_count).toBe(2);
+
+    const result = checkConsensus(state);
+    expect(result.achieved).toBe(true);
+    // Bug fix: should return p-2 content, not p-1
+    expect(result.proposal_id).toBe("p-2");
+    expect(result.proposal_content).toBe("Amended proposal");
+    // Assent profile should include all parties who assented to p-2
+    expect(result.assent_profile?.explicit_assents).toContain("Party A");
+    expect(result.assent_profile?.explicit_assents).toContain("Party B");
+    expect(result.assent_profile?.explicit_assents).toContain("Party C");
+  });
 });

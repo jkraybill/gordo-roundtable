@@ -46,11 +46,13 @@ export function buildPositionMap(state: ConsensusState): Record<string, string |
   }
 
   // Find each party's most recent non-retracted assent
-  const sortedAssents = [...state.assents]
+  // Use array index as tiebreaker when timestamps are equal (same millisecond)
+  const indexedAssents = state.assents
+    .map((a, i) => ({ ...a, index: i }))
     .filter(a => !a.retracted)
-    .sort((a, b) => b.timestamp - a.timestamp);
+    .sort((a, b) => b.timestamp - a.timestamp || b.index - a.index);
 
-  for (const assent of sortedAssents) {
+  for (const assent of indexedAssents) {
     if (map[assent.party] === null) {
       map[assent.party] = assent.proposal_id;
     }
@@ -125,9 +127,11 @@ function getMostSupportedProposal(positionMap: Record<string, string | null>): s
  * Check if consensus has been achieved per spec §5.1 rule 5.
  *
  * Consensus requires:
- * 1. All participants have assented (explicitly or via pass without objection)
- * 2. This state persists for β consecutive rounds
- * 3. No standing objections against the proposal
+ * 1. All positioned participants aligned on the same proposal (per position_map)
+ * 2. No standing objections against that proposal
+ * 3. This state persists for β consecutive rounds (stability_count >= beta)
+ *
+ * Parties with null position (passed without assenting) are non-blocking.
  */
 export function checkConsensus(state: ConsensusState): {
   achieved: boolean;
@@ -135,49 +139,69 @@ export function checkConsensus(state: ConsensusState): {
   proposal_content?: string;
   assent_profile?: AssentProfile;
 } {
-  const alpha = state.config.alpha ?? state.participants.length;
   const beta = state.config.beta;
+  const positionMap = state.convergence_metrics.position_map;
 
-  for (const proposal of state.proposals) {
-    // Get standing (non-withdrawn) objections against this proposal
-    const objections = state.objections.filter(
-      o => o.target_id === proposal.id && !o.withdrawn
-    );
-
-    // Any objection blocks consensus
-    if (objections.length > 0) continue;
-
-    // Get explicit assents for this proposal
-    const explicitAssents = state.assents
-      .filter(a => a.proposal_id === proposal.id && !a.retracted)
-      .map(a => a.party);
-
-    // Parties who have passed without objecting (non-blocking)
-    // These are parties not in explicitAssents and not objecting
-    const objectors = new Set(objections.map(o => o.objector));
-    const passBasedNonObjectors = state.participants.filter(
-      p => !explicitAssents.includes(p) && !objectors.has(p)
-    );
-
-    // Check α threshold
-    const supportCount = explicitAssents.length + passBasedNonObjectors.length;
-    if (supportCount < alpha) continue;
-
-    // Check β stability
-    if (state.convergence_metrics.stability_count < beta) continue;
-
-    return {
-      achieved: true,
-      proposal_id: proposal.id,
-      proposal_content: proposal.content,
-      assent_profile: {
-        explicit_assents: explicitAssents,
-        pass_based_non_objectors: passBasedNonObjectors,
-      },
-    };
+  // Check β stability first — if not stable, no consensus
+  if (state.convergence_metrics.stability_count < beta) {
+    return { achieved: false };
   }
 
-  return { achieved: false };
+  // Find the consensus proposal from position_map
+  // All non-null positions must be on the same proposal
+  const positions = Object.values(positionMap);
+  const nonNullPositions = positions.filter((p): p is string => p !== null);
+
+  // Need at least one positioned party
+  if (nonNullPositions.length === 0) {
+    return { achieved: false };
+  }
+
+  // Check all non-null positions are the same
+  const consensusProposalId = nonNullPositions[0];
+  if (!nonNullPositions.every(p => p === consensusProposalId)) {
+    return { achieved: false };
+  }
+
+  // Find the proposal
+  const proposal = state.proposals.find(p => p.id === consensusProposalId);
+  if (!proposal) {
+    return { achieved: false };
+  }
+
+  // Check no standing objections against this proposal
+  const objections = state.objections.filter(
+    o => o.target_id === consensusProposalId && !o.withdrawn
+  );
+  if (objections.length > 0) {
+    return { achieved: false };
+  }
+
+  // Build assent profile from assents to the consensus proposal
+  // Include both explicit assents and implicit assents (from proposing)
+  const allAssents = state.assents
+    .filter(a => a.proposal_id === consensusProposalId && !a.retracted)
+    .map(a => a.party);
+
+  // Unique assenting parties
+  const uniqueAssenters = [...new Set(allAssents)];
+
+  // Pass-based non-objectors: parties who passed (null position or same position)
+  // and don't have any assent record — they're not blocking
+  const passBasedNonObjectors = state.participants.filter(
+    p => !uniqueAssenters.includes(p) &&
+         (positionMap[p] === null || positionMap[p] === consensusProposalId)
+  );
+
+  return {
+    achieved: true,
+    proposal_id: proposal.id,
+    proposal_content: proposal.content,
+    assent_profile: {
+      explicit_assents: uniqueAssenters,
+      pass_based_non_objectors: passBasedNonObjectors,
+    },
+  };
 }
 
 /**
