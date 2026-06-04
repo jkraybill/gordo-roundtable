@@ -147,4 +147,50 @@ RATIONALE: |
       expect(result.target_id).toBe("o-1");
     }
   });
+
+  it("parses multi-line content with blank lines inside", () => {
+    const response = `ACTION: synthesize
+CONTENT: |
+  **Roundtable Induction Spec (v2)**
+
+  This is paragraph one.
+
+  This is paragraph two with a blank line before it.
+
+  ## Section Header
+
+  More content here.
+RATIONALE: |
+  Synthesizing multiple proposals.`;
+
+    const result = parseAction(response);
+
+    expect("error" in result).toBe(false);
+    if (!("error" in result)) {
+      expect(result.action).toBe("synthesize");
+      expect(result.content).toContain("**Roundtable Induction Spec (v2)**");
+      expect(result.content).toContain("paragraph one");
+      expect(result.content).toContain("paragraph two");
+      expect(result.content).toContain("## Section Header");
+      expect(result.content).toContain("More content here");
+      // Should NOT include RATIONALE
+      expect(result.content).not.toContain("Synthesizing");
+    }
+  });
+
+  it("parses content at end of response (no RATIONALE)", () => {
+    const response = `ACTION: propose
+CONTENT: |
+  This is a proposal.
+
+  With multiple paragraphs.`;
+
+    const result = parseAction(response);
+
+    expect("error" in result).toBe(false);
+    if (!("error" in result)) {
+      expect(result.content).toContain("This is a proposal");
+      expect(result.content).toContain("multiple paragraphs");
+    }
+  });
 });

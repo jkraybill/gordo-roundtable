@@ -49,15 +49,27 @@ export function parseAction(response: string): ParsedAction | { error: string } 
   const target_id = targetMatch?.[1]?.trim();
 
   // Extract CONTENT (optional, multiline)
+  // The regex must handle multi-line content with blank lines inside.
+  // We look for CONTENT: followed by optional | and newline, then capture everything
+  // until we hit RATIONALE:/TARGET:/ACTION: at the start of a line, or end of string.
+  // Strategy: try to match with a following section header first, then fall back to end-of-string.
   let content: string | undefined;
-  const contentMatch = response.match(/^CONTENT:\s*\|?\s*\n([\s\S]*?)(?=^(?:RATIONALE|TARGET|ACTION):|$)/mi);
-  if (contentMatch) {
-    content = contentMatch[1].trim();
+
+  // First, try multiline content ending at a section header
+  const contentWithHeader = response.match(/^CONTENT:\s*\|?\s*\n([\s\S]*?)(?=\n(?:RATIONALE|TARGET|ACTION):)/mi);
+  if (contentWithHeader) {
+    content = contentWithHeader[1].trim();
   } else {
-    // Try single-line content
-    const singleLineMatch = response.match(/^CONTENT:\s*(.+?)$/mi);
-    if (singleLineMatch) {
-      content = singleLineMatch[1].trim();
+    // No following section header — content goes to end of string
+    const contentToEnd = response.match(/^CONTENT:\s*\|?\s*\n([\s\S]*)$/mi);
+    if (contentToEnd) {
+      content = contentToEnd[1].trim();
+    } else {
+      // Try single-line content (no pipe, no newline after CONTENT:)
+      const singleLineMatch = response.match(/^CONTENT:\s*([^\n]+)/mi);
+      if (singleLineMatch) {
+        content = singleLineMatch[1].trim();
+      }
     }
   }
 
