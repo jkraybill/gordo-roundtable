@@ -100,7 +100,7 @@ function toReviewer(config: ParticipantConfig, id: string): Reviewer {
     id,
     provider: config.provider,
     model: config.model,
-    max_tokens: config.max_tokens,
+    ...(config.max_tokens ? { max_tokens: config.max_tokens } : {}),
     ...(config.reasoning_effort ? { reasoning_effort: config.reasoning_effort } : {}),
   };
 }

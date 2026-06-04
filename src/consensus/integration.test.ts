@@ -19,9 +19,9 @@ const mockDispatchOne = vi.mocked(runner.dispatchOne);
 
 const testConfig: ConsensusConfig = {
   participants: [
-    { model: "test-model-a", provider: "openrouter", max_tokens: 1000 },
-    { model: "test-model-b", provider: "openrouter", max_tokens: 1000 },
-    { model: "test-model-c", provider: "openrouter", max_tokens: 1000 },
+    { model: "test-model-a", provider: "openrouter" },
+    { model: "test-model-b", provider: "openrouter" },
+    { model: "test-model-c", provider: "openrouter" },
   ],
   turn_limit: 50,
   hard_cap: 100,

@@ -9,14 +9,11 @@ participants:
   - model: anthropic/claude-sonnet-4.6
     provider: openrouter
     reasoning_effort: high
-    max_tokens: 8000
 
   - model: anthropic/claude-sonnet-4.6
     provider: openrouter
     reasoning_effort: high
-    max_tokens: 8000
 
   - model: anthropic/claude-sonnet-4.6
     provider: openrouter
     reasoning_effort: high
-    max_tokens: 8000

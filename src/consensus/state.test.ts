@@ -14,9 +14,9 @@ import type { ConsensusConfig, ParsedAction } from "./types.js";
 
 const testConfig: ConsensusConfig = {
   participants: [
-    { model: "test-model-1", provider: "openrouter", max_tokens: 1000 },
-    { model: "test-model-2", provider: "openrouter", max_tokens: 1000 },
-    { model: "test-model-3", provider: "openrouter", max_tokens: 1000 },
+    { model: "test-model-1", provider: "openrouter" },
+    { model: "test-model-2", provider: "openrouter" },
+    { model: "test-model-3", provider: "openrouter" },
   ],
   turn_limit: 100,
   hard_cap: 500,

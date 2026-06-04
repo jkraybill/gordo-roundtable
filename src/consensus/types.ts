@@ -126,7 +126,7 @@ export const ParticipantConfigSchema = z.object({
   model: z.string(),
   provider: z.enum(["openrouter", "ollama"]).default("openrouter"),
   reasoning_effort: z.enum(["low", "medium", "high"]).optional(),
-  max_tokens: z.number().int().positive().default(8000),
+  max_tokens: z.number().int().positive().optional(), // No default — let model use natural limit
 });
 
 export type ParticipantConfig = z.infer<typeof ParticipantConfigSchema>;

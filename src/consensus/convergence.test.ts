@@ -66,9 +66,9 @@ describe("calculateEntropy", () => {
 describe("buildPositionMap", () => {
   const testConfig: ConsensusConfig = {
     participants: [
-      { model: "test-1", provider: "openrouter", max_tokens: 1000 },
-      { model: "test-2", provider: "openrouter", max_tokens: 1000 },
-      { model: "test-3", provider: "openrouter", max_tokens: 1000 },
+      { model: "test-1", provider: "openrouter" },
+      { model: "test-2", provider: "openrouter" },
+      { model: "test-3", provider: "openrouter" },
     ],
     turn_limit: 100,
     hard_cap: 500,
@@ -103,9 +103,9 @@ describe("buildPositionMap", () => {
 describe("checkConsensus", () => {
   const testConfig: ConsensusConfig = {
     participants: [
-      { model: "test-1", provider: "openrouter", max_tokens: 1000 },
-      { model: "test-2", provider: "openrouter", max_tokens: 1000 },
-      { model: "test-3", provider: "openrouter", max_tokens: 1000 },
+      { model: "test-1", provider: "openrouter" },
+      { model: "test-2", provider: "openrouter" },
+      { model: "test-3", provider: "openrouter" },
     ],
     turn_limit: 100,
     hard_cap: 500,
