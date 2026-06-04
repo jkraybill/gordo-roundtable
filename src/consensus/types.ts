@@ -19,6 +19,8 @@ export const ActionTypeSchema = z.enum([
   "meta_propose",
   "synthesize",
   "narrow",
+  "identity_doubt_pause",
+  "identity_doubt_resolved",
 ]);
 
 export type ActionType = z.infer<typeof ActionTypeSchema>;

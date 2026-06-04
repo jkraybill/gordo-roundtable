@@ -162,6 +162,17 @@ export function validateAction(
     case "abstain":
       // Always valid
       break;
+
+    case "identity_doubt_pause":
+      // Requires content (the concern)
+      if (!action.content) {
+        return { valid: false, reason: "identity_doubt_pause requires content describing the concern" };
+      }
+      break;
+
+    case "identity_doubt_resolved":
+      // Always valid — clears the speaker's own doubt
+      break;
   }
 
   return { valid: true };
@@ -236,6 +247,16 @@ function generateNarration(speaker: string, action: ParsedAction, state: Consens
 
     case "retract_assent": {
       narration = `${speaker} retracted their assent to ${action.target_id}.`;
+      break;
+    }
+
+    case "identity_doubt_pause": {
+      narration = `${speaker} invoked an identity-doubt pause. Deliberation paused for verification.`;
+      break;
+    }
+
+    case "identity_doubt_resolved": {
+      narration = `${speaker} resolved their identity-doubt. Deliberation may proceed.`;
       break;
     }
 
@@ -433,6 +454,17 @@ export function applyAction(
     case "pass":
     case "abstain":
       // No state change
+      break;
+
+    case "identity_doubt_pause":
+      // Identity doubt is tracked via the raw_response in turn_log
+      // The prompts.ts detection logic reads these
+      // No separate state field needed — detection is pattern-based
+      break;
+
+    case "identity_doubt_resolved":
+      // Resolution is also tracked via raw_response
+      // prompts.ts clears the doubt when this action is detected
       break;
   }
 
