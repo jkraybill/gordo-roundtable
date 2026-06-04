@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "roundtable": "tsx src/cli.ts run",
+    "consensus": "tsx src/cli.ts consensus",
     "tiers": "tsx src/cli.ts tiers",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

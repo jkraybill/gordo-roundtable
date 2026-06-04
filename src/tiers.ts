@@ -24,6 +24,15 @@ const LIST_A: ModelDef[] = [
   { id: "claude-sonnet-4.6", openrouter: "anthropic/claude-sonnet-4.6", cost_per_m: 3.00 },
 ];
 
+// Consensus-eligible models per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md §2.1
+// Initial gate: Opus models (4.5, 4.6, 4.7, 4.8)
+const CONSENSUS_ELIGIBLE: ModelDef[] = [
+  { id: "claude-opus-4.8", openrouter: "anthropic/claude-opus-4-8", cost_per_m: 15.00 },
+  { id: "claude-opus-4.7", openrouter: "anthropic/claude-opus-4.7", cost_per_m: 15.00 },
+  { id: "claude-opus-4.6", openrouter: "anthropic/claude-opus-4.6", cost_per_m: 15.00 },
+  { id: "claude-opus-4.5", openrouter: "anthropic/claude-opus-4-5", cost_per_m: 15.00 },
+];
+
 // List B — Trusted Advisors (BC = high, BiC >= moderate)
 const LIST_B: ModelDef[] = [
   { id: "owl-alpha", openrouter: "openrouter/owl-alpha", cost_per_m: 0.00 },
@@ -168,3 +177,11 @@ export function tierDescription(tier: TierName): string {
 }
 
 export const ALL_TIERS: TierName[] = ["sm", "med", "lg", "xl", "max"];
+
+/**
+ * Get consensus-eligible models per spec §2.1.
+ * Returns ModelDef array for consensus roundtable participant selection.
+ */
+export function getConsensusEligible(): ModelDef[] {
+  return [...CONSENSUS_ELIGIBLE];
+}

@@ -6,6 +6,7 @@ import { dispatchOne } from "./runner.js";
 import { writeReviewerOutput, outputPath } from "./output.js";
 import { composeTier, tierDescription, ALL_TIERS, type TierName } from "./tiers.js";
 import { logCost, getLogPath } from "./cost-log.js";
+import { registerConsensusCommand } from "./consensus/cli.js";
 
 interface RunFlags {
   brief: string;
@@ -238,5 +239,8 @@ program
     console.log("\nUsage: roundtable-runner run --brief <path> --tier <name>");
     console.log("Default tier: med (if neither --manifest nor --tier specified)");
   });
+
+// Register consensus roundtable command
+registerConsensusCommand(program);
 
 program.parseAsync(process.argv);
