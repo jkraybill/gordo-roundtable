@@ -194,7 +194,7 @@ export function registerConsensusCommand(program: Command): void {
         session: process.env.GORDO_SESSION,
         record_id: `consensus-${sessionId}`,
         round: state.round_count,
-        panel_size: participantCount,
+        panel_size: participants.length,
         models: [...new Set(participants.map(p => p.model))],
         prompt_tokens: totalPromptTokens,
         completion_tokens: totalCompletionTokens,
