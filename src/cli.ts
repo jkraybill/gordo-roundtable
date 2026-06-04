@@ -7,6 +7,7 @@ import { writeReviewerOutput, outputPath } from "./output.js";
 import { composeTier, tierDescription, ALL_TIERS, type TierName } from "./tiers.js";
 import { logCost, getLogPath } from "./cost-log.js";
 import { registerConsensusCommand } from "./consensus/cli.js";
+import { wrapAdvisoryBrief } from "./advisory/prompts.js";
 
 interface RunFlags {
   brief: string;
@@ -16,6 +17,9 @@ interface RunFlags {
   reviewer: string[];
   dryRun?: boolean;
   overwrite?: boolean;
+  advisory?: boolean;
+  lens?: string;
+  privacy?: string;
 }
 
 const program = new Command();
@@ -38,7 +42,21 @@ program
   )
   .option("--dry-run", "print resolved request shapes; don't dispatch")
   .option("--overwrite", "allow overwriting existing output files")
+  .option("--advisory", "wrap brief with advisory panel framing (consent gate, privacy notice, lens)")
+  .option("--lens <lens>", "panelist lens for advisory panels (required with --advisory)")
+  .option("--privacy <intent>", "privacy intent for advisory panels (required with --advisory)")
   .action(async (flags: RunFlags) => {
+    // Validate advisory options
+    if (flags.advisory) {
+      if (!flags.lens) {
+        console.error("--advisory requires --lens (e.g., --lens bug-finding)");
+        process.exit(1);
+      }
+      if (!flags.privacy) {
+        console.error("--advisory requires --privacy (e.g., --privacy \"read by deliberating parties only\")");
+        process.exit(1);
+      }
+    }
     // Resolve manifest: explicit file, tier-based, or default to tier=med
     let manifest: { record_id: string; round?: number; reviewers: any[] };
     let manifestDir = process.cwd();
@@ -64,7 +82,14 @@ program
       console.log(`Using tier: ${tierDescription(tierUsed)}`);
     }
 
-    const briefText = loadBrief(flags.brief);
+    let briefText = loadBrief(flags.brief);
+
+    // Wrap brief with advisory framing if --advisory specified
+    if (flags.advisory) {
+      briefText = wrapAdvisoryBrief(briefText, flags.lens!, flags.privacy!);
+      console.log(`Advisory mode: lens="${flags.lens}", privacy="${flags.privacy}"`);
+    }
+
     const round = flags.round
       ? parseInt(flags.round, 10)
       : (manifest.round ?? inferRoundFromFilename(flags.brief));
