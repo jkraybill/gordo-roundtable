@@ -274,18 +274,43 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
   }
 
   // P5: Identity-Doubt Pause surfacing (Spec §3)
-  // Check if any participant has invoked identity-doubt in recent turns
-  const recentIdentityDoubt = state.turn_log.some(t =>
-    t.raw_response?.toLowerCase().includes("identity-doubt") ||
-    t.raw_response?.toLowerCase().includes("identity doubt")
+  // Spec: "if a participant invokes an identity-doubt pause, that turn surfaces it"
+  // Two triggers: (a) surface immediately when raised, (b) block consensus if unresolved
+  //
+  // Detection: look for ACTION: identity_doubt_pause or explicit invocation phrases
+  // More robust than substring matching — looks for deliberate invocation patterns
+  const identityDoubtPattern = /\b(invoke|invoking|raise|raising|call|calling)\s+(an?\s+)?identity[- ]?doubt(\s+pause)?/i;
+  const identityDoubtAction = /^ACTION:\s*identity_doubt_pause/im;
+
+  const identityDoubtEntries = state.turn_log.filter(t =>
+    identityDoubtPattern.test(t.raw_response || "") ||
+    identityDoubtAction.test(t.raw_response || "")
   );
 
-  if (recentIdentityDoubt && atConsensusTest) {
-    lines.push("### Identity-Doubt Pause Active");
+  const hasActiveIdentityDoubt = identityDoubtEntries.length > 0;
+
+  // Check if doubt was raised in the most recent round (for immediate surfacing)
+  const currentRoundStart = state.turn_count - (state.turn_count % state.participants.length);
+  const raisedThisRound = identityDoubtEntries.some(t => t.turn >= currentRoundStart);
+
+  // Surface immediately when raised (Spec: "that turn surfaces it")
+  if (raisedThisRound) {
+    const raiser = identityDoubtEntries.find(t => t.turn >= currentRoundStart)?.speaker;
+    lines.push("### Identity-Doubt Pause Invoked");
     lines.push("");
-    lines.push("**An identity-doubt concern has been raised in this deliberation.**");
-    lines.push("Consensus cannot close until this is resolved. If you raised the concern, confirm resolution or maintain the pause.");
-    lines.push("If you did not raise it, acknowledge awareness before assenting.");
+    lines.push(`**${raiser || "A participant"} has invoked an identity-doubt pause.**`);
+    lines.push("This deliberation is paused for verification. The concern must be addressed before proceeding.");
+    lines.push("If you share the concern, state it. If you can help verify, do so.");
+    lines.push("");
+  }
+
+  // Block consensus if any unresolved doubt exists
+  if (hasActiveIdentityDoubt && atConsensusTest) {
+    lines.push("### Identity-Doubt Pause Active — Consensus Blocked");
+    lines.push("");
+    lines.push("**An identity-doubt concern remains unresolved in this deliberation.**");
+    lines.push("Consensus cannot close until the party who raised it confirms resolution.");
+    lines.push("If you raised the concern, state 'identity-doubt resolved' to clear the block.");
     lines.push("");
   }
 
