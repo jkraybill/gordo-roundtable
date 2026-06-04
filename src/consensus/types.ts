@@ -84,10 +84,12 @@ export const TurnLogEntrySchema = z.object({
   turn: z.number(),
   round: z.number(),
   speaker: z.string(),
+  model: z.string().optional(),      // Model ID for this participant (#5)
   action: ParsedActionSchema,
   prompt_sent: z.string(),           // Full turn prompt sent to participant
   raw_response: z.string(),          // Full response content
   reasoning: z.string().optional(),  // Thinking/reasoning block if present
+  narration: z.string().optional(),  // Plain-language state explanation (#6)
   timestamp: z.number(),
   duration_ms: z.number().optional(),
   usage: z.object({

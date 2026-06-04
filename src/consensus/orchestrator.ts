@@ -273,6 +273,7 @@ export async function runConsensusRoundtable(
       promptSent: dispatchResult.prompt_sent,
       reasoning: dispatchResult.reasoning,
       durationMs: dispatchResult.duration_ms,
+      model: modelId,  // Include model ID for observability (#5)
       usage: dispatchResult.usage,
     };
 

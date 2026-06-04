@@ -173,7 +173,88 @@ export interface TurnLogData {
   promptSent: string;
   reasoning?: string;
   durationMs?: number;
+  model?: string;  // Model ID for this participant (#5)
   usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
+}
+
+/**
+ * Generate plain-language narration for a turn (#6).
+ * Explains what happened and current state in readable terms.
+ */
+function generateNarration(speaker: string, action: ParsedAction, state: ConsensusState): string {
+  const proposalCount = state.proposals.length;
+  const activeObjections = state.objections.filter(o => !o.withdrawn).length;
+
+  let narration = "";
+
+  switch (action.action) {
+    case "propose": {
+      const proposal = state.proposals[proposalCount - 1];
+      const contentPreview = proposal.content.slice(0, 80) + (proposal.content.length > 80 ? "..." : "");
+      narration = `${speaker} proposed "${contentPreview}" (${proposal.id}). `;
+      narration += `Now ${proposalCount} proposal(s) on the table.`;
+      break;
+    }
+
+    case "amend": {
+      const amendment = state.proposals[proposalCount - 1];
+      const contentPreview = amendment.content.slice(0, 80) + (amendment.content.length > 80 ? "..." : "");
+      narration = `${speaker} amended ${action.target_id} with "${contentPreview}" (${amendment.id}). `;
+      narration += `Now ${proposalCount} proposal(s) on the table.`;
+      break;
+    }
+
+    case "assent": {
+      const assentsForTarget = state.assents.filter(a => a.proposal_id === action.target_id && !a.retracted).length;
+      narration = `${speaker} assented to ${action.target_id}. `;
+      narration += `${action.target_id} now has ${assentsForTarget} assent(s).`;
+      break;
+    }
+
+    case "object": {
+      narration = `${speaker} objected to ${action.target_id}: "${action.reason}". `;
+      narration += `${activeObjections} active objection(s) total.`;
+      break;
+    }
+
+    case "withdraw": {
+      narration = `${speaker} withdrew their objection. ${activeObjections} active objection(s) remain.`;
+      break;
+    }
+
+    case "call_vote": {
+      narration = `${speaker} called for a vote on ${action.target_id}. `;
+      narration += `Stability window begins — need ${state.config.beta} stable rounds for consensus.`;
+      break;
+    }
+
+    case "pass":
+    case "abstain": {
+      narration = `${speaker} passed. No change to proposals or objections.`;
+      break;
+    }
+
+    case "retract_assent": {
+      narration = `${speaker} retracted their assent to ${action.target_id}.`;
+      break;
+    }
+
+    default:
+      narration = `${speaker} took action: ${action.action}`;
+  }
+
+  // Add convergence status
+  const metrics = state.convergence_metrics;
+  const positions = Object.values(metrics.position_map).filter(p => p !== null);
+  const uniquePositions = new Set(positions);
+
+  if (uniquePositions.size === 1 && positions.length === state.participants.length) {
+    narration += ` All parties aligned on ${positions[0]}.`;
+  } else if (uniquePositions.size > 1) {
+    narration += ` Parties split across ${uniquePositions.size} positions.`;
+  }
+
+  return narration;
 }
 
 /**
@@ -355,15 +436,20 @@ export function applyAction(
       break;
   }
 
+  // Generate plain-language narration (#6)
+  const narration = generateNarration(speaker, action, newState);
+
   // Log the turn (maximally verbose)
   newState.turn_log.push({
     turn: newState.turn_count,
     round: newState.round_count,
     speaker,
+    model: logData.model,
     action,
     prompt_sent: logData.promptSent,
     raw_response: logData.rawResponse,
     reasoning: logData.reasoning,
+    narration,
     timestamp: now,
     duration_ms: logData.durationMs,
     usage: logData.usage,
