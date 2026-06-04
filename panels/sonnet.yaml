@@ -1,0 +1,21 @@
+# Sonnet panel — cost-effective consensus
+# Use for smoke tests and lower-stakes deliberation
+
+name: sonnet
+description: Sonnet family — cost-effective consensus panel
+
+participants:
+  - model: anthropic/claude-sonnet-4-20250514
+    provider: openrouter
+    reasoning_effort: high
+    max_tokens: 8000
+
+  - model: anthropic/claude-sonnet-4.6
+    provider: openrouter
+    reasoning_effort: high
+    max_tokens: 8000
+
+  - model: anthropic/claude-sonnet-4-5-20250514
+    provider: openrouter
+    reasoning_effort: high
+    max_tokens: 8000

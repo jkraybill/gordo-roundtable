@@ -4,18 +4,24 @@
 
 import { Command } from "commander";
 import { randomUUID } from "node:crypto";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import YAML from "yaml";
 import type { ConsensusConfig, ParticipantConfig } from "./types.js";
 import { createInitialState } from "./state.js";
 import { runConsensusRoundtable, resumeFromFile } from "./orchestrator.js";
-import { getConsensusEligible } from "../tiers.js";
 import { logCost, getLogPath } from "../cost-log.js";
+
+interface PanelFile {
+  name: string;
+  description?: string;
+  participants: ParticipantConfig[];
+}
 
 interface ConsensusFlags {
   question: string;
   context?: string;
+  panel?: string;
   participants: string;
   turnLimit: string;
   beta: string;
@@ -26,13 +32,42 @@ interface ConsensusFlags {
   outputDir?: string;
 }
 
+/**
+ * Load panel configuration from YAML file.
+ * Resolves relative paths from package panels/ directory.
+ */
+function loadPanel(panelPath: string): PanelFile {
+  // Check if it's a built-in panel name (no path separators, no .yaml)
+  if (!panelPath.includes("/") && !panelPath.includes("\\") && !panelPath.endsWith(".yaml")) {
+    const builtinPath = resolve(dirname(new URL(import.meta.url).pathname), "../../panels", `${panelPath}.yaml`);
+    if (existsSync(builtinPath)) {
+      panelPath = builtinPath;
+    }
+  }
+
+  const resolved = resolve(panelPath);
+  if (!existsSync(resolved)) {
+    throw new Error(`Panel file not found: ${resolved}`);
+  }
+
+  const content = readFileSync(resolved, "utf-8");
+  const parsed = YAML.parse(content) as PanelFile;
+
+  if (!parsed.participants || !Array.isArray(parsed.participants) || parsed.participants.length === 0) {
+    throw new Error(`Panel file must have at least one participant: ${resolved}`);
+  }
+
+  return parsed;
+}
+
 export function registerConsensusCommand(program: Command): void {
   program
     .command("consensus")
     .description("Run a consensus roundtable — multi-turn AI deliberation for unanimous agreement")
     .requiredOption("--question <text>", "The question for the roundtable to answer")
     .option("--context <text>", "Optional context for the question")
-    .option("--participants <n>", "Number of participants (3-11, default: 5)", "5")
+    .option("--panel <path>", "Panel YAML file (built-in: opus, sonnet, mixed; default: opus)")
+    .option("--participants <n>", "Number of participants (overrides panel size if specified)")
     .option("--turn-limit <n>", "Maximum turns (default: 100)", "100")
     .option("--beta <n>", "Stability horizon for consensus (default: 2)", "2")
     .option("--bootstrap-rounds <n>", "Rounds for optional bootstrap phase (0 to skip, default: 3)", "3")
@@ -41,32 +76,43 @@ export function registerConsensusCommand(program: Command): void {
     .requiredOption("--output-dir <path>", "Directory to write results (must not be under gordo-roundtable)")
     .option("--dry-run", "Print config without running")
     .action(async (flags: ConsensusFlags) => {
-      const participantCount = parseInt(flags.participants, 10);
-      if (participantCount < 3 || participantCount > 11) {
-        console.error("Error: participants must be between 3 and 11 (per spec §2.2)");
-        process.exit(1);
-      }
-
       const turnLimit = parseInt(flags.turnLimit, 10);
       const beta = parseInt(flags.beta, 10);
       const bootstrapRounds = parseInt(flags.bootstrapRounds, 10);
 
-      // Build participant configs from consensus-eligible models
-      const eligibleModels = getConsensusEligible();
-      if (eligibleModels.length === 0) {
-        console.error("Error: No consensus-eligible models available");
+      // Load panel configuration
+      const panelName = flags.panel || "opus";
+      let panel: PanelFile;
+      try {
+        panel = loadPanel(panelName);
+        console.log(`Panel: ${panel.name}${panel.description ? ` — ${panel.description}` : ""}`);
+      } catch (err) {
+        console.error(`Error loading panel: ${(err as Error).message}`);
         process.exit(1);
       }
 
-      const participants: ParticipantConfig[] = [];
-      for (let i = 0; i < participantCount; i++) {
-        const model = eligibleModels[i % eligibleModels.length];
-        participants.push({
-          model: model.openrouter,
-          provider: "openrouter",
-          reasoning_effort: "high",
-          max_tokens: 8000,
-        });
+      // Use panel participants, optionally limited by --participants flag
+      let participants = panel.participants;
+      if (flags.participants) {
+        const requestedCount = parseInt(flags.participants, 10);
+        if (requestedCount < 3 || requestedCount > 11) {
+          console.error("Error: participants must be between 3 and 11 (per spec §2.2)");
+          process.exit(1);
+        }
+        // Cycle through panel participants if requested count exceeds panel size
+        participants = [];
+        for (let i = 0; i < requestedCount; i++) {
+          participants.push(panel.participants[i % panel.participants.length]);
+        }
+      }
+
+      if (participants.length < 3) {
+        console.error("Error: panel must have at least 3 participants (per spec §2.2)");
+        process.exit(1);
+      }
+      if (participants.length > 11) {
+        console.error("Error: panel must have at most 11 participants (per spec §2.2)");
+        process.exit(1);
       }
 
       const config: ConsensusConfig = {
@@ -84,9 +130,10 @@ export function registerConsensusCommand(program: Command): void {
         if (flags.context) console.log("Context:", flags.context);
         console.log("\nConfig:");
         console.log(YAML.stringify(config));
-        console.log("\nEligible models:");
-        for (const m of eligibleModels) {
-          console.log(`  - ${m.id}: ${m.openrouter}`);
+        console.log("\nParticipants:");
+        for (let i = 0; i < participants.length; i++) {
+          const p = participants[i];
+          console.log(`  Party ${String.fromCharCode(65 + i)}: ${p.model}`);
         }
         return;
       }
