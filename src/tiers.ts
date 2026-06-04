@@ -8,6 +8,7 @@
  */
 
 import type { Reviewer } from "./types.js";
+import { buildAdvisorySystemPrompt } from "./advisory/prompts.js";
 
 export type TierName = "sm" | "med" | "lg" | "xl" | "max";
 
@@ -81,6 +82,7 @@ function modelToReviewer(m: ModelDef, maxTokens: number, reasoningEffort?: strin
     provider: "openrouter",
     model: m.openrouter,
     max_tokens: maxTokens,
+    system_prompt: buildAdvisorySystemPrompt(),
     ...(reasoningEffort ? { reasoning_effort: reasoningEffort as any } : {}),
   };
 }
