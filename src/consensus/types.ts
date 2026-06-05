@@ -211,6 +211,15 @@ export const ConsensusTypeSchema = z.enum([
 
 export type ConsensusType = z.infer<typeof ConsensusTypeSchema>;
 
+// Diversity flag for participant configuration (S409 #20)
+export const DiversityLevelSchema = z.enum([
+  "low",     // Same model family, adjacent versions (e.g., all Opus 4.x)
+  "medium",  // Same provider, different families (e.g., Opus + Sonnet)
+  "high",    // Different providers/architectures
+]);
+
+export type DiversityLevel = z.infer<typeof DiversityLevelSchema>;
+
 // Consensus output per spec §7.1 + S409 improvements
 export const ConsensusOutputSchema = z.object({
   answer: z.string(),
@@ -226,6 +235,10 @@ export const ConsensusOutputSchema = z.object({
     prompt: z.number(),
     completion: z.number(),
   }).optional(),
+  // S409 #20: participant diversity
+  diversity_level: DiversityLevelSchema.optional(),
+  // S409 #22: action-type usage audit
+  action_usage: z.record(z.number()).optional(), // action type -> count
 });
 
 export type ConsensusOutput = z.infer<typeof ConsensusOutputSchema>;

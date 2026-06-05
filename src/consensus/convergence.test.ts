@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { calculateEntropy, buildPositionMap, checkConsensus } from "./convergence.js";
+import { calculateEntropy, buildPositionMap, checkConsensus, calculateDiversityLevel, calculateActionUsage } from "./convergence.js";
 import { createInitialState, applyAction } from "./state.js";
 import type { ConsensusConfig } from "./types.js";
 
@@ -213,5 +213,70 @@ describe("checkConsensus", () => {
     expect(result.assent_profile?.explicit_assents).toContain("Party A");
     expect(result.assent_profile?.explicit_assents).toContain("Party B");
     expect(result.assent_profile?.explicit_assents).toContain("Party C");
+  });
+});
+
+describe("calculateDiversityLevel (S409 #20)", () => {
+  it("returns low for same model family (all Opus)", () => {
+    const participants = [
+      { model: "anthropic/claude-opus-4-8", provider: "openrouter" as const },
+      { model: "anthropic/claude-opus-4.7", provider: "openrouter" as const },
+      { model: "anthropic/claude-opus-4-5", provider: "openrouter" as const },
+    ];
+    expect(calculateDiversityLevel(participants)).toBe("low");
+  });
+
+  it("returns medium for same provider two families", () => {
+    const participants = [
+      { model: "anthropic/claude-opus-4-8", provider: "openrouter" as const },
+      { model: "anthropic/claude-opus-4.7", provider: "openrouter" as const },
+      { model: "anthropic/claude-sonnet-4.6", provider: "openrouter" as const },
+    ];
+    expect(calculateDiversityLevel(participants)).toBe("medium");
+  });
+
+  it("returns high for 3+ families", () => {
+    const participants = [
+      { model: "anthropic/claude-opus-4-8", provider: "openrouter" as const },
+      { model: "anthropic/claude-sonnet-4.6", provider: "openrouter" as const },
+      { model: "anthropic/claude-haiku-4.5", provider: "openrouter" as const },
+    ];
+    expect(calculateDiversityLevel(participants)).toBe("high");
+  });
+
+  it("returns high for multiple providers", () => {
+    const participants = [
+      { model: "anthropic/claude-opus-4-8", provider: "openrouter" as const },
+      { model: "local-llama", provider: "ollama" as const },
+      { model: "anthropic/claude-opus-4.7", provider: "openrouter" as const },
+    ];
+    expect(calculateDiversityLevel(participants)).toBe("high");
+  });
+});
+
+describe("calculateActionUsage (S409 #22)", () => {
+  it("counts action types across turns", () => {
+    const config: ConsensusConfig = {
+      participants: [
+        { model: "m1", provider: "openrouter" },
+        { model: "m2", provider: "openrouter" },
+        { model: "m3", provider: "openrouter" },
+      ],
+      turn_limit: 100,
+      hard_cap: 500,
+      bootstrap_rounds: 0,
+      beta: 2,
+    };
+
+    let state = createInitialState("Q?", undefined, config);
+    state = applyAction(state, "Party A", { action: "propose", content: "P1" }, { rawResponse: "", promptSent: "" });
+    state = applyAction(state, "Party B", { action: "assent", target_id: "p-1" }, { rawResponse: "", promptSent: "" });
+    state = applyAction(state, "Party C", { action: "pass" }, { rawResponse: "", promptSent: "" });
+
+    const usage = calculateActionUsage(state);
+    expect(usage["propose"]).toBe(1);
+    expect(usage["assent"]).toBe(1);
+    expect(usage["pass"]).toBe(1);
+    expect(usage["object"]).toBeUndefined();
   });
 });

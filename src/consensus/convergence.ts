@@ -3,7 +3,14 @@
  * Per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md v0.2.1 §4.3, §5.1
  */
 
-import type { ConsensusState, AssentProfile, ConvergenceMetrics, ConsensusType } from "./types.js";
+import type {
+  ConsensusState,
+  AssentProfile,
+  ConvergenceMetrics,
+  ConsensusType,
+  DiversityLevel,
+  ParticipantConfig,
+} from "./types.js";
 
 /**
  * Calculate Shannon entropy of position distribution.
@@ -331,6 +338,58 @@ export function calculateTotalCost(state: ConsensusState): {
     total_cost_usd: totalCost,
     total_tokens: { prompt: promptTokens, completion: completionTokens },
   };
+}
+
+/**
+ * Calculate diversity level of participant configuration (S409 #20).
+ * Low: same model family + adjacent versions
+ * Medium: same provider, different families
+ * High: different providers/architectures
+ */
+export function calculateDiversityLevel(participants: ParticipantConfig[]): DiversityLevel {
+  const models = participants.map(p => p.model.toLowerCase());
+  const providers = participants.map(p => p.provider || "openrouter");
+
+  // Extract model families (e.g., "claude-opus", "claude-sonnet", "gpt", "gemini")
+  const families = models.map(m => {
+    if (m.includes("opus")) return "claude-opus";
+    if (m.includes("sonnet")) return "claude-sonnet";
+    if (m.includes("haiku")) return "claude-haiku";
+    if (m.includes("gpt")) return "gpt";
+    if (m.includes("gemini")) return "gemini";
+    if (m.includes("deepseek")) return "deepseek";
+    if (m.includes("llama")) return "llama";
+    // Default: treat full model name as family
+    return m.split("-")[0] || m;
+  });
+
+  const uniqueProviders = new Set(providers);
+  const uniqueFamilies = new Set(families);
+
+  // High: multiple providers or multiple non-Anthropic families
+  if (uniqueProviders.size > 1) return "high";
+  if (uniqueFamilies.size >= 3) return "high";
+
+  // Medium: same provider but different families
+  if (uniqueFamilies.size >= 2) return "medium";
+
+  // Low: same family (e.g., all Opus)
+  return "low";
+}
+
+/**
+ * Calculate action-type usage across all turns (S409 #22).
+ * Reveals whether action space is well-calibrated or has dead weight.
+ */
+export function calculateActionUsage(state: ConsensusState): Record<string, number> {
+  const usage: Record<string, number> = {};
+
+  for (const turn of state.turn_log) {
+    const action = turn.action.action;
+    usage[action] = (usage[action] || 0) + 1;
+  }
+
+  return usage;
 }
 
 /**

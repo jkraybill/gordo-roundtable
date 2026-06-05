@@ -29,6 +29,8 @@ import {
   determineConsensusType,
   checkSelfSynthesis,
   calculateTotalCost,
+  calculateDiversityLevel,
+  calculateActionUsage,
 } from "./convergence.js";
 import { buildSystemPrompt, buildTurnPrompt, buildClarificationPrompt, buildCharacterizationPrompt } from "./prompts.js";
 
@@ -251,6 +253,8 @@ export async function runConsensusRoundtable(
       const consensusType = determineConsensusType(state, consensusCheck.proposal_id!);
       const selfSynthesis = checkSelfSynthesis(state, consensusCheck.proposal_id!);
       const costData = calculateTotalCost(state);
+      const diversityLevel = calculateDiversityLevel(config.participants);
+      const actionUsage = calculateActionUsage(state);
 
       log(`\n=== CONSENSUS ACHIEVED ===`);
       log(`Proposal: ${consensusCheck.proposal_id}`);
@@ -278,6 +282,8 @@ export async function runConsensusRoundtable(
           self_synthesis: selfSynthesis,
           total_cost_usd: costData.total_cost_usd,
           total_tokens: costData.total_tokens,
+          diversity_level: diversityLevel,
+          action_usage: actionUsage,
         },
       };
     }
