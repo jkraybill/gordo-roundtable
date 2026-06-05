@@ -348,6 +348,37 @@ export const MinorityReportSchema = z.object({
 
 export type MinorityReport = z.infer<typeof MinorityReportSchema>;
 
+// S411 #17: Decision brief — actionable summary for external consumers
+export const DecisionBriefSchema = z.object({
+  // (a) what was decided
+  decision: z.string(),
+  decision_type: z.enum(["consensus", "hung_jury", "terminated"]),
+
+  // (b) what was considered and rejected
+  alternatives_considered: z.array(z.object({
+    proposal_id: z.string(),
+    summary: z.string(),
+    rejection_reason: z.string().optional(), // Why it didn't achieve consensus
+  })),
+
+  // (c) confidence level and basis
+  confidence: z.object({
+    level: z.enum(["high", "medium", "low"]),
+    basis: z.array(z.string()), // Factors contributing to confidence
+  }),
+
+  // (d) recommended next actions (if extractable)
+  next_actions: z.array(z.string()).optional(),
+
+  // Metadata
+  question: z.string(),
+  participants: z.number(),
+  rounds: z.number(),
+  duration_ms: z.number().optional(),
+});
+
+export type DecisionBrief = z.infer<typeof DecisionBriefSchema>;
+
 // Hung jury report per spec §9.2
 export const HungJuryReportSchema = z.object({
   question: z.string(),
@@ -376,11 +407,13 @@ export const ConsensusResultSchema = z.discriminatedUnion("outcome", [
     outcome: z.literal("consensus"),
     state: ConsensusStateSchema,
     output: ConsensusOutputSchema,
+    decision_brief: DecisionBriefSchema.optional(), // S411 #17
   }),
   z.object({
     outcome: z.literal("hung_jury"),
     state: ConsensusStateSchema,
     report: HungJuryReportSchema,
+    decision_brief: DecisionBriefSchema.optional(), // S411 #17
   }),
   z.object({
     outcome: z.literal("error"),

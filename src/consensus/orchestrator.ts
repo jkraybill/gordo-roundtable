@@ -14,7 +14,9 @@ import type {
   ParticipantConfig,
   HungJuryReport,
   ReasoningTrace,
+  DecisionBrief,
 } from "./types.js";
+import { generateDecisionBrief } from "./brief.js";
 import { ActionTypeSchema } from "./types.js";
 import {
   createInitialState,
@@ -451,28 +453,37 @@ export async function runConsensusRoundtable(
       // S410 #27: Extract supersession records
       const supersessions = extractSupersessions(state);
 
-      return {
+      const output = {
+        answer: consensusCheck.proposal_content!,
+        assent_profile: consensusCheck.assent_profile!,
+        rounds_to_consensus: state.round_count,
+        final_entropy: state.convergence_metrics.entropy,
+        // S409 improvements
+        consensus_type: consensusType,
+        self_synthesis: selfSynthesis,
+        total_cost_usd: costData.total_cost_usd,
+        total_tokens: costData.total_tokens,
+        diversity_level: diversityLevel,
+        action_usage: actionUsage,
+        // S410 #14: blind opening status
+        blind_opening_used: config.blind_opening !== false,
+        // S410 #16: residual concerns
+        residual_concerns: residualConcerns.length > 0 ? residualConcerns : undefined,
+        // S410 #27: supersession records
+        supersessions: supersessions.length > 0 ? supersessions : undefined,
+      };
+
+      // S411 #17: Generate decision brief
+      const result: ConsensusResult = {
         outcome: "consensus",
         state,
-        output: {
-          answer: consensusCheck.proposal_content!,
-          assent_profile: consensusCheck.assent_profile!,
-          rounds_to_consensus: state.round_count,
-          final_entropy: state.convergence_metrics.entropy,
-          // S409 improvements
-          consensus_type: consensusType,
-          self_synthesis: selfSynthesis,
-          total_cost_usd: costData.total_cost_usd,
-          total_tokens: costData.total_tokens,
-          diversity_level: diversityLevel,
-          action_usage: actionUsage,
-          // S410 #14: blind opening status
-          blind_opening_used: config.blind_opening !== false,
-          // S410 #16: residual concerns
-          residual_concerns: residualConcerns.length > 0 ? residualConcerns : undefined,
-          // S410 #27: supersession records
-          supersessions: supersessions.length > 0 ? supersessions : undefined,
-        },
+        output,
+      };
+      const decision_brief = generateDecisionBrief(result, state);
+
+      return {
+        ...result,
+        decision_brief,
       };
     }
 
@@ -566,10 +577,17 @@ export async function runConsensusRoundtable(
 
     const report = await runTerminalCharacterization(state, config, systemPrompt, log);
 
-    return {
+    // S411 #17: Generate decision brief for hung jury
+    const result: ConsensusResult = {
       outcome: "hung_jury",
       state,
       report,
+    };
+    const decision_brief = generateDecisionBrief(result, state);
+
+    return {
+      ...result,
+      decision_brief,
     };
   }
 
