@@ -3,7 +3,7 @@
  * Per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md v0.2.1 §5, §6
  */
 
-import { randomUUID } from "node:crypto";
+import { randomUUID, randomInt } from "node:crypto";
 import type {
   ConsensusState,
   ConsensusConfig,
@@ -19,6 +19,19 @@ import { ConsensusStateSchema } from "./types.js";
 import { updateConvergenceMetrics } from "./convergence.js";
 
 /**
+ * Fisher-Yates shuffle using crypto.randomInt for unbiased randomness.
+ * Returns a new shuffled array, does not mutate input.
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = randomInt(0, i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+/**
  * Create initial state for a new consensus roundtable.
  */
 export function createInitialState(
@@ -26,7 +39,12 @@ export function createInitialState(
   context: string | undefined,
   config: ConsensusConfig
 ): ConsensusState {
-  const participants = config.participants.map(
+  // Shuffle participant configs to randomize position/letter assignment
+  // This prevents position bias (Party A always speaking first)
+  const shuffledConfigs = shuffleArray(config.participants);
+  const shuffledConfig = { ...config, participants: shuffledConfigs };
+
+  const participants = shuffledConfigs.map(
     (_, i) => `Party ${String.fromCharCode(65 + i)}`
   );
 
@@ -36,16 +54,16 @@ export function createInitialState(
   }
 
   // S410 #14: Blind opening enabled by default
-  const blindOpening = config.blind_opening !== false;
+  const blindOpening = shuffledConfig.blind_opening !== false;
 
   return {
     question,
     context,
     participants,
     session_id: randomUUID(),
-    config,
+    config: shuffledConfig,
 
-    phase: config.bootstrap_rounds > 0 ? "bootstrap" : "deliberation",
+    phase: shuffledConfig.bootstrap_rounds > 0 ? "bootstrap" : "deliberation",
     standing_rules: [],
     current_speaker_index: 0,
     turn_count: 0,
