@@ -366,6 +366,49 @@ describe("runConsensusRoundtable integration", () => {
     expect(result.state.turn_log[0].action.action).toBe("pass");
   });
 
+  it("tracks supersession when party assents to another's proposal (S410 #27)", async () => {
+    // A proposes, B proposes, C assents to A's, then B assents to A's (supersession)
+    const responses = [
+      // Round 1: A and B propose, C assents to A
+      mockResponse("propose", "A's proposal", "A proposes"),
+      mockResponse("propose", "B's proposal", "B proposes"),
+      mockResponse("assent", "p-1", "C agrees with A"),
+      // Round 2: A passes, B assents to A (supersedes own), C passes
+      mockResponse("pass", undefined, "A maintains"),
+      "ACTION: assent\nTARGET: p-1\nRATIONALE: |\n  A's proposal better addresses the core question\n",
+      mockResponse("pass", undefined, "C maintains"),
+      // Residual concern round
+      mockResponse("pass", undefined, "A satisfied"),
+      mockResponse("pass", undefined, "B satisfied"),
+      mockResponse("pass", undefined, "C satisfied"),
+    ];
+
+    let callIndex = 0;
+    mockDispatchOne.mockImplementation(async () => {
+      const resp = responses[callIndex++];
+      return {
+        reviewer_id: "test",
+        status: "ok" as const,
+        content: resp,
+        duration_ms: 100,
+        usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
+      };
+    });
+
+    const state = createInitialState("Supersession test", undefined, testConfig);
+    const result = await runConsensusRoundtable(state, { onLog: () => {} });
+
+    expect(result.outcome).toBe("consensus");
+    if (result.outcome === "consensus") {
+      expect(result.output.supersessions).toBeDefined();
+      expect(result.output.supersessions!.length).toBe(1);
+      expect(result.output.supersessions![0].party).toBe("Party B");
+      expect(result.output.supersessions![0].superseded_proposal).toBe("p-2");
+      expect(result.output.supersessions![0].adopted_proposal).toBe("p-1");
+      expect(result.output.supersessions![0].reason).toContain("core question");
+    }
+  });
+
   it("collects residual concerns after consensus (S410 #16)", async () => {
     // Responses for consensus + residual concern round
     const responses = [

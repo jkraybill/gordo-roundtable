@@ -32,6 +32,7 @@ import {
   calculateTotalCost,
   calculateDiversityLevel,
   calculateActionUsage,
+  extractSupersessions,
 } from "./convergence.js";
 import { buildSystemPrompt, buildTurnPrompt, buildClarificationPrompt, buildCharacterizationPrompt, buildResidualConcernPrompt } from "./prompts.js";
 import type { ResidualConcern } from "./types.js";
@@ -87,6 +88,21 @@ export function parseAction(response: string): ParsedAction | { error: string } 
   let reason: string | undefined;
   if (actionType === "object") {
     reason = content;
+  }
+
+  // S410 #27: For assent action, capture RATIONALE as reason (explains supersession)
+  if (actionType === "assent") {
+    // Extract RATIONALE for assent-with-reason
+    const rationaleMatch = response.match(/^RATIONALE:\s*\|?\s*\n([\s\S]*?)$/mi);
+    if (rationaleMatch) {
+      reason = rationaleMatch[1].trim();
+    } else {
+      // Single-line rationale
+      const singleRationale = response.match(/^RATIONALE:\s*([^\n]+)/mi);
+      if (singleRationale) {
+        reason = singleRationale[1].trim();
+      }
+    }
   }
 
   // Extract OBJECTION_IDS for synthesize
@@ -334,6 +350,9 @@ export async function runConsensusRoundtable(
         termination_reason: "consensus-achieved",
       };
 
+      // S410 #27: Extract supersession records
+      const supersessions = extractSupersessions(state);
+
       return {
         outcome: "consensus",
         state,
@@ -353,6 +372,8 @@ export async function runConsensusRoundtable(
           blind_opening_used: config.blind_opening !== false,
           // S410 #16: residual concerns
           residual_concerns: residualConcerns.length > 0 ? residualConcerns : undefined,
+          // S410 #27: supersession records
+          supersessions: supersessions.length > 0 ? supersessions : undefined,
         },
       };
     }

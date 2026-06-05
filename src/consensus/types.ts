@@ -68,6 +68,9 @@ export const AssentSchema = z.object({
   explicit: z.boolean(), // true = assent action, false = implicit from propose
   timestamp: z.number(),
   retracted: z.boolean().default(false),
+  // S410 #27: Track when assent supersedes own proposal
+  supersedes: z.string().optional(), // proposal_id of own proposal being abandoned
+  reason: z.string().optional(), // Why synthesis is compelling (required when supersedes)
 });
 
 export type Assent = z.infer<typeof AssentSchema>;
@@ -223,6 +226,16 @@ export const AssentProfileSchema = z.object({
 
 export type AssentProfile = z.infer<typeof AssentProfileSchema>;
 
+// S410 #27: Supersession record — when a party abandons own proposal for another
+export const SupersessionRecordSchema = z.object({
+  party: z.string(),
+  superseded_proposal: z.string(), // Proposal ID they abandoned
+  adopted_proposal: z.string(), // Proposal ID they assented to
+  reason: z.string().optional(), // Why synthesis was compelling
+});
+
+export type SupersessionRecord = z.infer<typeof SupersessionRecordSchema>;
+
 // Consensus type classification (S409 #11)
 export const ConsensusTypeSchema = z.enum([
   "convergent-independent",   // Everyone picked same answer without synthesis
@@ -273,6 +286,8 @@ export const ConsensusOutputSchema = z.object({
   blind_opening_used: z.boolean().optional(),
   // S410 #16: residual concerns — accepted but wants on record
   residual_concerns: z.array(ResidualConcernSchema).optional(),
+  // S410 #27: supersession records — when parties abandon own proposal for synthesis
+  supersessions: z.array(SupersessionRecordSchema).optional(),
 });
 
 export type ConsensusOutput = z.infer<typeof ConsensusOutputSchema>;

@@ -462,12 +462,30 @@ export function applyAction(
       newState.assents = newState.assents.filter(
         a => !(a.proposal_id === action.target_id && a.party === speaker)
       );
+
+      // S410 #27: Check if this assent supersedes speaker's own proposal
+      // Find speaker's own proposals that are NOT the one being assented to
+      const allProposals = [...newState.proposals, ...newState.pending_proposals];
+      const ownProposals = allProposals.filter(
+        p => p.proposer === speaker && p.id !== action.target_id
+      );
+      // If speaker has own proposal(s) and is assenting to someone else's, mark supersession
+      const targetProposal = allProposals.find(p => p.id === action.target_id);
+      const isSupersession = ownProposals.length > 0 && targetProposal?.proposer !== speaker;
+      // Use most recent own proposal as the superseded one
+      const supersededProposal = isSupersession
+        ? ownProposals.sort((a, b) => b.timestamp - a.timestamp)[0]
+        : null;
+
       newState.assents.push({
         proposal_id: action.target_id!,
         party: speaker,
         explicit: true,
         timestamp: now,
         retracted: false,
+        // S410 #27: supersession tracking
+        supersedes: supersededProposal?.id,
+        reason: isSupersession ? action.reason : undefined,
       });
       break;
     }

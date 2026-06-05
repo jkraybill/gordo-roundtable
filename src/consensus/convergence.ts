@@ -427,3 +427,35 @@ export function findNearConsensusProposals(state: ConsensusState): Array<{
 
   return results;
 }
+
+/**
+ * Extract supersession records from assents (S410 #27).
+ * Supersession: when a party abandons their own proposal to assent to another.
+ * Distinguishes genuine agreement from capitulation.
+ */
+export function extractSupersessions(state: ConsensusState): Array<{
+  party: string;
+  superseded_proposal: string;
+  adopted_proposal: string;
+  reason?: string;
+}> {
+  const records: Array<{
+    party: string;
+    superseded_proposal: string;
+    adopted_proposal: string;
+    reason?: string;
+  }> = [];
+
+  for (const assent of state.assents) {
+    if (assent.supersedes && !assent.retracted) {
+      records.push({
+        party: assent.party,
+        superseded_proposal: assent.supersedes,
+        adopted_proposal: assent.proposal_id,
+        reason: assent.reason,
+      });
+    }
+  }
+
+  return records;
+}

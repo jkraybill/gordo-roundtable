@@ -72,7 +72,7 @@ Each turn, take exactly ONE action:
 - object(target_id, reason) — Object to a proposal. This resets the stability counter.
 - withdraw(objection_id) — Remove your own objection
 - amend(proposal_id, change) — Propose a modification to an existing proposal (creates new proposal)
-- assent(proposal_id) — Explicitly endorse a proposal
+- assent(proposal_id) — Explicitly endorse a proposal. If you have your own proposal and are assenting to someone else's synthesis, explain WHY in your RATIONALE (distinguishes genuine agreement from capitulation)
 - retract_assent(proposal_id) — Withdraw your previous assent
 - pass — Yield turn without action (counts as non-objection, not assent)
 - abstain — Explicitly decline to take a position (equivalent to pass)
