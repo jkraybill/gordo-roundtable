@@ -54,6 +54,10 @@ export function createInitialState(
       entropy: 0,
       stability_count: 0,
       position_map: initialPositionMap,
+      // S409 #13: objection timing metrics
+      first_objection_turn: null,
+      rounds_without_objection: 0,
+      silent_pass_count: 0,
     },
 
     transcript_summary: "",

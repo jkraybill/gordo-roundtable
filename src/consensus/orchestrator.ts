@@ -23,7 +23,13 @@ import {
   deserializeState,
   updateTranscriptSummary,
 } from "./state.js";
-import { checkConsensus, findNearConsensusProposals } from "./convergence.js";
+import {
+  checkConsensus,
+  findNearConsensusProposals,
+  determineConsensusType,
+  checkSelfSynthesis,
+  calculateTotalCost,
+} from "./convergence.js";
 import { buildSystemPrompt, buildTurnPrompt, buildClarificationPrompt, buildCharacterizationPrompt } from "./prompts.js";
 
 const MAX_PARSE_RETRIES = 2;
@@ -241,6 +247,11 @@ export async function runConsensusRoundtable(
     // Check for consensus
     const consensusCheck = checkConsensus(state);
     if (consensusCheck.achieved) {
+      // S409 improvements: determine consensus characteristics
+      const consensusType = determineConsensusType(state, consensusCheck.proposal_id!);
+      const selfSynthesis = checkSelfSynthesis(state, consensusCheck.proposal_id!);
+      const costData = calculateTotalCost(state);
+
       log(`\n=== CONSENSUS ACHIEVED ===`);
       log(`Proposal: ${consensusCheck.proposal_id}`);
       log(`Answer: ${consensusCheck.proposal_content}`);
@@ -262,6 +273,11 @@ export async function runConsensusRoundtable(
           assent_profile: consensusCheck.assent_profile!,
           rounds_to_consensus: state.round_count,
           final_entropy: state.convergence_metrics.entropy,
+          // S409 improvements
+          consensus_type: consensusType,
+          self_synthesis: selfSynthesis,
+          total_cost_usd: costData.total_cost_usd,
+          total_tokens: costData.total_tokens,
         },
       };
     }

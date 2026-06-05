@@ -103,11 +103,15 @@ export const TurnLogEntrySchema = z.object({
 
 export type TurnLogEntry = z.infer<typeof TurnLogEntrySchema>;
 
-// Convergence metrics per spec §4.3
+// Convergence metrics per spec §4.3 + meta-roundtable S409 improvements
 export const ConvergenceMetricsSchema = z.object({
   entropy: z.number(), // Shannon entropy of position distribution
   stability_count: z.number(), // Consecutive rounds with same leading proposal
   position_map: z.record(z.string().nullable()), // party -> proposal_id or null
+  // S409 #13: objection timing metrics
+  first_objection_turn: z.number().nullable().optional(), // Turn of first objection (null = none)
+  rounds_without_objection: z.number().optional(), // Consecutive rounds with no objections
+  silent_pass_count: z.number().optional(), // Passes without assent or objection
 });
 
 export type ConvergenceMetrics = z.infer<typeof ConvergenceMetricsSchema>;
@@ -198,12 +202,30 @@ export const AssentProfileSchema = z.object({
 
 export type AssentProfile = z.infer<typeof AssentProfileSchema>;
 
-// Consensus output per spec §7.1
+// Consensus type classification (S409 #11)
+export const ConsensusTypeSchema = z.enum([
+  "convergent-independent",   // Everyone picked same answer without synthesis
+  "convergent-via-synthesis", // Unified through synthesis proposal
+  "uncontested",              // Zero objections registered (S409 p-3.19)
+]);
+
+export type ConsensusType = z.infer<typeof ConsensusTypeSchema>;
+
+// Consensus output per spec §7.1 + S409 improvements
 export const ConsensusOutputSchema = z.object({
   answer: z.string(),
   assent_profile: AssentProfileSchema,
   rounds_to_consensus: z.number(),
   final_entropy: z.number(),
+  // S409 #11: convergence analysis
+  consensus_type: ConsensusTypeSchema.optional(),
+  self_synthesis: z.boolean().optional(), // S409 #12: synthesizer authored original
+  // S409 #10: cost transparency
+  total_cost_usd: z.number().optional(),
+  total_tokens: z.object({
+    prompt: z.number(),
+    completion: z.number(),
+  }).optional(),
 });
 
 export type ConsensusOutput = z.infer<typeof ConsensusOutputSchema>;

@@ -3,7 +3,7 @@
  * Per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md v0.2.1 §4.3, §5.1
  */
 
-import type { ConsensusState, AssentProfile, ConvergenceMetrics } from "./types.js";
+import type { ConsensusState, AssentProfile, ConvergenceMetrics, ConsensusType } from "./types.js";
 
 /**
  * Calculate Shannon entropy of position distribution.
@@ -91,10 +91,61 @@ export function updateConvergenceMetrics(state: ConsensusState): ConvergenceMetr
     stabilityCount = 1;
   }
 
+  // S409 #13: Track objection timing
+  const objectionMetrics = calculateObjectionMetrics(state);
+
   return {
     entropy,
     stability_count: stabilityCount,
     position_map: positionMap,
+    ...objectionMetrics,
+  };
+}
+
+/**
+ * Calculate objection-related metrics (S409 #13).
+ * Surfaces absence-of-dissent as data.
+ */
+function calculateObjectionMetrics(state: ConsensusState): {
+  first_objection_turn: number | null;
+  rounds_without_objection: number;
+  silent_pass_count: number;
+} {
+  // Find first objection turn
+  let firstObjectionTurn: number | null = null;
+  for (const entry of state.turn_log) {
+    if (entry.action.action === "object") {
+      firstObjectionTurn = entry.turn;
+      break;
+    }
+  }
+
+  // Count consecutive rounds without objection from the end
+  let roundsWithoutObjection = 0;
+  const objectionsByRound = new Map<number, boolean>();
+  for (const entry of state.turn_log) {
+    if (entry.action.action === "object") {
+      objectionsByRound.set(entry.round, true);
+    }
+  }
+  // Count from current round backwards
+  for (let r = state.round_count; r >= 0; r--) {
+    if (objectionsByRound.has(r)) break;
+    roundsWithoutObjection++;
+  }
+
+  // Count silent passes (pass without assent in same round)
+  let silentPassCount = 0;
+  for (const entry of state.turn_log) {
+    if (entry.action.action === "pass" || entry.action.action === "abstain") {
+      silentPassCount++;
+    }
+  }
+
+  return {
+    first_objection_turn: firstObjectionTurn,
+    rounds_without_objection: roundsWithoutObjection,
+    silent_pass_count: silentPassCount,
   };
 }
 
@@ -201,6 +252,84 @@ export function checkConsensus(state: ConsensusState): {
       explicit_assents: uniqueAssenters,
       pass_based_non_objectors: passBasedNonObjectors,
     },
+  };
+}
+
+/**
+ * Determine the type of consensus achieved (S409 #11).
+ * Distinguishes how convergence happened, not just that it happened.
+ */
+export function determineConsensusType(
+  state: ConsensusState,
+  consensusProposalId: string
+): ConsensusType {
+  // Check if any objections were ever raised
+  const anyObjections = state.objections.length > 0;
+  if (!anyObjections) {
+    return "uncontested";
+  }
+
+  // Check if consensus is on a synthesis proposal
+  const proposal = state.proposals.find(p => p.id === consensusProposalId);
+  if (!proposal) {
+    return "convergent-independent";
+  }
+
+  // Was this proposal created via synthesize action?
+  const synthesisTurn = state.turn_log.find(
+    t => t.action.action === "synthesize" &&
+         state.proposals.find(p => p.proposer === t.speaker && p.timestamp === t.timestamp)?.id === consensusProposalId
+  );
+
+  if (synthesisTurn) {
+    return "convergent-via-synthesis";
+  }
+
+  return "convergent-independent";
+}
+
+/**
+ * Check if the consensus proposal was a self-synthesis (S409 #12).
+ * Self-synthesis: proposer of synthesis also proposed one of the original proposals being synthesized.
+ */
+export function checkSelfSynthesis(
+  state: ConsensusState,
+  consensusProposalId: string
+): boolean {
+  const proposal = state.proposals.find(p => p.id === consensusProposalId);
+  if (!proposal) return false;
+
+  // Count how many proposals this party made
+  const proposerProposals = state.proposals.filter(p => p.proposer === proposal.proposer);
+
+  // Self-synthesis if proposer has more than one proposal (their original + the synthesis)
+  return proposerProposals.length > 1;
+}
+
+/**
+ * Calculate total cost from turn log (S409 #10).
+ */
+export function calculateTotalCost(state: ConsensusState): {
+  total_cost_usd: number;
+  total_tokens: { prompt: number; completion: number };
+} {
+  let totalCost = 0;
+  let promptTokens = 0;
+  let completionTokens = 0;
+
+  for (const turn of state.turn_log) {
+    if (turn.usage) {
+      promptTokens += turn.usage.prompt_tokens;
+      completionTokens += turn.usage.completion_tokens;
+      if (turn.usage.cost_usd) {
+        totalCost += turn.usage.cost_usd;
+      }
+    }
+  }
+
+  return {
+    total_cost_usd: totalCost,
+    total_tokens: { prompt: promptTokens, completion: completionTokens },
   };
 }
 
