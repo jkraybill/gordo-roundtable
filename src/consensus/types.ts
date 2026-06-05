@@ -97,6 +97,19 @@ export const VisibilitySnapshotSchema = z.object({
 
 export type VisibilitySnapshot = z.infer<typeof VisibilitySnapshotSchema>;
 
+// S411 #26: Structured reasoning trace per turn
+// Extracted from RATIONALE for post-hoc analysis of consensus dynamics
+export const ReasoningTraceSchema = z.object({
+  action_taken: ActionTypeSchema,
+  target: z.string().optional(),
+  reasons: z.array(z.string()),           // Why this action was taken
+  concerns_addressed: z.array(z.string()).optional(), // What this action resolves
+  concerns_remaining: z.array(z.string()).optional(), // What remains unresolved
+  references: z.array(z.string()).optional(), // Proposal/objection IDs mentioned
+});
+
+export type ReasoningTrace = z.infer<typeof ReasoningTraceSchema>;
+
 // Turn log entry — maximally verbose for post-hoc analysis
 export const TurnLogEntrySchema = z.object({
   turn: z.number(),
@@ -107,6 +120,7 @@ export const TurnLogEntrySchema = z.object({
   prompt_sent: z.string(),           // Full turn prompt sent to participant
   raw_response: z.string(),          // Full response content
   reasoning: z.string().optional(),  // Thinking/reasoning block if present
+  reasoning_trace: ReasoningTraceSchema.optional(), // S411 #26: structured reasoning
   narration: z.string().optional(),  // Plain-language state explanation (#6)
   visibility: VisibilitySnapshotSchema.optional(), // S409 #23: what speaker could see
   timestamp: z.number(),

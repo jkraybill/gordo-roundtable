@@ -13,6 +13,7 @@ import type {
   Assent,
   ConvergenceMetrics,
   VisibilitySnapshot,
+  ReasoningTrace,
 } from "./types.js";
 import { ConsensusStateSchema } from "./types.js";
 import { updateConvergenceMetrics } from "./convergence.js";
@@ -196,6 +197,7 @@ export interface TurnLogData {
   rawResponse: string;
   promptSent: string;
   reasoning?: string;
+  reasoning_trace?: ReasoningTrace; // S411 #26: structured reasoning
   durationMs?: number;
   model?: string;  // Model ID for this participant (#5)
   usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
@@ -537,6 +539,7 @@ export function applyAction(
     prompt_sent: logData.promptSent,
     raw_response: logData.rawResponse,
     reasoning: logData.reasoning,
+    reasoning_trace: logData.reasoning_trace, // S411 #26
     narration,
     visibility: logData.visibility,
     timestamp: now,

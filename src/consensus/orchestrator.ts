@@ -13,6 +13,7 @@ import type {
   ParsedAction,
   ParticipantConfig,
   HungJuryReport,
+  ReasoningTrace,
 } from "./types.js";
 import { ActionTypeSchema } from "./types.js";
 import {
@@ -115,6 +116,103 @@ export function parseAction(response: string): ParsedAction | { error: string } 
     content,
     reason,
     objection_ids,
+  };
+}
+
+/**
+ * S411 #26: Extract structured reasoning trace from RATIONALE.
+ * Parses natural language reasoning into structured fields for post-hoc analysis.
+ */
+export function extractReasoningTrace(
+  response: string,
+  parsedAction: ParsedAction
+): ReasoningTrace {
+  // Extract full RATIONALE block
+  let rationale = "";
+  const rationaleWithHeader = response.match(/^RATIONALE:\s*\|?\s*\n([\s\S]*?)(?=\n(?:CONTENT|TARGET|ACTION):)/mi);
+  if (rationaleWithHeader) {
+    rationale = rationaleWithHeader[1].trim();
+  } else {
+    // RATIONALE at end of response
+    const rationaleToEnd = response.match(/^RATIONALE:\s*\|?\s*\n([\s\S]*)$/mi);
+    if (rationaleToEnd) {
+      rationale = rationaleToEnd[1].trim();
+    } else {
+      // Single-line rationale
+      const singleLine = response.match(/^RATIONALE:\s*([^\n]+)/mi);
+      if (singleLine) {
+        rationale = singleLine[1].trim();
+      }
+    }
+  }
+
+  // Extract reasons — sentences/bullets that explain the action
+  const reasons: string[] = [];
+
+  // Look for bullet points (may be indented)
+  const bulletMatches = rationale.match(/^\s*[-•*]\s*(.+)$/gm);
+  if (bulletMatches) {
+    reasons.push(...bulletMatches.map(b => b.replace(/^\s*[-•*]\s*/, "").trim()));
+  }
+
+  // Look for "because" clauses
+  const becauseMatches = rationale.match(/because\s+([^.]+)/gi);
+  if (becauseMatches) {
+    reasons.push(...becauseMatches.map(b => b.replace(/^because\s+/i, "").trim()));
+  }
+
+  // If no structured reasons found, use first sentence as reason
+  if (reasons.length === 0 && rationale) {
+    const firstSentence = rationale.match(/^[^.!?]+[.!?]/);
+    if (firstSentence) {
+      reasons.push(firstSentence[0].trim());
+    } else if (rationale.length < 200) {
+      reasons.push(rationale);
+    }
+  }
+
+  // Extract concerns addressed — look for "addresses", "resolves", "satisfies"
+  const concernsAddressed: string[] = [];
+  const addressPatterns = [
+    /address(?:es|ed|ing)?\s+(?:my\s+)?(?:concern\s+(?:about|regarding|with)\s+)?([^,.]+)/gi,
+    /resolv(?:es|ed|ing)?\s+(?:my\s+)?(?:concern\s+(?:about|regarding|with)\s+)?([^,.]+)/gi,
+    /satisf(?:ies|ied|ying)?\s+(?:my\s+)?(?:concern\s+(?:about|regarding|with)\s+)?([^,.]+)/gi,
+  ];
+  for (const pattern of addressPatterns) {
+    const matches = rationale.matchAll(pattern);
+    for (const match of matches) {
+      if (match[1]) concernsAddressed.push(match[1].trim());
+    }
+  }
+
+  // Extract concerns remaining — look for "still", "doesn't", "however", "but"
+  const concernsRemaining: string[] = [];
+  const remainingPatterns = [
+    /(?:still|doesn't|does not|however|but)\s+(?:fully\s+)?(?:address|resolve|satisfy)\s+([^,.]+)/gi,
+    /concern(?:s)?\s+(?:remain|remaining)\s*(?:about|regarding|with)?\s*([^,.]+)/gi,
+    /(?:unresolved|open)\s+(?:concern|question|issue)\s*(?:about|regarding|with)?\s*([^,.]+)/gi,
+  ];
+  for (const pattern of remainingPatterns) {
+    const matches = rationale.matchAll(pattern);
+    for (const match of matches) {
+      if (match[1]) concernsRemaining.push(match[1].trim());
+    }
+  }
+
+  // Extract references to proposals/objections
+  const references: string[] = [];
+  const refMatches = rationale.match(/\b(p-\d+|o-\d+)\b/gi);
+  if (refMatches) {
+    references.push(...new Set(refMatches.map(r => r.toLowerCase())));
+  }
+
+  return {
+    action_taken: parsedAction.action,
+    target: parsedAction.target_id,
+    reasons: [...new Set(reasons)], // Dedupe
+    concerns_addressed: concernsAddressed.length > 0 ? [...new Set(concernsAddressed)] : undefined,
+    concerns_remaining: concernsRemaining.length > 0 ? [...new Set(concernsRemaining)] : undefined,
+    references: references.length > 0 ? references : undefined,
   };
 }
 
@@ -404,10 +502,14 @@ export async function runConsensusRoundtable(
       log
     );
 
+    // S411 #26: Extract structured reasoning trace
+    const reasoning_trace = extractReasoningTrace(dispatchResult.raw, dispatchResult.action);
+
     const logData = {
       rawResponse: dispatchResult.raw,
       promptSent: dispatchResult.prompt_sent,
       reasoning: dispatchResult.reasoning,
+      reasoning_trace, // S411 #26
       durationMs: dispatchResult.duration_ms,
       model: modelId,  // Include model ID for observability (#5)
       usage: dispatchResult.usage,
