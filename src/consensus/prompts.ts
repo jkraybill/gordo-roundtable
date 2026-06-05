@@ -130,7 +130,7 @@ Each turn, take exactly ONE action:
 - amend(proposal_id, change) — Propose a modification to an existing proposal (creates new proposal)
 - assent(proposal_id) — Explicitly endorse a proposal. If you have your own proposal and are assenting to someone else's synthesis, explain WHY in your RATIONALE (distinguishes genuine agreement from capitulation)
 - retract_assent(proposal_id) — Withdraw your previous assent
-- pass — Yield turn without action (counts as non-objection, not assent)
+- pass — Yield turn without action (counts as non-objection, not assent). In RATIONALE, reflect: state one way the leading proposal could be wrong, OR explain why you believe it cannot be.
 - abstain — Explicitly decline to take a position (equivalent to pass)
 - call_vote(proposal_id) — Request formal consensus test; begins stability window
 - meta_propose(content) — Propose a new standing rule for deliberation
@@ -173,7 +173,7 @@ RATIONALE: |
 
 ACTION: pass
 RATIONALE: |
-  I have no objections to the current proposals but am not ready to assent yet.`;
+  I have no objections but am not ready to assent. One way p-2 could be wrong: it assumes X holds universally, but edge case Y might break that assumption. I'm passing to see if others surface this.`;
 }
 
 /**

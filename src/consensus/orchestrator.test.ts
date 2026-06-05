@@ -292,3 +292,65 @@ TARGET: none`;
     expect(trace.reasons).toEqual([]);
   });
 });
+
+describe("extractReasoningTrace — pass reflection (#19)", () => {
+  it("extracts 'could be wrong' reflection from pass", () => {
+    const response = `ACTION: pass
+RATIONALE: |
+  I have no objections but am not ready to assent. One way p-2 could be wrong: it assumes all users have admin access, but edge cases with limited permissions might break.`;
+
+    const action = { action: "pass" as const };
+    const trace = extractReasoningTrace(response, action);
+
+    expect(trace.pass_reflection).toBeDefined();
+    expect(trace.pass_reflection).toContain("assumes all users have admin access");
+  });
+
+  it("extracts confidence statement from pass", () => {
+    const response = `ACTION: pass
+RATIONALE: |
+  The proposal cannot be wrong because it follows directly from the spec requirements.`;
+
+    const action = { action: "pass" as const };
+    const trace = extractReasoningTrace(response, action);
+
+    expect(trace.pass_reflection).toBeDefined();
+    expect(trace.pass_reflection).toContain("Confident");
+  });
+
+  it("extracts assumption/risk pattern from pass", () => {
+    const response = `ACTION: pass
+RATIONALE: |
+  Waiting to see others' views on p-1. The approach assumes stable network conditions which may not hold.`;
+
+    const action = { action: "pass" as const };
+    const trace = extractReasoningTrace(response, action);
+
+    expect(trace.pass_reflection).toBeDefined();
+    expect(trace.pass_reflection).toContain("assumes stable network");
+  });
+
+  it("does not extract reflection for non-pass actions", () => {
+    const response = `ACTION: assent
+TARGET: p-1
+RATIONALE: |
+  One way this could be wrong but I assent anyway.`;
+
+    const action = { action: "assent" as const, target_id: "p-1" };
+    const trace = extractReasoningTrace(response, action);
+
+    expect(trace.pass_reflection).toBeUndefined();
+  });
+
+  it("handles abstain same as pass", () => {
+    const response = `ACTION: abstain
+RATIONALE: |
+  I believe the proposal covers the main cases but edge case X might need attention.`;
+
+    const action = { action: "abstain" as const };
+    const trace = extractReasoningTrace(response, action);
+
+    expect(trace.pass_reflection).toBeDefined();
+    expect(trace.pass_reflection).toContain("the proposal covers the main cases");
+  });
+});

@@ -208,6 +208,45 @@ export function extractReasoningTrace(
     references.push(...new Set(refMatches.map(r => r.toLowerCase())));
   }
 
+  // S411 #19: Extract pass reflection — "one way it could be wrong" or confidence statement
+  let pass_reflection: string | undefined;
+  if (parsedAction.action === "pass" || parsedAction.action === "abstain") {
+    // Look for "could be wrong" pattern
+    const wrongPattern = /(?:one\s+way|way\s+(?:it|this|the proposal)\s+)?could\s+be\s+wrong[:\s]*([^.]+)/i;
+    const wrongMatch = rationale.match(wrongPattern);
+    if (wrongMatch) {
+      pass_reflection = wrongMatch[1]?.trim() || wrongMatch[0].trim();
+    }
+
+    // Look for "cannot be wrong" / confidence pattern
+    if (!pass_reflection) {
+      const confidencePattern = /(?:cannot|can't|could not)\s+be\s+wrong[:\s]*([^.]+)/i;
+      const confMatch = rationale.match(confidencePattern);
+      if (confMatch) {
+        pass_reflection = `Confident: ${confMatch[1]?.trim() || confMatch[0].trim()}`;
+      }
+    }
+
+    // Look for "I believe" statements in pass context
+    if (!pass_reflection) {
+      const believePattern = /I\s+believe\s+([^.]+)/i;
+      const believeMatch = rationale.match(believePattern);
+      if (believeMatch) {
+        pass_reflection = believeMatch[1].trim();
+      }
+    }
+
+    // Fallback: if passing mentions a specific proposal concern
+    if (!pass_reflection && references.length > 0) {
+      // Check if rationale mentions assumption, edge case, or risk
+      const riskPattern = /(?:assumes?|edge\s+case|risk|might|may\s+(?:not|break|fail))\s+([^.]+)/i;
+      const riskMatch = rationale.match(riskPattern);
+      if (riskMatch) {
+        pass_reflection = riskMatch[0].trim();
+      }
+    }
+  }
+
   return {
     action_taken: parsedAction.action,
     target: parsedAction.target_id,
@@ -215,6 +254,7 @@ export function extractReasoningTrace(
     concerns_addressed: concernsAddressed.length > 0 ? [...new Set(concernsAddressed)] : undefined,
     concerns_remaining: concernsRemaining.length > 0 ? [...new Set(concernsRemaining)] : undefined,
     references: references.length > 0 ? references : undefined,
+    pass_reflection,
   };
 }
 

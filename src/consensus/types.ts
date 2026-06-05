@@ -106,6 +106,8 @@ export const ReasoningTraceSchema = z.object({
   concerns_addressed: z.array(z.string()).optional(), // What this action resolves
   concerns_remaining: z.array(z.string()).optional(), // What remains unresolved
   references: z.array(z.string()).optional(), // Proposal/objection IDs mentioned
+  // S411 #19: Pass reflection — surfaced doubt or confidence statement
+  pass_reflection: z.string().optional(), // "One way it could be wrong" or "why it cannot be"
 });
 
 export type ReasoningTrace = z.infer<typeof ReasoningTraceSchema>;
