@@ -22,6 +22,7 @@ import {
   serializeState,
   deserializeState,
   updateTranscriptSummary,
+  captureVisibility,
 } from "./state.js";
 import {
   checkConsensus,
@@ -297,6 +298,9 @@ export async function runConsensusRoundtable(
     // Update transcript before turn
     state = { ...state, transcript_summary: updateTranscriptSummary(state) };
 
+    // S409 #23: Capture what speaker can see BEFORE they act
+    const visibility = captureVisibility(state);
+
     // Build turn prompt
     const turnPrompt = buildTurnPrompt(state, speaker);
 
@@ -318,6 +322,7 @@ export async function runConsensusRoundtable(
       durationMs: dispatchResult.duration_ms,
       model: modelId,  // Include model ID for observability (#5)
       usage: dispatchResult.usage,
+      visibility, // S409 #23: what speaker could see
     };
 
     // Validate action

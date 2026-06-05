@@ -81,6 +81,18 @@ export const RuleSchema = z.object({
 
 export type Rule = z.infer<typeof RuleSchema>;
 
+// Visibility snapshot — what this speaker could see (S409 #23)
+export const VisibilitySnapshotSchema = z.object({
+  proposals_visible: z.array(z.string()),
+  assents_visible: z.array(z.object({
+    party: z.string(),
+    proposal_id: z.string(),
+  })),
+  objections_visible: z.array(z.string()),
+});
+
+export type VisibilitySnapshot = z.infer<typeof VisibilitySnapshotSchema>;
+
 // Turn log entry — maximally verbose for post-hoc analysis
 export const TurnLogEntrySchema = z.object({
   turn: z.number(),
@@ -92,6 +104,7 @@ export const TurnLogEntrySchema = z.object({
   raw_response: z.string(),          // Full response content
   reasoning: z.string().optional(),  // Thinking/reasoning block if present
   narration: z.string().optional(),  // Plain-language state explanation (#6)
+  visibility: VisibilitySnapshotSchema.optional(), // S409 #23: what speaker could see
   timestamp: z.number(),
   duration_ms: z.number().optional(),
   usage: z.object({

@@ -12,6 +12,7 @@ import type {
   Objection,
   Assent,
   ConvergenceMetrics,
+  VisibilitySnapshot,
 } from "./types.js";
 import { ConsensusStateSchema } from "./types.js";
 import { updateConvergenceMetrics } from "./convergence.js";
@@ -190,6 +191,7 @@ export interface TurnLogData {
   durationMs?: number;
   model?: string;  // Model ID for this participant (#5)
   usage?: { prompt_tokens: number; completion_tokens: number; cost_usd?: number };
+  visibility?: VisibilitySnapshot; // S409 #23
 }
 
 /**
@@ -486,6 +488,7 @@ export function applyAction(
     raw_response: logData.rawResponse,
     reasoning: logData.reasoning,
     narration,
+    visibility: logData.visibility,
     timestamp: now,
     duration_ms: logData.durationMs,
     usage: logData.usage,
@@ -583,4 +586,20 @@ function formatAction(action: ParsedAction): string {
 function truncate(s: string, len: number): string {
   if (s.length <= len) return s;
   return s.slice(0, len - 3) + "...";
+}
+
+/**
+ * Capture visibility snapshot — what speaker can see at this moment (S409 #23).
+ * Critical for distinguishing independent agreement from herding.
+ */
+export function captureVisibility(state: ConsensusState): VisibilitySnapshot {
+  return {
+    proposals_visible: state.proposals.map(p => p.id),
+    assents_visible: state.assents
+      .filter(a => !a.retracted)
+      .map(a => ({ party: a.party, proposal_id: a.proposal_id })),
+    objections_visible: state.objections
+      .filter(o => !o.withdrawn)
+      .map(o => o.id),
+  };
 }
