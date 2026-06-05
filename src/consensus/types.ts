@@ -160,6 +160,8 @@ export const ConsensusConfigSchema = z.object({
   alpha: z.number().int().positive().optional(), // Default: N (unanimous)
   beta: z.number().int().positive().default(2),
   state_file: z.string().optional(),
+  // S410 #14: Blind opening round — collect proposals without visibility
+  blind_opening: z.boolean().default(true),
 });
 
 export type ConsensusConfig = z.infer<typeof ConsensusConfigSchema>;
@@ -179,6 +181,11 @@ export const ConsensusStateSchema = z.object({
   current_speaker_index: z.number().int().min(0),
   turn_count: z.number().int().min(0),
   round_count: z.number().int().min(0),
+
+  // S410 #14: Blind opening phase state
+  blind_phase_active: z.boolean().default(false),
+  pending_proposals: z.array(ProposalSchema).default([]), // Hidden until reveal
+  pending_assents: z.array(AssentSchema).default([]), // Implicit assents for pending proposals
 
   // Substantive
   proposals: z.array(ProposalSchema),
@@ -252,6 +259,8 @@ export const ConsensusOutputSchema = z.object({
   diversity_level: DiversityLevelSchema.optional(),
   // S409 #22: action-type usage audit
   action_usage: z.record(z.number()).optional(), // action type -> count
+  // S410 #14: blind opening status
+  blind_opening_used: z.boolean().optional(),
 });
 
 export type ConsensusOutput = z.infer<typeof ConsensusOutputSchema>;

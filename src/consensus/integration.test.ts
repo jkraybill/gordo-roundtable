@@ -27,6 +27,7 @@ const testConfig: ConsensusConfig = {
   hard_cap: 100,
   bootstrap_rounds: 0,
   beta: 2,
+  blind_opening: false, // Disable for integration tests; tested separately
 };
 
 beforeEach(() => {

@@ -224,6 +224,10 @@ export async function runConsensusRoundtable(
     ? `max_rounds=${config.max_rounds}, turn_limit=${config.turn_limit}`
     : `turn_limit=${config.turn_limit}`;
   log(`Config: ${limitsStr}, beta=${config.beta}`);
+  // S410 #14: Log blind opening status
+  if (state.blind_phase_active) {
+    log(`Blind opening: enabled — proposals hidden until round 1 completes`);
+  }
   log("");
 
   // Main deliberation loop
@@ -285,6 +289,8 @@ export async function runConsensusRoundtable(
           total_tokens: costData.total_tokens,
           diversity_level: diversityLevel,
           action_usage: actionUsage,
+          // S410 #14: blind opening status
+          blind_opening_used: config.blind_opening !== false,
         },
       };
     }
@@ -355,6 +361,12 @@ export async function runConsensusRoundtable(
     // Log convergence at round boundaries
     if (state.current_speaker_index === 0) {
       log(`\n--- Round ${state.round_count} complete ---`);
+
+      // S410 #14: Log blind phase reveal
+      if (state.round_count === 1 && !state.blind_phase_active && state.proposals.length > 0) {
+        log(`  Blind phase ended — ${state.proposals.length} proposals revealed simultaneously`);
+      }
+
       log(`  Entropy: ${state.convergence_metrics.entropy.toFixed(3)}`);
       log(`  Stability: ${state.convergence_metrics.stability_count}/${config.beta}`);
       log("");

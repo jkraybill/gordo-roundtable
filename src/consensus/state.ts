@@ -34,6 +34,9 @@ export function createInitialState(
     initialPositionMap[p] = null;
   }
 
+  // S410 #14: Blind opening enabled by default
+  const blindOpening = config.blind_opening !== false;
+
   return {
     question,
     context,
@@ -46,6 +49,11 @@ export function createInitialState(
     current_speaker_index: 0,
     turn_count: 0,
     round_count: 0,
+
+    // S410 #14: Blind opening phase
+    blind_phase_active: blindOpening,
+    pending_proposals: [],
+    pending_assents: [],
 
     proposals: [],
     objections: [],
@@ -197,24 +205,34 @@ export interface TurnLogData {
 /**
  * Generate plain-language narration for a turn (#6).
  * Explains what happened and current state in readable terms.
+ *
+ * S410 #14: During blind phase, proposals are in pending_proposals.
  */
 function generateNarration(speaker: string, action: ParsedAction, state: ConsensusState): string {
-  const proposalCount = state.proposals.length;
+  // S410 #14: Count includes both visible and pending proposals
+  const allProposals = [...state.proposals, ...state.pending_proposals];
+  const proposalCount = allProposals.length;
   const activeObjections = state.objections.filter(o => !o.withdrawn).length;
 
   let narration = "";
 
   switch (action.action) {
     case "propose": {
-      const proposal = state.proposals[proposalCount - 1];
+      // S410 #14: Get the most recent proposal from either array
+      const proposal = allProposals[proposalCount - 1];
       const contentPreview = proposal.content.slice(0, 80) + (proposal.content.length > 80 ? "..." : "");
-      narration = `${speaker} proposed "${contentPreview}" (${proposal.id}). `;
-      narration += `Now ${proposalCount} proposal(s) on the table.`;
+      if (state.blind_phase_active) {
+        narration = `${speaker} proposed "${contentPreview}" (${proposal.id}) [blind]. `;
+        narration += `${proposalCount} proposal(s) pending reveal.`;
+      } else {
+        narration = `${speaker} proposed "${contentPreview}" (${proposal.id}). `;
+        narration += `Now ${proposalCount} proposal(s) on the table.`;
+      }
       break;
     }
 
     case "amend": {
-      const amendment = state.proposals[proposalCount - 1];
+      const amendment = allProposals[proposalCount - 1];
       const contentPreview = amendment.content.slice(0, 80) + (amendment.content.length > 80 ? "..." : "");
       narration = `${speaker} amended ${action.target_id} with "${contentPreview}" (${amendment.id}). `;
       narration += `Now ${proposalCount} proposal(s) on the table.`;
@@ -287,6 +305,9 @@ function generateNarration(speaker: string, action: ParsedAction, state: Consens
 /**
  * Apply an action to state, returning new state.
  * Assumes action has been validated.
+ *
+ * S410 #14: During blind_phase_active, proposals go to pending_proposals
+ * and are revealed after all participants have had one turn.
  */
 export function applyAction(
   state: ConsensusState,
@@ -297,107 +318,118 @@ export function applyAction(
   const now = Date.now();
   const newState = structuredClone(state);
 
+  // S410 #14: Helper to add proposal to correct location
+  const addProposal = (proposal: Proposal, assent: Assent) => {
+    if (newState.blind_phase_active) {
+      newState.pending_proposals.push(proposal);
+      newState.pending_assents.push(assent);
+    } else {
+      newState.proposals.push(proposal);
+      newState.assents.push(assent);
+    }
+  };
+
+  // S410 #14: Compute next proposal ID considering both visible and pending
+  const nextProposalId = () => {
+    const totalProposals = newState.proposals.length + newState.pending_proposals.length;
+    return `p-${totalProposals + 1}`;
+  };
+
   switch (action.action) {
     case "propose": {
       const proposal: Proposal = {
-        id: `p-${newState.proposals.length + 1}`,
+        id: nextProposalId(),
         content: action.content!,
         proposer: speaker,
         timestamp: now,
         type: "substantive",
       };
-      newState.proposals.push(proposal);
-
-      // Proposer implicitly assents (spec §5.1 rule 5)
-      newState.assents.push({
+      const assent: Assent = {
         proposal_id: proposal.id,
         party: speaker,
         explicit: false, // implicit from proposing
         timestamp: now,
         retracted: false,
-      });
+      };
+      addProposal(proposal, assent);
       break;
     }
 
     case "meta_propose": {
       const proposal: Proposal = {
-        id: `p-${newState.proposals.length + 1}`,
+        id: nextProposalId(),
         content: action.content!,
         proposer: speaker,
         timestamp: now,
         type: "meta",
       };
-      newState.proposals.push(proposal);
-
-      newState.assents.push({
+      const assent: Assent = {
         proposal_id: proposal.id,
         party: speaker,
         explicit: false,
         timestamp: now,
         retracted: false,
-      });
+      };
+      addProposal(proposal, assent);
       break;
     }
 
     case "synthesize": {
       const proposal: Proposal = {
-        id: `p-${newState.proposals.length + 1}`,
+        id: nextProposalId(),
         content: action.content!,
         proposer: speaker,
         timestamp: now,
         type: "substantive",
       };
-      newState.proposals.push(proposal);
-
-      newState.assents.push({
+      const assent: Assent = {
         proposal_id: proposal.id,
         party: speaker,
         explicit: false,
         timestamp: now,
         retracted: false,
-      });
+      };
+      addProposal(proposal, assent);
       break;
     }
 
     case "narrow": {
       const proposal: Proposal = {
-        id: `p-${newState.proposals.length + 1}`,
+        id: nextProposalId(),
         content: action.content!,
         proposer: speaker,
         timestamp: now,
         type: "narrow",
         parent_id: action.target_id,
       };
-      newState.proposals.push(proposal);
-
-      newState.assents.push({
+      const assent: Assent = {
         proposal_id: proposal.id,
         party: speaker,
         explicit: false,
         timestamp: now,
         retracted: false,
-      });
+      };
+      addProposal(proposal, assent);
       break;
     }
 
     case "amend": {
       const proposal: Proposal = {
-        id: `p-${newState.proposals.length + 1}`,
+        id: nextProposalId(),
         content: action.content!,
         proposer: speaker,
         timestamp: now,
         type: "amendment",
         parent_id: action.target_id,
       };
-      newState.proposals.push(proposal);
-
-      newState.assents.push({
+      const assent: Assent = {
         proposal_id: proposal.id,
         party: speaker,
         explicit: false,
         timestamp: now,
         retracted: false,
-      });
+      };
+      addProposal(proposal, assent);
       break;
     }
 
@@ -502,6 +534,17 @@ export function applyAction(
   // Check for round boundary
   if (newState.current_speaker_index === 0) {
     newState.round_count++;
+
+    // S410 #14: End blind phase after first round — reveal pending proposals
+    if (newState.blind_phase_active && newState.round_count === 1) {
+      // Move pending proposals to visible proposals
+      newState.proposals.push(...newState.pending_proposals);
+      newState.assents.push(...newState.pending_assents);
+      newState.pending_proposals = [];
+      newState.pending_assents = [];
+      newState.blind_phase_active = false;
+    }
+
     newState.convergence_metrics = updateConvergenceMetrics(newState);
 
     // Check phase transitions
@@ -591,6 +634,10 @@ function truncate(s: string, len: number): string {
 /**
  * Capture visibility snapshot — what speaker can see at this moment (S409 #23).
  * Critical for distinguishing independent agreement from herding.
+ *
+ * S410 #14: During blind phase, pending_proposals are NOT visible.
+ * This accurately reflects the blind opening design — each participant
+ * submits without seeing others' proposals.
  */
 export function captureVisibility(state: ConsensusState): VisibilitySnapshot {
   return {

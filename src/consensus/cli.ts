@@ -31,6 +31,7 @@ interface ConsensusFlags {
   resume?: string;
   dryRun?: boolean;
   outputDir?: string;
+  noBlindOpening?: boolean; // S410 #14
 }
 
 /**
@@ -76,6 +77,7 @@ export function registerConsensusCommand(program: Command): void {
     .option("--resume <path>", "Resume from saved state file")
     .requiredOption("--output-dir <path>", "Directory to write results (must not be under gordo-roundtable)")
     .option("--dry-run", "Print config without running")
+    .option("--no-blind-opening", "Disable blind opening round (proposals visible immediately)")
     .action(async (flags: ConsensusFlags) => {
       const turnLimit = parseInt(flags.turnLimit, 10);
       const maxRounds = flags.maxRounds ? parseInt(flags.maxRounds, 10) : undefined;
@@ -125,6 +127,8 @@ export function registerConsensusCommand(program: Command): void {
         bootstrap_rounds: bootstrapRounds,
         beta,
         state_file: flags.stateFile,
+        // S410 #14: Blind opening is enabled by default; --no-blind-opening disables
+        blind_opening: !flags.noBlindOpening,
       };
 
       // Parse brief file
@@ -141,6 +145,7 @@ export function registerConsensusCommand(program: Command): void {
         if (context) console.log("Context:", context);
         console.log("\nConfig:");
         console.log(YAML.stringify(config));
+        console.log(`\nBlind opening: ${config.blind_opening ? "enabled (proposals hidden until round 1 ends)" : "disabled"}`);
         console.log("\nParticipants:");
         for (let i = 0; i < participants.length; i++) {
           const p = participants[i];

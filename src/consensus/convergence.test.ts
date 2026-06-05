@@ -74,6 +74,7 @@ describe("buildPositionMap", () => {
     hard_cap: 500,
     bootstrap_rounds: 0,
     beta: 2,
+    blind_opening: false, // Disable for unit tests
   };
 
   it("starts with all null positions", () => {
@@ -111,6 +112,7 @@ describe("checkConsensus", () => {
     hard_cap: 500,
     bootstrap_rounds: 0,
     beta: 2,
+    blind_opening: false, // Disable for unit tests
   };
 
   // Helper for test log data
@@ -266,6 +268,7 @@ describe("calculateActionUsage (S409 #22)", () => {
       hard_cap: 500,
       bootstrap_rounds: 0,
       beta: 2,
+      blind_opening: false, // Disable for unit tests
     };
 
     let state = createInitialState("Q?", undefined, config);

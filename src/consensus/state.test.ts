@@ -22,6 +22,7 @@ const testConfig: ConsensusConfig = {
   hard_cap: 500,
   bootstrap_rounds: 0,
   beta: 2,
+  blind_opening: false, // Disable for unit tests; tested separately
 };
 
 describe("createInitialState", () => {
@@ -153,5 +154,74 @@ describe("serialization", () => {
     expect(restored.context).toBe(state.context);
     expect(restored.participants).toEqual(state.participants);
     expect(restored.session_id).toBe(state.session_id);
+  });
+});
+
+// S410 #14: Blind opening phase tests
+describe("blind opening phase", () => {
+  const blindConfig: ConsensusConfig = {
+    ...testConfig,
+    blind_opening: true,
+  };
+
+  it("starts with blind_phase_active when enabled", () => {
+    const state = createInitialState("Test?", undefined, blindConfig);
+    expect(state.blind_phase_active).toBe(true);
+    expect(state.pending_proposals).toEqual([]);
+    expect(state.pending_assents).toEqual([]);
+  });
+
+  it("places proposals in pending_proposals during blind phase", () => {
+    let state = createInitialState("Test?", undefined, blindConfig);
+    state = applyAction(state, "Party A", { action: "propose", content: "A's answer" }, testLogData());
+
+    // Proposal should be in pending, not visible
+    expect(state.proposals.length).toBe(0);
+    expect(state.pending_proposals.length).toBe(1);
+    expect(state.pending_proposals[0].content).toBe("A's answer");
+    expect(state.pending_proposals[0].id).toBe("p-1");
+
+    // Assent also pending
+    expect(state.assents.length).toBe(0);
+    expect(state.pending_assents.length).toBe(1);
+  });
+
+  it("reveals pending proposals after first round completes", () => {
+    let state = createInitialState("Test?", undefined, blindConfig);
+
+    // All three parties propose (blind)
+    state = applyAction(state, "Party A", { action: "propose", content: "A's answer" }, testLogData());
+    state = applyAction(state, "Party B", { action: "propose", content: "B's answer" }, testLogData());
+    state = applyAction(state, "Party C", { action: "propose", content: "C's answer" }, testLogData());
+
+    // After round 1 completes, blind phase should end
+    expect(state.blind_phase_active).toBe(false);
+    expect(state.round_count).toBe(1);
+
+    // All proposals should now be visible
+    expect(state.proposals.length).toBe(3);
+    expect(state.pending_proposals.length).toBe(0);
+    expect(state.assents.length).toBe(3);
+    expect(state.pending_assents.length).toBe(0);
+
+    // Check IDs are sequential
+    expect(state.proposals.map(p => p.id)).toEqual(["p-1", "p-2", "p-3"]);
+  });
+
+  it("keeps proposals visible after reveal (round 2+)", () => {
+    let state = createInitialState("Test?", undefined, blindConfig);
+
+    // Round 1: all propose (blind)
+    state = applyAction(state, "Party A", { action: "propose", content: "A" }, testLogData());
+    state = applyAction(state, "Party B", { action: "propose", content: "B" }, testLogData());
+    state = applyAction(state, "Party C", { action: "propose", content: "C" }, testLogData());
+
+    // Round 2: Party A proposes again (should be immediately visible)
+    state = applyAction(state, "Party A", { action: "propose", content: "A's second" }, testLogData());
+
+    expect(state.proposals.length).toBe(4);
+    expect(state.pending_proposals.length).toBe(0);
+    expect(state.proposals[3].content).toBe("A's second");
+    expect(state.proposals[3].id).toBe("p-4");
   });
 });

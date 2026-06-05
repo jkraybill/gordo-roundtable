@@ -171,6 +171,12 @@ export function buildTurnPrompt(state: ConsensusState, identity: string): string
   lines.push(`Phase: ${state.phase}`);
   lines.push(`Round: ${state.round_count + 1}`);
   lines.push(`Turn: ${state.turn_count + 1} (of ${state.config.turn_limit} max)`);
+
+  // S410 #14: Indicate blind opening phase
+  if (state.blind_phase_active) {
+    lines.push("");
+    lines.push("**BLIND OPENING ROUND:** Other participants' proposals are hidden until all have submitted. Your proposal will be collected and revealed simultaneously with others after this round completes.");
+  }
   lines.push("");
 
   // Proposals
