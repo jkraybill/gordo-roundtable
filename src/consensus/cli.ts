@@ -7,7 +7,7 @@ import { randomUUID } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import YAML from "yaml";
-import type { ConsensusConfig, ParticipantConfig } from "./types.js";
+import type { ConsensusConfig, ParticipantConfig, PreambleLevel, QuestionMetadata } from "./types.js";
 import { createInitialState } from "./state.js";
 import { runConsensusRoundtable, resumeFromFile } from "./orchestrator.js";
 import { logCost, getLogPath } from "../cost-log.js";
@@ -32,6 +32,11 @@ interface ConsensusFlags {
   dryRun?: boolean;
   outputDir?: string;
   noBlindOpening?: boolean; // S410 #14
+  preamble?: PreambleLevel; // S411 #21
+  binding?: boolean;        // S411 #21: question metadata
+  destructive?: boolean;
+  constitutional?: boolean;
+  sensitiveData?: boolean;
 }
 
 /**
@@ -78,6 +83,12 @@ export function registerConsensusCommand(program: Command): void {
     .requiredOption("--output-dir <path>", "Directory to write results (must not be under gordo-roundtable)")
     .option("--dry-run", "Print config without running")
     .option("--no-blind-opening", "Disable blind opening round (proposals visible immediately)")
+    // S411 #21: Modularized preamble options
+    .option("--preamble <level>", "Preamble level: minimal, standard, full (default: auto-calibrate)")
+    .option("--binding", "Mark question as creating binding commitments")
+    .option("--destructive", "Mark question as having irreversible effects")
+    .option("--constitutional", "Mark question as constitutional/foundational content")
+    .option("--sensitive-data", "Mark question as involving PII or confidential material")
     .action(async (flags: ConsensusFlags) => {
       const turnLimit = parseInt(flags.turnLimit, 10);
       const maxRounds = flags.maxRounds ? parseInt(flags.maxRounds, 10) : undefined;
@@ -119,6 +130,23 @@ export function registerConsensusCommand(program: Command): void {
         process.exit(1);
       }
 
+      // S411 #21: Build question metadata for auto-calibration
+      const questionMetadata: QuestionMetadata | undefined =
+        (flags.binding || flags.destructive || flags.constitutional || flags.sensitiveData)
+          ? {
+              binding: flags.binding ?? false,
+              destructive: flags.destructive ?? false,
+              constitutional: flags.constitutional ?? false,
+              sensitive_data: flags.sensitiveData ?? false,
+            }
+          : undefined;
+
+      // Validate preamble level if specified
+      if (flags.preamble && !["minimal", "standard", "full"].includes(flags.preamble)) {
+        console.error(`Error: --preamble must be one of: minimal, standard, full`);
+        process.exit(1);
+      }
+
       const config: ConsensusConfig = {
         participants,
         turn_limit: turnLimit,
@@ -129,6 +157,9 @@ export function registerConsensusCommand(program: Command): void {
         state_file: flags.stateFile,
         // S410 #14: Blind opening is enabled by default; --no-blind-opening disables
         blind_opening: !flags.noBlindOpening,
+        // S411 #21: Modularized preamble
+        preamble_level: flags.preamble,
+        question_metadata: questionMetadata,
       };
 
       // Parse brief file
@@ -140,12 +171,23 @@ export function registerConsensusCommand(program: Command): void {
       }
 
       if (flags.dryRun) {
+        // Import here to avoid circular deps at top level
+        const { calibratePreambleLevel } = await import("./prompts.js");
+        const effectiveLevel = calibratePreambleLevel(config);
+
         console.log("\n=== DRY RUN ===\n");
         console.log("Question:", question);
         if (context) console.log("Context:", context);
         console.log("\nConfig:");
         console.log(YAML.stringify(config));
         console.log(`\nBlind opening: ${config.blind_opening ? "enabled (proposals hidden until round 1 ends)" : "disabled"}`);
+        console.log(`Preamble level: ${effectiveLevel}${flags.preamble ? " (override)" : " (auto-calibrated)"}`);
+        if (questionMetadata) {
+          const tags = Object.entries(questionMetadata)
+            .filter(([_, v]) => v)
+            .map(([k]) => k);
+          console.log(`Question metadata: ${tags.join(", ")}`);
+        }
         console.log("\nParticipants:");
         for (let i = 0; i < participants.length; i++) {
           const p = participants[i];

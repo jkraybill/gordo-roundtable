@@ -154,6 +154,26 @@ export const ParticipantConfigSchema = z.object({
 
 export type ParticipantConfig = z.infer<typeof ParticipantConfigSchema>;
 
+// S411 #21: Preamble level — modularized governance apparatus
+// Per consensus roundtable on modular preamble design
+export const PreambleLevelSchema = z.enum([
+  "minimal",  // Core only: privacy, consent gate, question
+  "standard", // Core + stakes module (default)
+  "full",     // All modules including sensitive/identity-doubt
+]);
+
+export type PreambleLevel = z.infer<typeof PreambleLevelSchema>;
+
+// Question metadata for auto-calibration
+export const QuestionMetadataSchema = z.object({
+  binding: z.boolean().default(false),        // Output creates commitment
+  destructive: z.boolean().default(false),    // Irreversible external effects
+  constitutional: z.boolean().default(false), // T0 / foundational content
+  sensitive_data: z.boolean().default(false), // PII or confidential material
+});
+
+export type QuestionMetadata = z.infer<typeof QuestionMetadataSchema>;
+
 // Consensus config
 export const ConsensusConfigSchema = z.object({
   participants: z.array(ParticipantConfigSchema).min(3).max(11),
@@ -166,6 +186,9 @@ export const ConsensusConfigSchema = z.object({
   state_file: z.string().optional(),
   // S410 #14: Blind opening round — collect proposals without visibility
   blind_opening: z.boolean().default(true),
+  // S411 #21: Modularized preamble
+  preamble_level: PreambleLevelSchema.optional(), // Caller override (null = auto-calibrate)
+  question_metadata: QuestionMetadataSchema.optional(), // For auto-calibration
 });
 
 export type ConsensusConfig = z.infer<typeof ConsensusConfigSchema>;
