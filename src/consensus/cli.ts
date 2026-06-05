@@ -12,6 +12,7 @@ import { createInitialState } from "./state.js";
 import { runConsensusRoundtable, resumeFromFile } from "./orchestrator.js";
 import { logCost, getLogPath } from "../cost-log.js";
 import { loadBrief, parseBriefForConsensus } from "../brief.js";
+import { generateDecisionBrief, formatDecisionBrief } from "./brief.js";
 
 interface PanelFile {
   name: string;
@@ -249,6 +250,12 @@ export function registerConsensusCommand(program: Command): void {
       const resultFile = `${outputDir}/consensus-${runSessionId}.yaml`;
       writeFileSync(resultFile, YAML.stringify(result, { lineWidth: 0 }));
       console.log(`\nResult written to: ${resultFile}`);
+
+      // Write decision brief (#28)
+      const brief = generateDecisionBrief(result, result.state);
+      const briefFile = `${outputDir}/decision-brief-${runSessionId}.md`;
+      writeFileSync(briefFile, formatDecisionBrief(brief));
+      console.log(`Decision brief: ${briefFile}`);
 
       // Log cost
       const durationMs = Date.now() - startTime;
