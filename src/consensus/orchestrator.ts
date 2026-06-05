@@ -33,7 +33,8 @@ import {
   calculateDiversityLevel,
   calculateActionUsage,
 } from "./convergence.js";
-import { buildSystemPrompt, buildTurnPrompt, buildClarificationPrompt, buildCharacterizationPrompt } from "./prompts.js";
+import { buildSystemPrompt, buildTurnPrompt, buildClarificationPrompt, buildCharacterizationPrompt, buildResidualConcernPrompt } from "./prompts.js";
+import type { ResidualConcern } from "./types.js";
 
 const MAX_PARSE_RETRIES = 2;
 
@@ -190,6 +191,56 @@ export interface OrchestratorOptions {
 }
 
 /**
+ * Run residual concern round (S410 #16).
+ * Each participant gets one turn to register concerns they accept but want on record.
+ */
+async function runResidualConcernRound(
+  state: ConsensusState,
+  config: ConsensusConfig,
+  systemPrompt: string,
+  consensusAnswer: string,
+  log: (msg: string) => void
+): Promise<ResidualConcern[]> {
+  const concerns: ResidualConcern[] = [];
+
+  log("\n--- Residual Concern Round ---");
+
+  for (let i = 0; i < state.participants.length; i++) {
+    const party = state.participants[i];
+    const participantConfig = config.participants[i];
+    const prompt = buildResidualConcernPrompt(state, party, consensusAnswer);
+
+    log(`  ${party}...`);
+    const result = await dispatchWithRetry(
+      participantConfig,
+      party,
+      prompt,
+      systemPrompt,
+      log
+    );
+
+    if (result.action.action === "residual_concern" && result.action.content) {
+      concerns.push({
+        party,
+        concern: result.action.content,
+        timestamp: Date.now(),
+      });
+      log(`    Registered concern: "${result.action.content.slice(0, 80)}${result.action.content.length > 80 ? "..." : ""}"`);
+    } else {
+      log(`    No concerns`);
+    }
+  }
+
+  if (concerns.length === 0) {
+    log("  No residual concerns registered.");
+  } else {
+    log(`  ${concerns.length} concern(s) registered.`);
+  }
+
+  return concerns;
+}
+
+/**
  * Run a consensus roundtable from initial state or resume.
  */
 export async function runConsensusRoundtable(
@@ -267,6 +318,15 @@ export async function runConsensusRoundtable(
       log(`Explicit assents: ${consensusCheck.assent_profile!.explicit_assents.join(", ")}`);
       log(`Pass-based non-objectors: ${consensusCheck.assent_profile!.pass_based_non_objectors.join(", ")}`);
 
+      // S410 #16: Run residual concern round
+      const residualConcerns = await runResidualConcernRound(
+        state,
+        config,
+        systemPrompt,
+        consensusCheck.proposal_content!,
+        log
+      );
+
       state = {
         ...state,
         phase: "closed",
@@ -291,6 +351,8 @@ export async function runConsensusRoundtable(
           action_usage: actionUsage,
           // S410 #14: blind opening status
           blind_opening_used: config.blind_opening !== false,
+          // S410 #16: residual concerns
+          residual_concerns: residualConcerns.length > 0 ? residualConcerns : undefined,
         },
       };
     }

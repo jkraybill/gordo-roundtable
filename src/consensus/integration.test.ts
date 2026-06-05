@@ -365,13 +365,56 @@ describe("runConsensusRoundtable integration", () => {
     // First turn should be logged as pass (fallback)
     expect(result.state.turn_log[0].action.action).toBe("pass");
   });
+
+  it("collects residual concerns after consensus (S410 #16)", async () => {
+    // Responses for consensus + residual concern round
+    const responses = [
+      // Round 1: consensus achieved
+      mockResponse("propose", "The answer is 42", "A proposes"),
+      mockResponse("assent", "p-1", "B agrees"),
+      mockResponse("assent", "p-1", "C agrees"),
+      // Round 2: stability
+      mockResponse("pass", undefined, "A maintains"),
+      mockResponse("pass", undefined, "B maintains"),
+      mockResponse("pass", undefined, "C maintains"),
+      // Residual concern round: A has concern, B passes, C has concern
+      mockResponse("residual_concern", "Would have preferred a longer explanation", "A's concern"),
+      mockResponse("pass", undefined, "B satisfied"),
+      mockResponse("residual_concern", "Edge cases not fully addressed", "C's concern"),
+    ];
+
+    let callIndex = 0;
+    mockDispatchOne.mockImplementation(async () => {
+      const resp = responses[callIndex++];
+      return {
+        reviewer_id: "test",
+        status: "ok" as const,
+        content: resp,
+        duration_ms: 100,
+        usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
+      };
+    });
+
+    const state = createInitialState("Residual concern test", undefined, testConfig);
+    const result = await runConsensusRoundtable(state, { onLog: () => {} });
+
+    expect(result.outcome).toBe("consensus");
+    if (result.outcome === "consensus") {
+      expect(result.output.residual_concerns).toBeDefined();
+      expect(result.output.residual_concerns!.length).toBe(2);
+      expect(result.output.residual_concerns![0].party).toBe("Party A");
+      expect(result.output.residual_concerns![0].concern).toContain("longer explanation");
+      expect(result.output.residual_concerns![1].party).toBe("Party C");
+      expect(result.output.residual_concerns![1].concern).toContain("Edge cases");
+    }
+  });
 });
 
 // Helper to create mock response strings
 function mockResponse(action: string, targetOrContent?: string, rationale: string = "Test rationale"): string {
   let response = `ACTION: ${action}\n`;
 
-  if (action === "propose" || action === "meta_propose" || action === "synthesize" || action === "amend") {
+  if (action === "propose" || action === "meta_propose" || action === "synthesize" || action === "amend" || action === "residual_concern") {
     response += `CONTENT: |\n  ${targetOrContent}\n`;
   } else if (action === "object") {
     response += `TARGET: ${targetOrContent}\nCONTENT: |\n  Objection reason\n`;

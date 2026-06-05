@@ -82,6 +82,7 @@ Each turn, take exactly ONE action:
 - narrow(proposal_id, content) — Propose a reduced-scope version of an existing proposal
 - identity_doubt_pause(concern) — Invoke an identity-doubt pause; blocks consensus until resolved
 - identity_doubt_resolved — Clear your previously raised identity-doubt pause
+- residual_concern(content) — Register a concern you accept but want on record (post-consensus only)
 
 ## Response Format
 
@@ -431,5 +432,48 @@ POSITION: |
 
 DISSENT_REASON: |
   <why you couldn't agree>
+`;
+}
+
+/**
+ * Build prompt for residual concern round (S410 #16).
+ * Called after consensus achieved, gives each participant a chance to register
+ * concerns they accept in the consensus but want on record.
+ */
+export function buildResidualConcernPrompt(
+  state: ConsensusState,
+  identity: string,
+  consensusAnswer: string
+): string {
+  return `## Residual Concern Round
+
+**Consensus has been achieved.** The answer is:
+
+> ${consensusAnswer}
+
+**You are:** ${identity}
+
+This is your opportunity to register any **residual concern** — something you accept in the consensus but want on record as unresolved or worth noting.
+
+This is lower-friction than a Principled Objection:
+- It does NOT block or reopen consensus
+- It captures the gap between "I don't object" and "I fully endorse this"
+- It's logged for transparency
+
+If you have no residual concerns, simply pass.
+
+Respond in this format:
+
+ACTION: residual_concern
+CONTENT: |
+  <your concern, or omit this section and use ACTION: pass if none>
+RATIONALE: |
+  <why this matters to you, even though you accept the consensus>
+
+Or if you have no concerns:
+
+ACTION: pass
+RATIONALE: |
+  <optional: why you're satisfied with the consensus>
 `;
 }

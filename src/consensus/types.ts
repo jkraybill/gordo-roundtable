@@ -21,6 +21,7 @@ export const ActionTypeSchema = z.enum([
   "narrow",
   "identity_doubt_pause",
   "identity_doubt_resolved",
+  "residual_concern", // S410 #16: post-consensus concern registration
 ]);
 
 export type ActionType = z.infer<typeof ActionTypeSchema>;
@@ -240,6 +241,15 @@ export const DiversityLevelSchema = z.enum([
 
 export type DiversityLevel = z.infer<typeof DiversityLevelSchema>;
 
+// S410 #16: Residual concern — accepted but wants on record
+export const ResidualConcernSchema = z.object({
+  party: z.string(),
+  concern: z.string(),
+  timestamp: z.number(),
+});
+
+export type ResidualConcern = z.infer<typeof ResidualConcernSchema>;
+
 // Consensus output per spec §7.1 + S409 improvements
 export const ConsensusOutputSchema = z.object({
   answer: z.string(),
@@ -261,6 +271,8 @@ export const ConsensusOutputSchema = z.object({
   action_usage: z.record(z.number()).optional(), // action type -> count
   // S410 #14: blind opening status
   blind_opening_used: z.boolean().optional(),
+  // S410 #16: residual concerns — accepted but wants on record
+  residual_concerns: z.array(ResidualConcernSchema).optional(),
 });
 
 export type ConsensusOutput = z.infer<typeof ConsensusOutputSchema>;
