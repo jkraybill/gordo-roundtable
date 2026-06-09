@@ -239,11 +239,13 @@ describe("runConsensusRoundtable integration", () => {
     const state = createInitialState("Identity test", undefined, shortConfig);
     const result = await runConsensusRoundtable(state, { onLog: () => {} });
 
-    // Should have identity map
+    // Should have identity map (note: participant order is shuffled for anonymity)
     expect(result.state.identity_map).toBeDefined();
-    expect(result.state.identity_map!["Party A"]).toBe("test-model-a");
-    expect(result.state.identity_map!["Party B"]).toBe("test-model-b");
-    expect(result.state.identity_map!["Party C"]).toBe("test-model-c");
+    const models = Object.values(result.state.identity_map!);
+    expect(models).toHaveLength(3);
+    expect(models).toContain("test-model-a");
+    expect(models).toContain("test-model-b");
+    expect(models).toContain("test-model-c");
 
     // Should have system prompt logged
     expect(result.state.system_prompt).toBeDefined();
