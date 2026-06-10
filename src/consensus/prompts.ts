@@ -173,7 +173,19 @@ RATIONALE: |
 
 ACTION: pass
 RATIONALE: |
-  I have no objections but am not ready to assent. One way p-2 could be wrong: it assumes X holds universally, but edge case Y might break that assumption. I'm passing to see if others surface this.`;
+  I have no objections but am not ready to assent. One way p-2 could be wrong: it assumes X holds universally, but edge case Y might break that assumption. I'm passing to see if others surface this.
+
+## Counterfactual Capture (Optional)
+
+If you considered alternative positions or syntheses but chose not to propose them, you may note them:
+
+DISSENT_REGISTER: |
+  - Position: <position you considered>
+    Why rejected: <reason>
+SHADOW_PROPOSAL: |
+  <synthesis you considered but did not propose>
+
+These are optional but valuable for understanding convergence dynamics. They capture what was weighed, not just what was chosen.`;
 }
 
 /**

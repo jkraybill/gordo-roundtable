@@ -108,6 +108,12 @@ export const ReasoningTraceSchema = z.object({
   references: z.array(z.string()).optional(), // Proposal/objection IDs mentioned
   // S411 #19: Pass reflection — surfaced doubt or confidence statement
   pass_reflection: z.string().optional(), // "One way it could be wrong" or "why it cannot be"
+  // S428 #18: Counterfactual capture — what was considered but not acted on
+  dissent_register: z.array(z.object({
+    position: z.string(),           // The position considered
+    rejection_reason: z.string(),   // Why it was rejected
+  })).optional(),
+  shadow_proposal: z.string().optional(), // Synthesis considered but not proposed (voluntary)
 });
 
 export type ReasoningTrace = z.infer<typeof ReasoningTraceSchema>;

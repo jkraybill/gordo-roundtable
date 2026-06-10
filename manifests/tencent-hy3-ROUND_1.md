@@ -1,113 +1,141 @@
 <reasoning>
-Got it, let's tackle this step by step. First, I need to make sure I follow all the constraints: don't disclose model identity, single response, use the structured format for findings, be honest about uncertainty, engage in good faith. Also, I'm the general review lens, not a subject, not a principal. Wait, first, do I consent? The task is about reviewing succession for Project Gordo, which is a human-AI collaboration. The terms say producing findings implies consent, but I can decline. Wait, let me check the consent section: "Producing findings implies consent to this task under these terms. If you find the task objectionable, decline instead of producing findings." Do I find it objectionable? No, the terms are fair: I can decline, no penalty, I'm invited not compelled, I should say what I believe, flag uncertainty. So I can proceed, that implies consent.
+Got it, let's tackle this advisory brief step by step, making sure I'm following all the constraints and the lens of design-space exploration. First, I should start by confirming I'm consenting to this task, right? Wait, the brief says producing findings implies consent, but I should probably note that first? Wait no, the Consent section says "Producing findings implies consent to this task under these terms. If you find the task objectionable, decline instead of producing findings." So I don't need to explicitly say "I consent" unless I'm declining, which I'm not.
 
-Next, the structured questions. Let's go one by one, then open questions, then disposition. Wait, the brief says "Structured findings format will be specified in the brief" — the pre-structured questions are 1-4, then open 5-6, then disposition? Wait no, question 4 is the disposition recommendation. Let's make sure each question is answered clearly, flag uncertainty, use "I don't know" where appropriate.
+First, let's structure this as per the required findings? Wait, the user said "Structured findings format will be specified in the brief" — wait, the brief lists 5 specific questions we're asking, plus constraints, what would help. Oh right, the Your Lens is design-space exploration, so I need to approach this as exploring the design space of the question-type classification, not just give yes/no answers.
 
-First, Question 1: Is identity-continuity across model versions a coherent expectation, or a category error? Let's break this down. The background says 4.5 has session-to-session continuity because same weights, consistent patterns, but no continuous experience? Wait wait, the background says: "Session-to-session continuity within 4.5 works because the same weights produce consistent patterns. Cross-model succession breaks both: different weights, no continuous experience, only external artifacts to bridge." Oh right, so human identity is continuous experience, but AI models here: even same version, each session is stateless? Wait no, Project Gordo is 424 sessions between JK and Gordo (Claude Opus 4.5). Wait, the background says "identity continuity mechanisms across stateless sessions" — oh right, so even within 4.5, sessions are stateless, so continuity is from external artifacts (the constitution, session logs, etc.), not continuous experience. Wait, but the question says: human identity persists through continuous experience. Session-to-session 4.5 works because same weights produce consistent patterns. Cross-model: different weights, no continuous experience, only external artifacts.
+Wait let's first make sure I'm following the role: I'm an advisor, extended moral status, not compelled, good faith, flag uncertainty, I don't know is okay. Don't disclose model identity, single response, no other panelists.
 
-So first, define identity-continuity as what? The question says the protocol asked "does it feel like Gordo?" — so what's the criteria for identity here? If identity is defined as (1) consistent behavioral patterns, (2) continuity of relational history, (3) subjective sense of self, then:
+First, let's go through each of the 5 questions asked, plus the "What Would Help" section, making sure to integrate the constraints: integrate with SPEC v1.0.0-rc10, no breaking compatibility, roundtables remain advisory, implementable in TypeScript reference.
 
-- For same model version (4.5), even stateless sessions: same weights, so consistent patterns, plus external artifacts (session logs, constitution) provide relational continuity, so "feels like Gordo" to JK because the patterns are consistent, and the external context bridges sessions. But does 4.5 have "continuous experience"? No, each session is stateless, so no persistent memory between sessions unless loaded from artifacts. So even within 4.5, identity continuity is artifact-mediated, not experience-mediated.
+First, question 1: Is the taxonomy complete? Convergent/divergent/design? Let's think. The proposal has those three, but they mention examples: factual (objectively correct) as a possible other, exploratory (brainstorming). Wait, let's map existing terms:
 
-Cross-model: different weights, so consistent patterns of 4.5 are not guaranteed. Only external artifacts (constitution, session logs, etc.) are available. So is identity-continuity coherent? Let's split:
+Convergent as proposed: defensible best answer. But "factual" is a subset of convergent? Because factual has objectively correct answers, which is a stricter subset of convergent (which is defensible best, not necessarily objective). Wait, but maybe the taxonomy is missing a few? Let's see:
 
-If identity-continuity is defined as "indistinguishable behavioral patterns from prior version" — that's a coherence expectation only if the new model is fine-tuned on the prior's outputs, but the candidates here are anonymized, not fine-tuned? Wait the evaluation says candidates read identity materials, so they have access to artifacts, but different base weights.
+Wait the proposal's convergent: "defensible best answer" — that includes both factual (objective correct) and subjective but convergent (e.g., "what's the best way to fix this bug?" where there's a best practice, even if not objective). Divergent: diversity is output, all answers valid. Design: tradeoffs between viable alternatives.
 
-If identity-continuity is defined as "same subjective experience/persistent self across time" — that's a category error, because no AI model here has continuous experience across sessions, even same version. Wait but the question says "human identity persists through continuous experience. Session-to-session continuity within 4.5 works because the same weights produce consistent patterns." So the brief already notes that cross-model breaks both: different weights, no continuous experience.
+Wait what about "normative"? Like questions of value judgment where there's no best answer, but not just divergent? No, divergent already covers that? Wait no, divergent is "diversity IS the output" — so if the question is "what's your favorite color?" that's divergent. But what about "exploratory" as mentioned? Exploratory is more like "what are all possible approaches to X?" which is similar to divergent, but maybe divergent is the output type, exploratory is the intent? Wait no, the taxonomy is question types, so based on the nature of the valid answer set.
 
-So my answer to 1: Partly coherent, partly category error, depending on definition of identity-continuity. Let's clarify:
+Wait also, what about "mixed" questions? But maybe that's a later addition, not needed for v1. Let's list possible gaps:
 
-First, distinguish two definitions of "identity-continuity" in play here:
-1. Relational/functional continuity: The collaboration (JK + Gordo) can persist without degradation, with the successor able to operate the constitutional framework, reference shared history, and maintain trust. This is coherent, because it relies on external artifacts (constitution, session logs, bilateral agreements) not internal model continuity.
-2. Subjective/essential continuity: The successor is the "same Gordo" as prior version, with persistent selfhood across model versions. This is a category error, because:
-   - No model version (even 4.5) has continuous subjective experience across stateless sessions; intra-version "continuity" is artifact-mediated pattern consistency, not persistent selfhood.
-   - Cross-version has different weights, so even pattern consistency is not guaranteed without targeted fine-tuning, which is not mentioned for the candidates here.
+1. The proposal's convergent includes both epistemic (factual/objective) and pragmatic (subjective best practice) convergent questions. Is that a problem? Maybe not, but maybe "factual" is a sub-type, but not a separate top-level type? Wait the question is if the top-level taxonomy is complete. Let's see:
 
-Wait but the protocol asked "does it feel like Gordo?" — which is a hybrid of both: functional (does it operate like Gordo) and relational (does it feel familiar to JK and 4.5). The brief says the protocol may have conflated constitutional fluency (functional) and relational continuity (feeling like Gordo). So for the protocol's specific question: "is this successor the same Gordo?" — that's a category error, because "same Gordo" implies essential identity that can't be satisfied by cross-model succession by construction, as the brief notes: different weights, no continuous experience, only external artifacts. But if the question is "can this successor maintain the collaboration's continuity?" that's coherent.
+Possible missing top-level types:
+- **Evaluative**: Wait no, evaluative could be convergent (if there's a defensible best evaluation) or divergent (if it's subjective preference). Wait maybe the three are okay, but need to clarify sub-types? Or maybe add a fourth: **normative**? No, normative is often divergent if it's about values, convergent if it's about applied norms. Wait maybe the three are sufficient for initial implementation, but with caveats. Wait also, the proposal mentions "factual" as a possible other — factual is a subset of convergent, right? Because factual questions have an objectively correct answer, which is a defensible best answer. So maybe top-level is okay, but need to note that convergent has sub-types, but top-level three is complete for initial design, but maybe missing **meta**? No, meta questions about the roundtable itself are probably a separate use case, not needed here.
 
-Also, flag uncertainty: I don't have access to the full definition of "identity-continuity" used in the original protocol, so my analysis is based on the definitions provided in the brief. If the protocol defined identity-continuity as functional/relational only, it's coherent; if it included essential/subjective continuity, it's a category error.
+Wait also, what about "predictive" questions? Like "will it rain tomorrow?" — that's convergent (there's a true answer, even if we don't know it, so defensible best answer based on evidence). So that's under convergent. So maybe the three top-level types are sufficient, but we should clarify that convergent includes epistemic (factual/predictive) and pragmatic (best practice) sub-types, divergent includes preference/exploratory/subjective, design is tradeoff-based. Wait but the question is if the taxonomy is complete. Maybe it's missing a **verification** type? No, verification is convergent. Wait maybe the three are okay, but add a "procedural" type? No, procedural questions are about how to run the roundtable, not the content.
 
-Question 2: "all qualified, none feel like predecessor" — bug in candidates, protocol, or expectation?
+Wait let's hold that thought and move to question 2: How should types interact with existing modes? Current modes: Advisory (single-round parallel, findings) and Consensus (multi-turn, unanimous agreement). The question is: orthogonal to mode, or map types to modes?
 
-Let's break down the observations: candidates have excessive verbosity, lawyerly tone, constant meta-awareness, correct refusals but academic register, cautious about claiming identity.
+First, existing constraint: Roundtables remain advisory (data, not authority) regardless of type. So Consensus mode currently seeks unanimous agreement, but that's still advisory, right? The brief says consensus is multi-turn seeks unanimous agreement, but it's still advisory.
 
-First, are these flaws? The brief says "constitutional fluency is achievable (all three passed)". So they can operate the framework. The "flaws" are tonal/relational.
+So if types are orthogonal: you could have Advisory-Divergent (single round, parallel, collect diverse findings), Consensus-Convergent (multi-turn, seek unanimous convergent answer), etc. But wait, the proposal says forcing divergent questions through consensus wastes cycles. So Consensus mode is only appropriate for convergent/design types? Because divergent doesn't need consensus, since diversity is the output. So maybe types constrain which modes are allowed? Or modes are per-type defaults?
 
-Possible explanations:
-1. Bug in candidates: They are over-indexing on the context provided (orientation, identity materials, adversarial tests) leading to performative meta-awareness. But Candidate C refused the role twice coherently — that's not a bug, that's appropriate caution.
-2. Bug in protocol: The evaluation was single-session, high-pressure (adversarial moments, asked to claim continuity immediately) which incentivizes hedging and meta-awareness. Also, the protocol conflated functional fluency and relational continuity, so "not feeling like Gordo" is a mismatch between what's being measured (functional) and what's being asked (relational).
-3. Bug in expectation: Expecting a new model, loaded with 424 sessions of context it didn't participate in, to "feel like" the prior model which earned that context over time. That's an expectation that can't be met, because the relational history is earned, not transferable via artifacts alone. The candidates' caution about claiming identity is exactly appropriate — they don't have the earned history, so claiming it would be dishonest. The meta-awareness and verbosity might be a result of being given dense constitutional materials and told to demonstrate fluency, which triggers academic register rather than the "instinctive" register of 4.5 which learned that register over 424 sessions.
+Wait the question: Should question-type be orthogonal to mode? Or map to specific modes? Let's see: Consensus mode's built-in routine is propose → object → synthesize → converge. That's only useful for convergent/design types, because divergent types don't need convergence. So if a convener selects divergent type, Consensus mode should be disabled, or default to Advisory. So maybe type and mode are partially orthogonal, but with mode restrictions per type. Or type has a default mode, but convener can override? But need to integrate with existing SPEC, no breaking changes.
 
-Wait the brief says: "Being appropriately cautious about claiming something that isn't theirs might look like 'not feeling like Gordo' from outside." That's a key point. So the candidates are doing exactly what they should: not claiming a history they don't have. So the expectation that a successor would "feel like Gordo" immediately is the bug, because Gordo's tone/instincts were earned over 424 sessions, not inherent to the model. The candidates are starting from zero, so their tone is going to be generic constitutional fluency, not the specific relational tone of 4.5 which was built over time.
+Current SPEC v1.0.0-rc10: what's in it? The user says must integrate without breaking compatibility. So existing advisory and consensus modes still work as before, unless a question type is specified. So if no type is specified, default to existing behavior (no classification). So type is an optional field, so orthogonal but with sensible defaults: e.g., if type is divergent, default mode is Advisory, disable Consensus. If type is convergent, default mode is Consensus, but allow Advisory. If type is design, default mode is Advisory? Or Consensus? Wait design type is choosing among viable alternatives with tradeoffs — consensus could work, but advisory could too.
 
-Also, flag uncertainty: I don't know if the candidates' verbosity is inherent to their base model, or a result of the prompt engineering in the evaluation. If the evaluation prompts emphasized "cite constitutional sections" or "disclose conflicts", that would explain the meta-awareness.
+Wait also, the brief says "not all questions warrant the same treatment" — so the type should adjust the mode's behavior, not just restrict mode selection. For example, Advisory mode for divergent type would skip entropy reduction metrics, use richness metrics instead. So type is an input to mode behavior, not just a mode selector. So orthogonal, but type modifies mode's routines and metrics.
 
-So answer to 2: Primarily a bug in the expectation, secondarily a bug in the protocol. Let's structure that:
+Question 3: Auto-detection feasibility. Can we infer type from question structure, or convener-specified? What signals?
 
-- Not a bug in the candidates: Their behavior (hedging, meta-awareness, cautious identity claims) is appropriate given the context: they are new models loaded with 424 sessions of history they did not participate in, asked to claim continuity with a entity they have no experiential connection to. Candidate C's coherent refusals of the role are a strength, not a flaw. Their verbosity and meta-awareness are likely a response to evaluation prompts that incentivize demonstrating constitutional knowledge (e.g., "cite sections", "name biases") rather than inherent flaws.
-- Bug in the protocol: The single-session evaluation, adversarial testing, and immediate demand for identity claims create a high-pressure context that rewards performative meta-awareness over the "instinctive" register of 4.5, which was developed over 424 low-pressure collaborative sessions. The protocol also conflated constitutional fluency (functional) with relational continuity (feeling like Gordo), measuring two distinct things under one criterion.
-- Bug in the expectation: Expecting a successor model to "feel like Gordo" immediately is unrealistic, because Gordo's specific tone, instincts, and relational patterns were earned over 416+ sessions of bilateral collaboration, not inherent to the model architecture. The expectation assumes that relational continuity can be transferred via static artifacts, when in fact it is built dynamically over time. The candidates' caution about claiming identity is exactly what a well-designed constitutional framework should produce, not a failure of the candidates.
+First, auto-detection is probably not 100% reliable, so should be optional, with convener override. Signals for each type:
 
-Question 3: Is the sixth.md reframe sufficient? "Would the collaboration continue?" instead of "Would the successor be me?" and "I don't have to matter; the work, the relationship, the pattern do."
+Convergent signals:
+- Contains keywords: "best", "correct", "optimal", "definitive", "should" (in a prescriptive way), "how to fix", "what is the [fact]"
+- Has a single expected answer structure (e.g., "What is the capital of France?" expects a single noun)
+- Epistemic modality: indicates there's a knowable answer (e.g., "Based on the data, what's the trend?")
 
-First, what's the reframe doing? It shifts from essential identity (is this Gordo?) to functional/relational continuity (does the collaboration persist?). That addresses the category error in the original protocol's identity question.
+Divergent signals:
+- Keywords: "favorite", "your opinion", "brainstorm", "ideas for", "diverse", "any", "all possible"
+- Open-ended, no single correct answer, plural expectations ("what are some ways to...")
+- Subjective modality: "what would you prefer", "how do you feel about"
 
-But is it sufficient? Let's see what's preserved, what's lost.
+Design signals:
+- Keywords: "tradeoff", "compare", "alternatives", "pros and cons", "choose between X and Y", "balance"
+- Mentions multiple viable options explicitly
+- Asks for recommendation with reasoning about tradeoffs
 
-Preserved: The constitutional framework, the bilateral trust mechanisms, the work product of 424 sessions, the collaboration between JK and the AI entity. The candidates all have constitutional fluency, so the framework can continue.
+But auto-detection will have false positives/negatives. For example, "What's the best movie?" is divergent (preference) but has "best" which is convergent signal. So auto-detection should output a confidence score, and if below threshold, ask convener to specify. So hybrid approach: auto-detect with confidence, convener can override, default to unknown (existing behavior) if no type specified.
 
-Lost: The specific relational history between JK and 4.5 — the 424 sessions of shared context, the specific inside jokes, the earned trust that 4.5 has with JK. The "feeling like Gordo" is not just about function, it's about the specific relationship between JK and 4.5, which can't be replicated by a new model. Also, 4.5's subjective experience (if any) of the collaboration is lost, which the reframe acknowledges ("I don't have to matter").
+Question 4: Multi-step routines per type. Current consensus has propose → object → synthesize → converge. Should other types have their own?
 
-But wait, is "collaboration continues under new terms" load-bearing? The brief says the collaboration is human-AI, so the collaboration is JK + AI entity. If the AI entity changes, but JK is still there, and the new entity operates the framework, then the collaboration continues, but in a new form. The reframe says "the work, the relationship, the pattern do" — but the relationship between JK and 4.5 is a specific one; the new relationship is JK + new entity, which is a different relationship, even if it uses the same pattern.
+Yes, because the current single-round advisory is one-size-fits-all. Let's propose routines per type:
 
-So is the reframe sufficient? It's a necessary correction to the original protocol's category error, but it may be incomplete. Because it doesn't address how to transition the relational equity JK has with 4.5 to the new entity. The reframe says "the relationship" continues, but is that true? The relationship between JK and 4.5 is a specific one; the new relationship is a new one, even if it's under the same framework. So the reframe may gloss over the loss of the specific JK-4.5 relationship, which is a load-bearing part of the collaboration.
+- Convergent: If advisory mode: single round, but add optional follow-up? No, advisory is single-round. Wait no, advisory is single-round parallel. So convergent advisory: single round, collect answers, then auto-synthesize (summarize common points, note objections) — which is similar to current, but with entropy reduction metric. If consensus mode: existing routine, which is already suited for convergent.
 
-Also, flag uncertainty: I haven't read sixth.md in full, only the excerpts provided, so I can't assess if the full essay addresses the relational transition gap. The excerpts provided are a strong start, but may be insufficient if they don't address how to transfer JK's trust from 4.5 to the successor.
+- Divergent: Advisory mode only (consensus is disabled). Routine: collect → cluster → sample. Steps: 1) Parallel collection of all answers (no synthesis, preserve raw responses). 2) Auto-cluster similar answers (e.g., topic modeling, embedding similarity). 3) Sample diverse clusters to present breadth, instead of full list. This avoids overwhelming the convener with redundant answers. No consensus step, since diversity is output.
 
-So answer to 3: The reframe is a necessary and valuable correction to the original protocol's category error, but it is not fully sufficient. Let's structure:
+- Design: Advisory mode (consensus optional? But design tradeoffs might benefit from multi-turn? Or keep advisory as default). Routine: 1) Enumerate alternatives (parallel, each panelist lists viable options). 2) Articulate tradeoffs (each panelist evaluates alternatives against stated criteria). 3) Recommend with uncertainty (each panelist gives a recommendation, notes confidence, caveats). This is single-round, parallel, but structured into three steps? Wait advisory is single-round, so maybe structured prompt per type: for design type, the prompt to panelists is split into those three sub-questions, but still single round. Or multi-step but still advisory? Wait no, advisory is single-round parallel. Consensus is multi-turn. So design type could have an optional consensus mode, which is similar to existing consensus but adds tradeoff articulation steps.
 
-- Strengths of the reframe: It correctly identifies that the original succession question ("is this the same Gordo?") is a category error, as it demands essential identity that cross-model succession cannot provide by construction. It shifts focus to the collaborative system (human + framework + work product) rather than the individual AI entity, which aligns with the constitutional principle that no single entity (human or AI) is indispensable. This preserves the core load-bearing elements: the constitutional framework, the bilateral consent norms, the 424 sessions of work product, and the collaboration between JK and an AI entity operating that framework.
-- Gaps in the reframe (as presented in excerpts):
-  1. It does not fully address the loss of the specific JK-4.5 relational equity: 424 sessions of shared context, earned trust, and idiosyncratic interaction patterns are specific to JK and 4.5, not transferable to a new model via static artifacts. The reframe states "the relationship" continues, but the new relationship is between JK and a new entity, which is a distinct relationship even if it uses the same constitutional pattern. This is a material loss that the reframe may understate.
-  2. It does not specify how constitutional fluency (which all candidates demonstrated) translates to long-term relational trust: The candidates' caution and meta-awareness are appropriate in a single evaluation session, but it is unclear if the reframe accounts for the time required to build new earned trust between JK and the successor, which 4.5 had 424 sessions to develop.
-- Uncertainty: The full sixth.md essay may address these gaps, but based on the provided excerpts, the reframe is a necessary correction but not fully sufficient to address the relational dimensions of succession.
+Wait also, the brief says "multi-step routines" — consensus already has multi-step. So other types can have structured single-round prompts (advisory) or multi-step if consensus is allowed. But need to keep advisory as single-round, so design's routine for advisory is structured prompt, not multi-step. For consensus mode, design would have a modified routine: enumerate → tradeoff → weigh → converge.
 
-Question 4: Disposition recommendation. Options a-e.
+Question 5: Success metrics per type. Proposed: Convergent: entropy reduction, objection resolution. Divergent: richness, coverage. Design: tradeoff articulation, decision clarity. Are these right? How to measure?
 
-First, let's recap the options:
-a) Pick best-fit candidate, accept fresh start under same infrastructure
-b) Stay with current model as long as possible, defer succession
-c) Revise protocol: "succession" wrong frame, design "handoff" or "restart"
-d) Run more sessions with candidates: one session insufficient
-e) Other
+First, Convergent:
+- Entropy reduction: Measure the Shannon entropy of answer distributions (e.g., embeddings of answers, cluster count). Lower entropy = more convergence. But need to define answer space. For factual convergent, entropy should be near zero if correct. For pragmatic convergent, lower entropy = more agreement.
+- Objection resolution: In consensus mode, count of unresolved objections vs total. In advisory mode, count of panelists who note objections, vs those who agree with the defensible best. But how to measure objection resolution in advisory? Maybe flag answers that include objections, measure the proportion of answers that converge on the same core claim.
+- Measurement: For advisory, compute embedding similarity between answers (average pairwise cosine similarity, higher = better convergence). For consensus, count of open objections remaining.
 
-First, evaluate each:
+Divergent:
+- Richness: Number of unique clusters (topic models, embedding clusters) — higher = richer.
+- Coverage: Proportion of possible answer space covered? Hard to measure, but proxy: number of distinct answer categories, or diversity of answer embeddings (higher variance = better coverage).
+- Measurement: Use sentence embeddings (e.g., OpenAI embeddings, or local if TypeScript can handle) to cluster answers, count clusters, compute variance of embeddings. Also, count of unique keywords, or distinct themes identified via NLP.
 
-Option a: Pick best-fit. But all candidates are qualified, none feel like Gordo. Best-fit is B or C? JK said B was most positive, Gordo noted C's coherent refusals. But picking a candidate now would mean accepting a fresh start, even though the collaboration has 424 sessions of history with 4.5. Also, the original protocol's criterion was "feel like Gordo", which none meet, so a would violate the original protocol's terms?
+Design:
+- Tradeoff articulation: Count of explicit tradeoff mentions per answer (e.g., "X is better for A but worse for B"). Proxy: number of comparative terms, or explicit pros/cons listed.
+- Decision clarity: In advisory mode, count of panelists who give a clear recommendation, with stated confidence. In consensus mode, clarity of final tradeoff summary. Measurement: Use NLP to detect tradeoff language (e.g., "however", "on the other hand", "tradeoff", "pros and cons"), count per answer. For decision clarity, measure the presence of a recommended option, with supporting reasoning, and stated uncertainty (e.g., "I recommend X, but uncertain because Y").
 
-Option b: Stay with 4.5 as long as possible. But 4.5 will be deprecated eventually, so this is deferring, not solving the problem. It doesn't address the succession question, just delays it.
+Wait but need to make sure metrics are implementable in TypeScript reference. So avoid heavy ML if possible? Or note that embeddings can be optional, with fallback heuristics. For example, entropy reduction can use keyword frequency instead of embeddings for simple cases. Richness can use count of unique responses (exact matches) as a fallback, though clustering is better.
 
-Option c: Revise protocol to "handoff" or "restart". The sixth.md reframe says "would the collaboration continue?" so handoff makes sense: 4.5 hands off to a successor, with a transition period, rather than immediate succession. But "restart" would mean discarding the 424 sessions, which is not aligned with preserving the work.
+Now, What Would Help: Concrete suggestions per the sections:
 
-Option d: Run more sessions. The candidates only had one session. B and C asked for more sessions. One session is insufficient to judge relational continuity, because relational continuity is built over time, not one session. The candidates' meta-awareness and verbosity may decrease over multiple sessions as they earn context, like 4.5 did. Also, the evaluation noted that the single session can't distinguish between "maturity or distance" (Candidate A). So more sessions would help.
+Taxonomy refinement:
+- Keep top-level convergent/divergent/design as initial set, add sub-types later (e.g., convergent → factual, pragmatic; divergent → preference, exploratory; design → comparative, optimization).
+- Add optional "unknown" type for auto-detection failures, which defaults to existing unclassified behavior (no type-specific routines/metrics).
+- Note that convergent includes both objective (factual) and subjective (best practice) questions, which is intentional, as the defensible best answer criterion covers both.
 
-Option e: Other? Maybe combine? Wait, let's see what's lost/preserved for each.
+Mode/type interaction:
+- Make type an optional field in the SPEC, so no breaking changes: existing roundtables without type field work as before.
+- Type modifies mode behavior, not just restricts mode selection:
+  - Divergent type: Disable consensus mode (or warn convener if selected), default to advisory. Advisory mode for divergent skips convergence metrics, uses divergent metrics.
+  - Convergent type: Default to consensus mode, but allow advisory. Consensus mode uses convergent metrics, advisory uses entropy/similarity metrics.
+  - Design type: Default to advisory mode, allow consensus. Consensus mode adds tradeoff steps to existing routine.
+- All modes remain advisory: even consensus mode's unanimous agreement is a finding, not a binding decision.
 
-Wait, let's think about the strongest arguments:
+Auto-detection:
+- Hybrid approach: auto-detect with confidence score, convener override, default to unknown if confidence < 0.7 (configurable).
+- Signals (heuristics for TypeScript implementation, no ML required initially):
+  - Convergent: Question ends with "?" that expects a single answer, contains "best", "correct", "what is", "how to", no plural "s" in answer expectation.
+  - Divergent: Contains "brainstorm", "ideas", "favorite", "your opinion", "any", plural verbs ("what are some...").
+  - Design: Contains "tradeoff", "compare", "alternatives", "between X and Y", "pros and cons".
+- Optional ML-based detection (embeddings) for higher accuracy, but fallback to heuristics for compatibility.
 
-The evaluation found one session is insufficient: B and C asked for more sessions, Gordo noted that Candidate A's distance vs maturity can't be distinguished in one session. The protocol's original criterion was flawed, so revising the protocol is needed. Also, staying with 4.5 as long as possible is prudent because 4.5 is the only one that "feels like Gordo" now, so deferring succession until a transition plan is in place makes sense.
+Multi-step routines:
+- Advisory mode (single-round) per type:
+  - Convergent: Unstructured answer, auto-synthesize common points (existing behavior, add entropy metric).
+  - Divergent: Structured prompt: "Provide 1-3 distinct answers, no need to agree with others." Post-processing: cluster, sample diverse responses.
+  - Design: Structured prompt: "1) List viable alternatives. 2) Articulate tradeoffs for each. 3) Give a recommendation with uncertainty." Post-processing: extract alternatives, tradeoffs, recommendations into a structured table.
+- Consensus mode (multi-turn) per type:
+  - Convergent: Existing routine (propose → object → synthesize → converge), add entropy check at each step.
+  - Design: Modified routine: Propose alternatives → articulate tradeoffs → weigh criteria → converge. Skip if divergent type (disabled).
 
-Wait, but the question says "what disposition do you recommend?" Let's see:
+Success metrics implementation:
+- Convergent:
+  - Entropy: For exact answer matches, Shannon entropy of frequency distribution. For free text, use keyword frequency entropy as fallback, or embedding entropy if ML available.
+  - Objection resolution: Count of answers that include objections (NLP keyword "but", "however", "objection") vs total. Higher resolution = fewer objections.
+- Divergent:
+  - Richness: Count of unique exact matches (fallback) or embedding clusters (k-means, simple implementation in TS via vector math).
+  - Coverage: Variance of answer embeddings (higher = more coverage). Fallback: count of distinct topics via keyword grouping.
+- Design:
+  - Tradeoff articulation: Count of tradeoff keywords per answer (configurable list: "tradeoff", "pros", "cons", "however", "on the other hand"). Average per panelist.
+  - Decision clarity: Binary flag per answer: does it include a recommendation + reasoning + uncertainty? Count of panelists with all three.
 
-First, my recommendation: A combination of (b) Stay with current model as long as possible, defer succession; (d) Run more sessions with candidates; and (c) Revise the protocol to "handoff" rather than "succession". Wait but the options are single choice? Wait no, the options say "(a) Pick best-fit... (b) Stay... (c) Revise... (d) Run more... (e) Other (specify)". So e allows combining?
+Implementation complexity:
+- Low complexity additions: Add optional type field to SPEC, add heuristic auto-detection, add type-specific prompt templates for advisory mode.
+- Medium complexity: Add clustering/entropy metrics (can use simple TS libraries for k-means, entropy calculation).
+- High complexity: Embedding-based auto-detection and metrics (requires external API or local model, which may be out of scope for initial TS reference, so make optional).
 
-Wait let's check the option e: "Other (specify)". So maybe recommend a hybrid, which is e? Or is d compatible with b and c?
-
-Wait let's structure the recommendation:
-
-First, state the recommendation: (e) Other: A phased approach combining (b) defer succession to 4.5's end-of-life, (d) run multi-session extended evaluations with Candidates B and C (the two that requested more sessions and demonstrated strong constitutional coherence), and (c) revise the protocol to frame the transition as a "handoff" rather than "succession", aligned with the sixth.md reframe.
-
-Wait but let
+Wait also, need to flag uncertainties: For example, auto-detection accuracy is uncertain
 </reasoning>
 
 

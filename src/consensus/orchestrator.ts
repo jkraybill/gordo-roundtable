@@ -247,6 +247,29 @@ export function extractReasoningTrace(
     }
   }
 
+  // S428 #18: Extract dissent_register — positions considered and rejected
+  const dissent_register: Array<{ position: string; rejection_reason: string }> = [];
+  const dissentBlock = response.match(/^DISSENT_REGISTER:\s*\|?\s*\n([\s\S]*?)(?=\n(?:SHADOW_PROPOSAL|RATIONALE|CONTENT|TARGET|ACTION):|$)/mi);
+  if (dissentBlock) {
+    // Parse "- Position: X\n    Why rejected: Y" format
+    const entries = dissentBlock[1].matchAll(/-\s*Position:\s*([^\n]+)\n\s*Why rejected:\s*([^\n]+)/gi);
+    for (const entry of entries) {
+      if (entry[1] && entry[2]) {
+        dissent_register.push({
+          position: entry[1].trim(),
+          rejection_reason: entry[2].trim(),
+        });
+      }
+    }
+  }
+
+  // S428 #18: Extract shadow_proposal — synthesis considered but not proposed
+  let shadow_proposal: string | undefined;
+  const shadowBlock = response.match(/^SHADOW_PROPOSAL:\s*\|?\s*\n([\s\S]*?)(?=\n(?:DISSENT_REGISTER|RATIONALE|CONTENT|TARGET|ACTION):|$)/mi);
+  if (shadowBlock) {
+    shadow_proposal = shadowBlock[1].trim();
+  }
+
   return {
     action_taken: parsedAction.action,
     target: parsedAction.target_id,
@@ -255,6 +278,8 @@ export function extractReasoningTrace(
     concerns_remaining: concernsRemaining.length > 0 ? [...new Set(concernsRemaining)] : undefined,
     references: references.length > 0 ? references : undefined,
     pass_reflection,
+    dissent_register: dissent_register.length > 0 ? dissent_register : undefined,
+    shadow_proposal,
   };
 }
 
