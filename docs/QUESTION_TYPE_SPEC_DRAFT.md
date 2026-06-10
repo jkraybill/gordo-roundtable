@@ -23,13 +23,13 @@ Five question types, each with distinct success criteria and process structure:
 | **Convergent** | Best answer exists, requires reasoning | "Which design minimizes trust assumptions?" | Consensus |
 | **Design** | Viable alternatives, real tradeoffs | "Which architecture should we pick for #15?" | Advisory or Consensus |
 | **Exploratory** | Mapping possibility space | "What failure modes haven't we considered?" | Advisory |
-| **Expressival** | Gathering stakeholder values/positions | "Which direction has community support?" | Advisory |
+| **Sentiment** | Gathering stakeholder values/positions | "Which direction has community support?" | Advisory |
 
 **Why five types, not three:**
 
 - **Factual** is operationally distinct from convergent. Panelists disagreeing on factual questions is a bug (signal to flag), not a feature (signal to synthesize). Forcing it through convergent machinery wastes cycles.
 - **Exploratory** is distinct from divergent. Divergent asks "what's valid" (any answer works); exploratory asks "what's possible" (map the space). Both want breadth but with different output structures.
-- **Expressival** captures stakeholder-position-gathering, which is missing from the original three-type proposal. Some questions ("governance preferences", "scope priorities") aren't exploring new space but gathering existing positions.
+- **Sentiment** captures stakeholder-position-gathering, which is missing from the original three-type proposal. Some questions ("governance preferences", "scope priorities") aren't exploring new space but gathering existing positions.
 
 ---
 
@@ -45,7 +45,7 @@ Type determines success criteria and process structure. Mode (advisory/consensus
 | Convergent | Allowed | Default | Both work; consensus adds synthesis value |
 | Design | Default | Allowed | Advisory for tradeoff articulation; consensus optional |
 | Exploratory | Default | Disabled | Consensus causes premature convergence |
-| Expressival | Default | Allowed | Consensus if positions conflict and resolution needed |
+| Sentiment | Default | Allowed | Consensus if positions conflict and resolution needed |
 
 **Backward compatibility:** `questionType` is an optional field. Roundtables without this field work as before (unclassified, existing behavior).
 
@@ -95,7 +95,7 @@ collect → cluster → sample for breadth → report coverage map
 - Output is a *map of possibility space*, not a recommendation
 - No convergence step -- breadth is the point
 
-### Expressival
+### Sentiment
 
 ```
 collect → cluster → report distribution
@@ -145,7 +145,7 @@ High dispute rate = flag for review, not a synthesis target.
 | **Novelty** | Answers outside initial framing | Proportion not in brief's scope |
 | **Coverage** | Possibility space mapped | Requires defining the space (qualitative) |
 
-### Expressival
+### Sentiment
 
 | Metric | Definition | Measurement |
 |--------|------------|-------------|
@@ -179,7 +179,7 @@ Which architecture should we pick for #15?
 | "Which is better: A or B?" | Convergent | Medium |
 | "What are the tradeoffs of X?" | Design | Medium |
 | "What haven't we considered?" | Exploratory | High |
-| "What do you think about X?" | Expressival | Low |
+| "What do you think about X?" | Sentiment | Low |
 | "How should we handle X?" | Design | Medium |
 
 ---
@@ -194,7 +194,7 @@ Which architecture should we pick for #15?
 **Phase 2 (subsequent):**
 - Auto-detection with confidence scoring
 - Type-specific consensus routines (design tradeoff phase)
-- Clustering for exploratory/expressival output
+- Clustering for exploratory/sentiment output
 
 **Phase 3 (future):**
 - Outcome metrics (post-hoc evaluation)
@@ -213,9 +213,9 @@ Which architecture should we pick for #15?
 - **§2 Role-Frame:** Unchanged. All question types produce data, not authority.
 - **§3 Brief:** Extended with optional `questionType` field.
 - **§5 Round Mechanics:** Type-specific routines are process-template configurations within existing mechanics.
-- **§6 Disposition Vocabulary:** Applies to convergent/design types. Not applicable to factual/exploratory/expressival (different output shapes).
-- **§7 Convergence:** Applies to convergent/design. Explicitly inapplicable to exploratory/expressival.
-- **§12.1 AI-Experiential:** Orthogonal. AI-Experiential panels can be any question type (typically expressival or exploratory).
+- **§6 Disposition Vocabulary:** Applies to convergent/design types. Not applicable to factual/exploratory/sentiment (different output shapes).
+- **§7 Convergence:** Applies to convergent/design. Explicitly inapplicable to exploratory/sentiment.
+- **§12.1 AI-Experiential:** Orthogonal. AI-Experiential panels can be any question type (typically sentiment or exploratory).
 
 ---
 
