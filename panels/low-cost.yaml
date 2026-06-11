@@ -1,0 +1,27 @@
+# Low-cost panel — cheap but capable models
+# Use for light advisory work, experiments, high-volume tasks
+# All free-tier or near-free models with decent reasoning
+
+name: low-cost
+description: Budget panel — free/cheap models for light advisory work
+
+participants:
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+    # Google's latest Gemma, 31B params, free tier
+
+  - model: meta-llama/llama-3.3-70b-instruct:free
+    provider: openrouter
+    # Meta's Llama 3.3 70B, solid all-rounder, free tier
+
+  - model: qwen/qwen3-coder:free
+    provider: openrouter
+    # Alibaba's Qwen3 coder variant, free tier
+
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+    # Nvidia's 120B MoE, free tier
+
+  - model: nousresearch/hermes-3-llama-3.1-405b:free
+    provider: openrouter
+    # NousResearch fine-tune of Llama 405B, free tier

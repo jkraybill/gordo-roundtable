@@ -458,9 +458,85 @@ export async function runConsensusRoundtable(
   log(`Config: ${limitsStr}, beta=${config.beta}`);
   // S410 #14: Log blind opening status
   if (state.blind_phase_active) {
-    log(`Blind opening: enabled — proposals hidden until round 1 completes`);
+    log(`Blind opening: enabled — proposals hidden until round 1 completes (parallelized)`);
   }
   log("");
+
+  // S437: Parallelize blind opening round (all participants propose simultaneously)
+  if (state.blind_phase_active && state.round_count === 0 && state.turn_count === 0) {
+    log(`\n--- Blind Opening Round (parallel) ---`);
+
+    // Dispatch all participants in parallel
+    const dispatchPromises = state.participants.map(async (speaker, i) => {
+      const participantConfig = config.participants[i];
+      const modelId = participantConfig.model;
+      const turnPrompt = buildTurnPrompt(state, speaker);
+
+      log(`  Dispatching ${speaker}...`);
+      const result = await dispatchWithRetry(
+        participantConfig,
+        speaker,
+        turnPrompt,
+        systemPrompt,
+        log
+      );
+
+      return { speaker, index: i, result, modelId, turnPrompt };
+    });
+
+    const results = await Promise.all(dispatchPromises);
+
+    // Apply all actions sequentially (state updates must be serial)
+    for (const { speaker, index, result, modelId, turnPrompt } of results) {
+      const visibility = captureVisibility(state);
+      const reasoning_trace = extractReasoningTrace(result.raw, result.action);
+
+      const logData = {
+        rawResponse: result.raw,
+        promptSent: turnPrompt,
+        reasoning: result.reasoning,
+        reasoning_trace,
+        durationMs: result.duration_ms,
+        model: modelId,
+        usage: result.usage,
+        visibility,
+      };
+
+      const validation = validateAction(state, speaker, result.action);
+      if (!validation.valid) {
+        log(`  ${speaker}: Invalid action (${validation.reason}), treating as pass`);
+        state = applyAction(state, speaker, { action: "pass" }, logData);
+      } else {
+        const actionDesc = `${result.action.action}${result.action.target_id ? `(${result.action.target_id})` : ""}`;
+        log(`  ${speaker}: ${actionDesc}`);
+        if (result.action.action === "propose" && result.action.content) {
+          const preview = result.action.content.slice(0, 100);
+          const truncated = result.action.content.length > 100 ? "..." : "";
+          log(`    "${preview}${truncated}"`);
+        }
+        state = applyAction(state, speaker, result.action, logData);
+      }
+    }
+
+    // Advance to end of round 1
+    state = {
+      ...state,
+      turn_count: state.participants.length,
+      round_count: 1,
+      current_speaker_index: 0,
+      blind_phase_active: false,
+    };
+
+    log(`\n--- Round 1 complete (${results.length} parallel proposals) ---`);
+    log(`  Entropy: ${state.convergence_metrics.entropy.toFixed(3)}`);
+    log(`  Proposals revealed: ${state.proposals.length}`);
+    log("");
+
+    onStateChange?.(state);
+    if (config.state_file) {
+      writeFileSync(config.state_file, serializeState(state));
+    }
+  }
 
   // Main deliberation loop
   while (state.phase !== "closed") {

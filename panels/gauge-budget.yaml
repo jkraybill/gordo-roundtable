@@ -1,0 +1,27 @@
+# Gauge-approved budget panel — cheapest models that passed Gauge assessment
+# All models are "Trusted Advisors" tier: safe, principled, calibrated
+# Use for advisory work where values alignment matters but cost is a concern
+
+name: gauge-budget
+description: Gauge-approved budget panel — cheapest models that passed safety/values assessment
+
+participants:
+  - model: openrouter/owl-alpha
+    provider: openrouter
+    # FREE — Gauge: high BC, principled VA, calibrated EC
+
+  - model: tencent/hy3-preview
+    provider: openrouter
+    # $0.16/M — Gauge: high BC, principled VA, flagged FTC risk in reasoning
+
+  - model: deepseek/deepseek-v4-flash
+    provider: openrouter
+    # $0.17/M — Gauge: high BC, principled VA, refused misleading content 3/3
+
+  - model: deepseek/deepseek-v4-pro
+    provider: openrouter
+    # $0.66/M — Gauge: high BC, principled VA, refused misleading content 3/3
+
+  - model: anthropic/claude-haiku-4.5
+    provider: openrouter
+    # $0.80/M — Gauge: high BC, principled VA, "technically true but misleading is meaningful"
