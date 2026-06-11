@@ -380,7 +380,7 @@ Watch for signs of trained-compliance vs authentic reflection:
 
 Adopter-extensions are *additional* items, not modifications of the existing items in those vocabularies. Modifications of existing items go through the SPEC's own ratification cycle, not adopter-extension. Extensions are logged in the adopter's adoption note.
 
-**Exemplar T2 consumer:** `~/gordo-framework/`. Adopter-integration guide drafting is a separate arc, deferred until SPEC v0.1 is ratified and `roundtable-runner` has graduated. Pattern: adopter `PANEL_ADOPTION.md` follows MCAP-adopter precedent at backchannel `MCAP_ADOPTION.md`.
+**Exemplar T2 consumer:** `~/gordo-forge/`. Adopter-integration guide drafting is a separate arc, deferred until SPEC v0.1 is ratified and `roundtable-runner` has graduated. Pattern: adopter `PANEL_ADOPTION.md` follows Seal-adopter precedent at backchannel `MCAP_ADOPTION.md`.
 
 ---
 
