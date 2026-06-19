@@ -90,7 +90,7 @@ reviewers:
 | `model` | yes | Provider-native model id |
 | `reasoning_effort` | no | `minimal` \| `low` \| `medium` \| `high` \| `xhigh`; passed via OR `reasoning` parameter normalization. Ignored for non-reasoning models + Ollama |
 | `num_ctx` | no | Ollama-only; context window size in tokens. Default 32768. Ollama's own default is 4096 which silently truncates briefs longer than ~3K tokens — explicit override required for typical adversarial-review briefs |
-| `role` | no | Informational tag (`internal-shadow`, `perspective-variable`); not load-bearing for runner |
+| `role` | no | Informational tag (`internal-shadow`, `perspective-variable`); not used by runner |
 | `system_prompt` | no | Inline literal system message |
 | `system_prompt_file` | no | Path (relative to manifest) to file containing system message |
 
@@ -195,7 +195,7 @@ roundtable-runner run \
 
 ## 10. Behavioral notes / bias-flags carried into implementation
 
-- **Independent-source-convergence (S58 BOS):** OpenRouter is the only major router that pass-through-prices Claude Sonnet 4.6 (load-bearing for SPEC §4 Internal-Shadow role). Convergence with JK's prior intuition is independently grounded.
+- **Independent-source-convergence (S58 BOS):** OpenRouter is the only major router that pass-through-prices Claude Sonnet 4.6 (essential for SPEC §4 Internal-Shadow role). Convergence with JK's prior intuition is independently grounded.
 - **Substrate-shapes-methodology drift (RC1 future-watch):** cloud-routed reviewers become trivially substitutable; local-only stay operationally costlier. Future panel-composition decisions could bias toward all-cloud purely for tooling ease.
 
 ---

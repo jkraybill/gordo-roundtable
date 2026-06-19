@@ -163,7 +163,7 @@ These thresholds calibrate to typical 5-6-panelist composition. Smaller panels (
 
 When findings need integration into a single coherent picture before drafter-disposition, synthesis is the bridge step.
 
-**Default: drafter-self-synthesis.** Drafters read findings directly and disposition each. This is the load-bearing default — drafter-cognition is the integration substrate. Works well when finding-count is small (under ~10) or when findings are clearly-scoped per pre-structured-question.
+**Default: drafter-self-synthesis.** Drafters read findings directly and disposition each. This is the essential default — drafter-cognition is the integration substrate. Works well when finding-count is small (under ~10) or when findings are clearly-scoped per pre-structured-question.
 
 **Optional adjunct: Habermas-style synthesis-LLM** (S62 `#130` ODQ-4 close). When finding-count exceeds ~10 (rule-of-thumb, not hard threshold), an optional synthesis-LLM step may be inserted: a separate model call (different from any panelist; primed only on the round's findings, not on the artifact under review) drafts a *common-ground statement* that crystallizes what the panel collectively says. Drafters then disposition the synthesis, not each individual finding. Reduces drafter-cognitive-load and structurally defends against disposition-relocation (the synthesis is itself a closed artifact). The DeepMind 2024 *Habermas Machine* result is the strongest empirical evidence base for this pattern.
 
