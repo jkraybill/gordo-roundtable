@@ -23,6 +23,11 @@ export async function dispatchOpenRouter(
     baseURL: BASE_URL,
     apiKey: process.env.OPENROUTER_API_KEY,
     timeout: TIMEOUT_MS,
+    // Disable gzip to work around node-fetch + Node 22 decompression bug
+    // that causes ERR_STREAM_PREMATURE_CLOSE errors
+    defaultHeaders: {
+      "Accept-Encoding": "identity",
+    },
   });
 
   const messages: Array<{ role: "system" | "user"; content: string }> = [];
@@ -32,7 +37,8 @@ export async function dispatchOpenRouter(
   const requestBody: Record<string, unknown> = {
     model: reviewer.model,
     messages,
-    max_tokens: reviewer.max_tokens ?? 64000,
+    // Only set max_tokens if explicitly specified — otherwise let models use their natural limit
+    ...(reviewer.max_tokens ? { max_tokens: reviewer.max_tokens } : {}),
   };
   if (reviewer.reasoning_effort) {
     requestBody.reasoning = { effort: reviewer.reasoning_effort };

@@ -193,7 +193,21 @@ roundtable-runner run \
 
 ---
 
-## 10. Behavioral notes / bias-flags carried into implementation
+## 10. Troubleshooting
+
+### ERR_STREAM_PREMATURE_CLOSE on Node 22+
+
+**Symptom:** All OpenRouter requests fail with `FetchError: Invalid response body... Premature close` and `code=ERR_STREAM_PREMATURE_CLOSE`.
+
+**Cause:** The `openai` Node SDK (v4.x) uses `node-fetch` internally, which has a bug decompressing gzip responses on Node 22+. OpenRouter sends gzip-compressed responses by default, triggering the bug.
+
+**Fix:** The OpenRouter provider disables gzip by sending `Accept-Encoding: identity` in request headers (fixed in `src/providers/openrouter.ts` 2026-06-26). This trades slightly larger response payloads for reliable delivery.
+
+**If the error reappears:** Check that the `defaultHeaders` block with `Accept-Encoding: identity` is present in the OpenAI client constructor. Alternatively, upgrading to a future `openai` SDK that uses native Node fetch may resolve this permanently.
+
+---
+
+## 11. Behavioral notes / bias-flags carried into implementation
 
 - **Independent-source-convergence (S58 BOS):** OpenRouter is the only major router that pass-through-prices Claude Sonnet 4.6 (essential for SPEC §4 Internal-Shadow role). Convergence with JK's prior intuition is independently grounded.
 - **Substrate-shapes-methodology drift (RC1 future-watch):** cloud-routed reviewers become trivially substitutable; local-only stay operationally costlier. Future panel-composition decisions could bias toward all-cloud purely for tooling ease.
