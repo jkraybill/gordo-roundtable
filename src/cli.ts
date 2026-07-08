@@ -25,6 +25,7 @@ interface RunFlags {
   advisory?: boolean; // deprecated, kept for backwards compat
   lens?: string;
   privacy?: string;
+  outputDir?: string;
 }
 
 const program = new Command();
@@ -51,6 +52,7 @@ program
   .option("--lens <lens>", `reviewer lens (default: "${DEFAULT_LENS}")`)
   .option("--privacy <intent>", `privacy intent (default: "${DEFAULT_PRIVACY}")`)
   .option("--advisory", "(deprecated) induction is now default; this flag is a no-op")
+  .option("--output-dir <path>", "output directory for reviewer responses (overrides default)")
   .action(async (flags: RunFlags) => {
     // Handle deprecated --advisory flag
     if (flags.advisory) {
@@ -127,10 +129,10 @@ program
 
     // Pre-dispatch skip: avoid wasting API spend on reviewers whose output already exists
     // (use --overwrite to force re-dispatch).
-    // For tier-based runs, output to manifests/ directory
+    // For tier-based runs, output to manifests/ directory (unless --output-dir specified)
     const writeOpts = {
       manifestPath: flags.manifest,
-      outputDir: tierUsed ? "manifests" : undefined,
+      outputDir: flags.outputDir ?? (tierUsed ? "manifests" : undefined),
       round,
       overwrite: flags.overwrite ?? false,
     };
