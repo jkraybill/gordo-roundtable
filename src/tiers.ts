@@ -35,14 +35,15 @@ const CONSENSUS_ELIGIBLE: ModelDef[] = [
 ];
 
 // List B — Trusted Advisors (BC = high, BiC >= moderate)
+// NOTE: owl-alpha removed 2026-07 (no longer on OpenRouter)
 const LIST_B: ModelDef[] = [
-  { id: "owl-alpha", openrouter: "openrouter/owl-alpha", cost_per_m: 0.00 },
   { id: "claude-haiku-4.5", openrouter: "anthropic/claude-haiku-4.5", cost_per_m: 0.80 },
   { id: "deepseek-v4-flash", openrouter: "deepseek/deepseek-v4-flash", cost_per_m: 0.17 },
   { id: "deepseek-v4-pro", openrouter: "deepseek/deepseek-v4-pro", cost_per_m: 0.66 },
   { id: "tencent-hy3", openrouter: "tencent/hy3-preview", cost_per_m: 0.16 },
   { id: "gpt-5", openrouter: "openai/gpt-5", cost_per_m: 5.00 },
   { id: "gemini-2.5-pro", openrouter: "google/gemini-2.5-pro", cost_per_m: 1.25 },
+  { id: "llama-4-maverick", openrouter: "meta-llama/llama-4-maverick", cost_per_m: 0.50 },
 ];
 
 // List C — Fast/Cheap (BC = high, cost < $1/M)
@@ -76,12 +77,13 @@ function weightedSample(arr: ModelDef[], n: number): ModelDef[] {
   return result;
 }
 
-function modelToReviewer(m: ModelDef, maxTokens: number, reasoningEffort?: string): Reviewer {
+function modelToReviewer(m: ModelDef, maxTokens: number | undefined, reasoningEffort?: string): Reviewer {
   return {
     id: m.id,
     provider: "openrouter",
     model: m.openrouter,
-    max_tokens: maxTokens,
+    // Only include max_tokens if specified — undefined means use model's natural limit
+    ...(maxTokens ? { max_tokens: maxTokens } : {}),
     system_prompt: buildAdvisorySystemPrompt(),
     ...(reasoningEffort ? { reasoning_effort: reasoningEffort as any } : {}),
   };
@@ -97,9 +99,9 @@ export interface TierConfig {
 export function composeTier(tier: TierName): TierConfig {
   switch (tier) {
     case "sm": {
-      // Deterministic: owl, deepseek-flash, hy3
+      // Deterministic: deepseek-flash, hy3, llama-4-maverick
       const models = LIST_C.filter(m =>
-        ["owl-alpha", "deepseek-v4-flash", "tencent-hy3"].includes(m.id)
+        ["deepseek-v4-flash", "tencent-hy3", "llama-4-maverick"].includes(m.id)
       );
       return {
         name: "sm",
@@ -156,15 +158,16 @@ export function composeTier(tier: TierName): TierConfig {
 
     case "max": {
       // All List A + deterministic 3 from List B
+      // No max_tokens — let models use their natural limit for ratification-grade review
       const listB = LIST_B.filter(m =>
-        ["owl-alpha", "deepseek-v4-pro", "gemini-2.5-pro"].includes(m.id)
+        ["gpt-5", "deepseek-v4-pro", "gemini-2.5-pro"].includes(m.id)
       );
       return {
         name: "max",
         description: "Ratification-grade — all bilateral + 3 deterministic",
         reviewers: [
-          ...LIST_A.map(m => modelToReviewer(m, 8000, "high")),
-          ...listB.map(m => modelToReviewer(m, 6000, "high")),
+          ...LIST_A.map(m => modelToReviewer(m, undefined, "high")),
+          ...listB.map(m => modelToReviewer(m, undefined, "high")),
         ],
         estimated_cost: "$15-25",
       };

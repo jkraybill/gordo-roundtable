@@ -31,10 +31,11 @@ reviewers:
     reasoning_effort: high
 
   # Deterministic List B picks (diverse providers + high quality)
-  - id: owl
+  - id: gpt-5
     provider: openrouter
-    model: openrouter/owl-alpha
+    model: openai/gpt-5
     max_tokens: 6000
+    reasoning_effort: high
 
   - id: deepseek-pro
     provider: openrouter
