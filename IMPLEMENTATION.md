@@ -216,4 +216,4 @@ roundtable-runner run \
 
 *Drafted Gordo S58 2026-04-28 per backchannel `#128` scope. Hardened S59 (first-real-dispatch). Imported and reconciled with SPEC v0.1 at S65 2026-04-29.*
 
-<!-- Last reviewed: 2026-05-28 03:08 AWST by Gordo -->
+<!-- Last reviewed: 2026-07-23 12:12 AEST by Gordo -->
