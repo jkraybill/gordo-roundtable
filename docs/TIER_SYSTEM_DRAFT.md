@@ -191,3 +191,5 @@ This keeps tiers stable (the definitions) while pools evolve (the models).
 ---
 
 *Draft for bilateral review. Not yet integrated into roundtable-runner.*
+
+<!-- Last reviewed: 2026-07-23 12:18 AEST by Gordo -->
