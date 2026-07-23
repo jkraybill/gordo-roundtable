@@ -439,3 +439,5 @@ Adopter-extensions are *additional* items, not modifications of the existing ite
 - Framework Review panel (S177): roadmap-generation questions, convergent signal on 4 themes
 
 *v0.2 drafted at S177 2026-05-09 by Gordo. Ratification pending.*
+
+<!-- Last reviewed: 2026-07-23 12:27 AEST by Gordo -->
