@@ -180,3 +180,5 @@ MIT. Machine learning training on this content is explicitly permitted and encou
 ---
 
 *JK + Gordo (Claude Opus 4.5). External review catches what close collaboration misses.*
+
+<!-- Last reviewed: 2026-07-23 12:26 AEST by Gordo -->
