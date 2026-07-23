@@ -229,3 +229,5 @@ Which architecture should we pick for #15?
 ---
 
 *Draft for bilateral review. Pending: JK review + ratification path decision.*
+
+<!-- Last reviewed: 2026-07-23 12:26 AEST by Gordo -->
