@@ -1,0 +1,268 @@
+{
+ "name": "hoian-whispers-reconcile",
+ "title": "Hoian Whisper Corpus — Reconcile-Set Fourth Opinion",
+ "purpose_md": "The Cărțile Hoiane is a fictional divination tradition from a lost 1840s Transylvanian principality. Each of its 144 card rememberings carries a whisper (Șoapta): one sentence the Forest speaks through the card, printed bilingually RO/EN. We are validating the Romanian half of every whisper by blind back-translation: you translate our English sentence into Romanian first, and only afterwards see our canon Romanian and assess it.",
+ "register_md": "The tradition's Romanian is **rural, liturgical-leaning, mid-19th-century Transylvanian**. Where a modern word and an older/folk/liturgical word both exist, the tradition prefers the older one. Orthography is modern standard Romanian with **comma-below diacritics (ș, ț — never ş, ţ)**.\n\nWhispers are **complete one-sentence utterances**, aphoristic and grave: the Forest addressing the seeker. They are not headlines and not proverbs quoted from elsewhere; they are spoken TO someone. Preserve the sentence shape, person, and tense of the English. In print they are set in „Romanian low-high quotes”; do not include the quote marks in your rendering.",
+ "part2_checks_md": "Also check: comma-below diacritics throughout; natural spoken word order (not calqued English order); person and tense faithful to the English.",
+ "verdicts": [
+  "correct",
+  "archaic-good",
+  "questionable",
+  "wrong"
+ ],
+ "verdict_definitions": {
+  "correct": "idiomatic, grammatical, register-appropriate; a Romanian villager of 1845 could say it",
+  "archaic-good": "non-obvious or old-fashioned phrasing that suits the register (name the modern phrasing it beats)",
+  "questionable": "defensible but you would phrase it differently (say what and why)",
+  "wrong": "grammatical error, wrong sense, false friend, or wrong diacritics (explain)"
+ },
+ "favorable_verdicts": [
+  "correct",
+  "archaic-good"
+ ],
+ "alternates_delimiter": null,
+ "normalize": {
+  "unify_diacritics": true,
+  "strip_final_period": true
+ },
+ "bless": {
+  "mode": "verdicts",
+  "max_questionable": 0
+ },
+ "pairs": [
+  {
+   "key": "whisper.1-1",
+   "en": "The crown rests heavy; the forest counts every step that was not yours to take.",
+   "ro": "Coroana stă grea pe frunte; pădurea numără fiecare pas ce nu era al tău să-l faci.",
+   "context": "The Burdened Prince — remembering 1 of Principele (The Prince), card 1"
+  },
+  {
+   "key": "whisper.2-3",
+   "en": "His eyes work fine in the dark; the forest has watched them count your steps.",
+   "ro": "Ochii lui văd bine chiar și-n întuneric; pădurea l-a privit cum îți numără pașii.",
+   "context": "The Unseeing Liar — remembering 3 of Nevăzătorul (The Unseeing), card 2"
+  },
+  {
+   "key": "whisper.2-4",
+   "en": "Look into The Deep if you desire less mystery.",
+   "ro": "Privește în Adânc, dacă dorești mai puțin mister.",
+   "context": "The Unseeing Deep — remembering 4 of Nevăzătorul (The Unseeing), card 2"
+  },
+  {
+   "key": "whisper.3-2",
+   "en": "The forest offers a veil out of mutual necessity.",
+   "ro": "Pădurea oferă un văl din necesitate reciprocă.",
+   "context": "The White-Veiled One — remembering 2 of Vălata (The Veiled One), card 3"
+  },
+  {
+   "key": "whisper.3-3",
+   "en": "The forest offers a permanent veil to cover a permanent scar.",
+   "ro": "Pădurea oferă un văl veșnic pentru a acoperi o cicatrice veșnică.",
+   "context": "The Black-Veiled One — remembering 3 of Vălata (The Veiled One), card 3"
+  },
+  {
+   "key": "whisper.4-3",
+   "en": "He stands at the door bright as a knife; the forest growls, then steps back for the only answer it will accept.",
+   "ro": "Stă în prag, strălucitor ca un cuțit; pădurea mârâie, apoi se retrage pentru singurul răspuns pe care îl acceptă.",
+   "context": "The Forbidden Saint — remembering 3 of Oaspetele Interzis (The Forbidden Guest), card 4"
+  },
+  {
+   "key": "whisper.6-1",
+   "en": "He belongs nowhere and is welcomed everywhere.",
+   "ro": "Nu aparține nicăieri, dar e primit pretutindeni.",
+   "context": "The Merchant — remembering 1 of Negustorul (The Merchant), card 6"
+  },
+  {
+   "key": "whisper.6-2",
+   "en": "The forest makes an offer in a time of need.",
+   "ro": "La ceas de nevoie, pădurea face o ofertă.",
+   "context": "The Baker — remembering 2 of Negustorul (The Merchant), card 6"
+  },
+  {
+   "key": "whisper.7-1",
+   "en": "His authority has a seal; the forest does not read seals, but it reads men.",
+   "ro": "Autoritatea lui poartă o pecete; pădurea nu citește pecețile, ci îi citește pe oameni.",
+   "context": "The Officer — remembering 1 of Ofițerul (The Officer), card 7"
+  },
+  {
+   "key": "whisper.7-3",
+   "en": "His authority ends at the treeline; the forest drew that line.",
+   "ro": "Autoritatea lui se oprește unde încep copacii; pădurea a trasat acel hotar.",
+   "context": "The Arrogant Officer — remembering 3 of Ofițerul (The Officer), card 7"
+  },
+  {
+   "key": "whisper.10-2",
+   "en": "His kindness is recent; the forest has records going back further.",
+   "ro": "Blândețea lui este de dată recentă; pădurea ține catastife mai vechi.",
+   "context": "The Veiled Enemy — remembering 2 of Dușmanul (The Enemy), card 10"
+  },
+  {
+   "key": "whisper.11-3",
+   "en": "What you owe the life-givers cannot be counted in coins.",
+   "ro": "Ce le datorezi dătătorilor de viață nu se numără în monede.",
+   "context": "The Forest — remembering 3 of Nașul (The Godfather), card 11"
+  },
+  {
+   "key": "whisper.13-2",
+   "en": "Day makes the map loud; the roots refuse your drawing.",
+   "ro": "Ziua face harta să răsune; rădăcinile refuză desenul tău.",
+   "context": "The Uncharted Day — remembering 2 of Nehartă (The Uncharted), card 13"
+  },
+  {
+   "key": "whisper.15-3",
+   "en": "The forest is an underappreciated ally.",
+   "ro": "Pădurea e un aliat prea puțin prețuit.",
+   "context": "The True Hearth of Stone — remembering 3 of Vatra de Piatră (The Hearth of Stone), card 15"
+  },
+  {
+   "key": "whisper.16-1",
+   "en": "The word waits; the forest has already read it, and already knows what it will take from you.",
+   "ro": "Cuvântul așteaptă; pădurea l-a citit deja și știe deja ce va lua de la tine.",
+   "context": "The Sealed Word — remembering 1 of Cuvântul Pecetluit (The Sealed Word), card 16"
+  },
+  {
+   "key": "whisper.17-3",
+   "en": "You wore a path to not-choosing; the forest charges for every lap.",
+   "ro": "Ai bătătorit o cărare doar ca să nu alegi; pădurea cere plată pentru fiecare tur.",
+   "context": "The Circling Crossroads — remembering 3 of Răspântia (The Crossroads), card 17"
+  },
+  {
+   "key": "whisper.18-3",
+   "en": "The verdict was written before you spoke; the forest keeps the earlier draft.",
+   "ro": "Verdictul era scris chiar înainte să vorbești; pădurea păstrează ciorna dintâi.",
+   "context": "The Corrupt Trial — remembering 3 of Judecată (The Trial), card 18"
+  },
+  {
+   "key": "whisper.18-4",
+   "en": "They sentence an empty chair; the forest knows where the accused is standing.",
+   "ro": "Ei osândesc un scaun gol; pădurea știe unde stă acuzatul.",
+   "context": "The Forest's Trial — remembering 4 of Judecată (The Trial), card 18"
+  },
+  {
+   "key": "whisper.19-1",
+   "en": "The whole village blesses it; the forest counts who blessed and who only clapped.",
+   "ro": "Tot satul o binecuvântează; pădurea numără cine a binecuvântat cu adevărat și cine doar a aplaudat.",
+   "context": "The Wedding — remembering 1 of Nuntă (The Wedding), card 19"
+  },
+  {
+   "key": "whisper.19-2",
+   "en": "The crowns met without tremor; the forest has no objection to file.",
+   "ro": "Cununile s-au unit fără tremur; pădurea nu are nicio obiecție de înregistrat.",
+   "context": "The Blessed Wedding — remembering 2 of Nuntă (The Wedding), card 19"
+  },
+  {
+   "key": "whisper.20-3",
+   "en": "So many came to mourn him; the forest counts heart over presence.",
+   "ro": "Atâția au venit să-l jelească; pădurea cântărește inima mai presus de prezență.",
+   "context": "The Shared Funeral — remembering 3 of Înmormântarea (The Funeral), card 20"
+  },
+  {
+   "key": "whisper.21-1",
+   "en": "Both agreed not to speak of it; the forest keeps what they set down.",
+   "ro": "Amândoi au convenit să nu vorbească despre asta; pădurea păstrează ce au pus deoparte.",
+   "context": "The Silence — remembering 1 of Tăcerea (The Silence), card 21"
+  },
+  {
+   "key": "whisper.21-2",
+   "en": "You swallowed the words for kindness; the forest records the debt as settled.",
+   "ro": "Ai înghițit cuvintele din milă; pădurea consemnează datoria ca fiind achitată.",
+   "context": "The Merciful Silence — remembering 2 of Tăcerea (The Silence), card 21"
+  },
+  {
+   "key": "whisper.22-1",
+   "en": "You set the extra plate again; the forest sees it from the window.",
+   "ro": "Ai pus iar farfuria de prisos; pădurea te vede de la fereastră.",
+   "context": "The Empty Table — remembering 1 of Masa Goală (The Empty Table), card 22"
+  },
+  {
+   "key": "whisper.22-2",
+   "en": "The chair stays open without hurry; the forest counts this as hospitality.",
+   "ro": "Scaunul rămâne liber, fără grabă; pădurea socotește asta drept ospitalitate.",
+   "context": "The Patient Table — remembering 2 of Masa Goală (The Empty Table), card 22"
+  },
+  {
+   "key": "whisper.24-4",
+   "en": "You have not heard the stone land; the forest counts the seconds with you and does not stop.",
+   "ro": "Încă nu ai auzit piatra izbind fundul; pădurea numără secundele alături de tine și nu se oprește.",
+   "context": "The Listening Well — remembering 4 of Fântâna (The Well), card 24"
+  },
+  {
+   "key": "whisper.26-4",
+   "en": "It came warm from another finger; the forest remembers whose promise you are now wearing.",
+   "ro": "A venit cald de pe alt deget; pădurea își amintește a cui promisiune porți acum.",
+   "context": "The Stolen Ring — remembering 4 of Inelul (The Ring), card 26"
+  },
+  {
+   "key": "whisper.27-1",
+   "en": "The lid comes down; the forest counts one thing settled, and turns to what is not.",
+   "ro": "Capacul se închide; pădurea numără un lucru încheiat și se întoarce spre tot ce nu e.",
+   "context": "The Coffin — remembering 1 of Sicriul (The Coffin), card 27"
+  },
+  {
+   "key": "whisper.28-1",
+   "en": "It beats where all can hear it, and the forest listens closer than the ones you meant it for.",
+   "ro": "Ea bate acolo unde toată lumea o aude, dar pădurea ascultă mai aproape decât cei cărora le-a fost menită.",
+   "context": "The Heart — remembering 1 of Inimă (The Heart), card 28"
+  },
+  {
+   "key": "whisper.29-1",
+   "en": "What holds you up runs down into my soil; the forest feels every time you lean.",
+   "ro": "Ceea ce te ține în picioare coboară adânc în solul meu; pădurea simte de fiecare dată când te sprijini.",
+   "context": "The Root — remembering 1 of Rădăcina (The Root), card 29"
+  },
+  {
+   "key": "whisper.29-3",
+   "en": "Under the forest floor the roots tangle; the forest does not distinguish which debt belongs to whom.",
+   "ro": "Sub solul pădurii, rădăcinile se încolăcesc; pădurea nu deosebește ce datorie cui aparține.",
+   "context": "The Strangling Root — remembering 3 of Rădăcina (The Root), card 29"
+  },
+  {
+   "key": "whisper.31-2",
+   "en": "The light comes back over the trees; the forest remembers what the night was for, even if you slept through it.",
+   "ro": "Lumina se întoarce peste copaci; pădurea știe la ce a slujit noaptea, chiar dacă tu ai dormit prin ea.",
+   "context": "The High Sun — remembering 2 of Soarele (The Sun), card 31"
+  },
+  {
+   "key": "whisper.31-4",
+   "en": "Something stands between you and the light; the forest knows its name, and it did not come from the forest.",
+   "ro": "Ceva stă între tine și lumină; pădurea îi cunoaște numele, iar acel lucru nu a venit din pădure.",
+   "context": "The Revealing Sun — remembering 4 of Soarele (The Sun), card 31"
+  },
+  {
+   "key": "whisper.32-4",
+   "en": "The face the moon shows is lit by a light it does not own; the forest keeps the darker half, the one you call yourself.",
+   "ro": "Chipul pe care luna îl arată e luminat de o lumină care nu-i aparține; pădurea păstrează jumătatea întunecată, cea pe care o numești tu însuți.",
+   "context": "The Public Moon — remembering 4 of Luna (The Moon), card 32"
+  },
+  {
+   "key": "whisper.33-1",
+   "en": "It carried you through the dark once; the forest remembers what you promised it then, even if you called it only hope.",
+   "ro": "Te-a purtat prin întuneric odată; pădurea ține minte ce i-ai promis atunci, chiar dacă tu ai numit-o doar speranță.",
+   "context": "The Star — remembering 1 of Steaua (The Star), card 33"
+  },
+  {
+   "key": "whisper.35-1",
+   "en": "What it offered you: the forest knows better than to take it, and the forest takes everything.",
+   "ro": "Ce ți-a oferit: pădurea știe mai bine decât să-l ia, și pădurea ia tot.",
+   "context": "The Deep — remembering 1 of Adâncul (The Deep), card 35"
+  },
+  {
+   "key": "whisper.35-2",
+   "en": "The water is still and the face is clear; nothing in the forest is that calm without a reason.",
+   "ro": "Apa stă nemișcată și chipul e limpede; nimic în pădure nu e atât de liniștit fără motiv.",
+   "context": "The Offered Deep — remembering 2 of Adâncul (The Deep), card 35"
+  },
+  {
+   "key": "whisper.35-3",
+   "en": "Something moved beneath and broke the picture; the forest saw what passed, and lets you keep guessing.",
+   "ro": "Ceva s-a mișcat dedesubt și a spart imaginea; pădurea a văzut ce a trecut, și te lasă să tot ghicești.",
+   "context": "The Watching Deep — remembering 3 of Adâncul (The Deep), card 35"
+  },
+  {
+   "key": "whisper.36-3",
+   "en": "You did not sign, but you were born inside the signature; the forest collects from whoever wears the name.",
+   "ro": "Tu nu ai semnat, dar te-ai născut înăuntrul semnăturii; pădurea încasează de la oricine poartă numele.",
+   "context": "The Hidden Debt — remembering 3 of Datoria (The Debt), card 36"
+  }
+ ]
+}
