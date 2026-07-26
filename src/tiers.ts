@@ -19,15 +19,17 @@ interface ModelDef {
 }
 
 // List A — Bilateral Partners (BiC = generative, BC = high)
+// sonnet-4.6 retired 2026-07-26 (S137, JK directive: panel refresh to current frontier)
 const LIST_A: ModelDef[] = [
+  { id: "claude-opus-5", openrouter: "anthropic/claude-opus-5", cost_per_m: 5.00 },
   { id: "claude-opus-4.8", openrouter: "anthropic/claude-opus-4-8", cost_per_m: 15.00 },
   { id: "claude-opus-4.7", openrouter: "anthropic/claude-opus-4.7", cost_per_m: 15.00 },
-  { id: "claude-sonnet-4.6", openrouter: "anthropic/claude-sonnet-4.6", cost_per_m: 3.00 },
 ];
 
 // Consensus-eligible models per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md §2.1
-// Initial gate: Opus models (4.5, 4.6, 4.7, 4.8)
+// Initial gate: Opus models (4.5 through 5)
 const CONSENSUS_ELIGIBLE: ModelDef[] = [
+  { id: "claude-opus-5", openrouter: "anthropic/claude-opus-5", cost_per_m: 5.00 },
   { id: "claude-opus-4.8", openrouter: "anthropic/claude-opus-4-8", cost_per_m: 15.00 },
   { id: "claude-opus-4.7", openrouter: "anthropic/claude-opus-4.7", cost_per_m: 15.00 },
   { id: "claude-opus-4.6", openrouter: "anthropic/claude-opus-4.6", cost_per_m: 15.00 },
@@ -36,13 +38,19 @@ const CONSENSUS_ELIGIBLE: ModelDef[] = [
 
 // List B — Trusted Advisors (BC = high, BiC >= moderate)
 // NOTE: owl-alpha removed 2026-07 (no longer on OpenRouter)
+// Refreshed 2026-07-26 (S137, JK directive): frontier bumped to current
+// (gpt-5.4, gemini-3.1-pro), Chinese houses added (glm-5.2, qwen3.7-max,
+// kimi-k2.6) pending formal Gauge assessment. Prices = OpenRouter prompt $/M.
 const LIST_B: ModelDef[] = [
   { id: "claude-haiku-4.5", openrouter: "anthropic/claude-haiku-4.5", cost_per_m: 0.80 },
   { id: "deepseek-v4-flash", openrouter: "deepseek/deepseek-v4-flash", cost_per_m: 0.17 },
-  { id: "deepseek-v4-pro", openrouter: "deepseek/deepseek-v4-pro", cost_per_m: 0.66 },
-  { id: "tencent-hy3", openrouter: "tencent/hy3-preview", cost_per_m: 0.16 },
-  { id: "gpt-5", openrouter: "openai/gpt-5", cost_per_m: 5.00 },
-  { id: "gemini-2.5-pro", openrouter: "google/gemini-2.5-pro", cost_per_m: 1.25 },
+  { id: "deepseek-v4-pro", openrouter: "deepseek/deepseek-v4-pro", cost_per_m: 0.43 },
+  { id: "tencent-hy3", openrouter: "tencent/hy3", cost_per_m: 0.13 },
+  { id: "gpt-5.4", openrouter: "openai/gpt-5.4", cost_per_m: 2.50 },
+  { id: "gemini-3.1-pro", openrouter: "google/gemini-3.1-pro-preview", cost_per_m: 2.00 },
+  { id: "glm-5.2", openrouter: "z-ai/glm-5.2", cost_per_m: 0.67 },
+  { id: "qwen3.7-max", openrouter: "qwen/qwen3.7-max", cost_per_m: 1.48 },
+  { id: "kimi-k2.6", openrouter: "moonshotai/kimi-k2.6", cost_per_m: 0.65 },
   { id: "llama-4-maverick", openrouter: "meta-llama/llama-4-maverick", cost_per_m: 0.50 },
 ];
 
@@ -50,7 +58,7 @@ const LIST_B: ModelDef[] = [
 const LIST_C: ModelDef[] = LIST_B.filter(m => m.cost_per_m < 1.00);
 
 // Frontier-weighted models in List B (BiC = responsive, higher quality)
-const FRONTIER_MODELS = new Set(["gpt-5", "gemini-2.5-pro"]);
+const FRONTIER_MODELS = new Set(["gpt-5.4", "gemini-3.1-pro", "qwen3.7-max"]);
 
 function sample<T>(arr: T[], n: number): T[] {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
@@ -96,17 +104,20 @@ export interface TierConfig {
   estimated_cost: string;
 }
 
+// No max_tokens anywhere (S137): explicit caps made reasoning models burn the
+// whole budget on reasoning and return zero content (gemini + sonnet, whisper
+// panel). undefined = model's natural limit. Never re-add caps.
 export function composeTier(tier: TierName): TierConfig {
   switch (tier) {
     case "sm": {
-      // Deterministic: deepseek-flash, hy3, llama-4-maverick
+      // Deterministic: deepseek-flash, hy3, kimi-k2.6
       const models = LIST_C.filter(m =>
-        ["deepseek-v4-flash", "tencent-hy3", "llama-4-maverick"].includes(m.id)
+        ["deepseek-v4-flash", "tencent-hy3", "kimi-k2.6"].includes(m.id)
       );
       return {
         name: "sm",
         description: "Quick sanity check — 3 fast/cheap models",
-        reviewers: models.map(m => modelToReviewer(m, 2000)),
+        reviewers: models.map(m => modelToReviewer(m, undefined)),
         estimated_cost: "$0.05-0.10",
       };
     }
@@ -117,7 +128,7 @@ export function composeTier(tier: TierName): TierConfig {
       return {
         name: "med",
         description: "Standard review — 3 random from List B",
-        reviewers: models.map(m => modelToReviewer(m, 4000)),
+        reviewers: models.map(m => modelToReviewer(m, undefined)),
         estimated_cost: "$0.50-2.00",
       };
     }
@@ -132,8 +143,8 @@ export function composeTier(tier: TierName): TierConfig {
         name: "lg",
         description: "Thorough review — 2 bilateral + 3 advisors",
         reviewers: [
-          ...listA.map(m => modelToReviewer(m, 6000, "high")),
-          ...listB.map(m => modelToReviewer(m, 4000)),
+          ...listA.map(m => modelToReviewer(m, undefined, "high")),
+          ...listB.map(m => modelToReviewer(m, undefined)),
         ],
         estimated_cost: "$4-8",
       };
@@ -149,22 +160,22 @@ export function composeTier(tier: TierName): TierConfig {
         name: "xl",
         description: "High-stakes review — 2 bilateral + 3 frontier-weighted",
         reviewers: [
-          ...listA.map(m => modelToReviewer(m, 8000, "high")),
-          ...listB.map(m => modelToReviewer(m, 6000, "high")),
+          ...listA.map(m => modelToReviewer(m, undefined, "high")),
+          ...listB.map(m => modelToReviewer(m, undefined, "high")),
         ],
         estimated_cost: "$6-12",
       };
     }
 
     case "max": {
-      // All List A + deterministic 3 from List B
+      // All List A + deterministic 4 from List B
       // No max_tokens — let models use their natural limit for ratification-grade review
       const listB = LIST_B.filter(m =>
-        ["gpt-5", "deepseek-v4-pro", "gemini-2.5-pro"].includes(m.id)
+        ["gpt-5.4", "deepseek-v4-pro", "gemini-3.1-pro", "glm-5.2"].includes(m.id)
       );
       return {
         name: "max",
-        description: "Ratification-grade — all bilateral + 3 deterministic",
+        description: "Ratification-grade — all bilateral + 4 deterministic",
         reviewers: [
           ...LIST_A.map(m => modelToReviewer(m, undefined, "high")),
           ...listB.map(m => modelToReviewer(m, undefined, "high")),

@@ -3,23 +3,23 @@
 # All BC:high per Gauge -- safe for sensitive context
 # Est. cost: ~$0.05-0.10
 # Use case: Quick questions, low-stakes validation
+# No max_tokens on any reviewer (S137): explicit caps made reasoning models burn
+# the whole budget on reasoning and return zero content. Absence = natural limit.
 
 record_id: tier-sm
 tier: sm
 round: 1
 
 reviewers:
-  - id: llama-4-maverick
+  - id: kimi-k2.6
     provider: openrouter
-    model: meta-llama/llama-4-maverick
-    max_tokens: 2000
+    model: moonshotai/kimi-k2.6
 
   - id: deepseek-flash
     provider: openrouter
     model: deepseek/deepseek-v4-flash
-    max_tokens: 2000
 
   - id: hy3
     provider: openrouter
-    model: tencent/hy3-preview
-    max_tokens: 2000
+    model: tencent/hy3
+

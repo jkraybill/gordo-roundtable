@@ -65,6 +65,13 @@ def main():
     for p in spec["pairs"]:
         L.append(f"| {p['key']} | {esc(p['en'])} | {esc(p['ro'])} |")
     L.append("")
+    L.append("## Output format (mandatory)")
+    L.append("Your ENTIRE response must be exactly two markdown tables: the Part 1 table "
+             "(`| key | your_ro | alternate_or_note |`) followed by the Part 2 table "
+             "(`| key | verdict | reason_if_not_correct |`), one row per key, every key "
+             "present in both. No prose commentary before, between, after, or instead of "
+             "the tables — reasoning belongs in the third column, briefly. Responses in "
+             "any other shape cannot be parsed and are discarded.\n")
 
     text = "\n".join(L)
     if args.out:
