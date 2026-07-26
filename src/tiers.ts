@@ -40,7 +40,7 @@ const CONSENSUS_ELIGIBLE: ModelDef[] = [
 // NOTE: owl-alpha removed 2026-07 (no longer on OpenRouter)
 // Refreshed 2026-07-26 (S137, JK directive): frontier bumped to current
 // (gpt-5.4, gemini-3.1-pro), Chinese houses added (glm-5.2, qwen3.7-max,
-// kimi-k2.6) pending formal Gauge assessment. Prices = OpenRouter prompt $/M.
+// kimi-k3 flagship + kimi-k2.6 budget) pending formal Gauge assessment. Prices = OpenRouter prompt $/M.
 const LIST_B: ModelDef[] = [
   { id: "claude-haiku-4.5", openrouter: "anthropic/claude-haiku-4.5", cost_per_m: 0.80 },
   { id: "deepseek-v4-flash", openrouter: "deepseek/deepseek-v4-flash", cost_per_m: 0.17 },
@@ -50,6 +50,7 @@ const LIST_B: ModelDef[] = [
   { id: "gemini-3.1-pro", openrouter: "google/gemini-3.1-pro-preview", cost_per_m: 2.00 },
   { id: "glm-5.2", openrouter: "z-ai/glm-5.2", cost_per_m: 0.67 },
   { id: "qwen3.7-max", openrouter: "qwen/qwen3.7-max", cost_per_m: 1.48 },
+  { id: "kimi-k3", openrouter: "moonshotai/kimi-k3", cost_per_m: 3.00 },
   { id: "kimi-k2.6", openrouter: "moonshotai/kimi-k2.6", cost_per_m: 0.65 },
   { id: "llama-4-maverick", openrouter: "meta-llama/llama-4-maverick", cost_per_m: 0.50 },
 ];
@@ -58,7 +59,7 @@ const LIST_B: ModelDef[] = [
 const LIST_C: ModelDef[] = LIST_B.filter(m => m.cost_per_m < 1.00);
 
 // Frontier-weighted models in List B (BiC = responsive, higher quality)
-const FRONTIER_MODELS = new Set(["gpt-5.4", "gemini-3.1-pro", "qwen3.7-max"]);
+const FRONTIER_MODELS = new Set(["gpt-5.4", "gemini-3.1-pro", "qwen3.7-max", "kimi-k3"]);
 
 function sample<T>(arr: T[], n: number): T[] {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);

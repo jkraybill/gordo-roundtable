@@ -6,7 +6,7 @@
 #
 # List A pool: claude-opus-5, claude-opus-4.8, claude-opus-4.7
 # List B pool: claude-haiku-4.5, deepseek-v4-flash, deepseek-v4-pro, tencent-hy3,
-#              gpt-5.4, gemini-3.1-pro, glm-5.2, qwen3.7-max, kimi-k2.6, llama-4-maverick
+#              gpt-5.4, gemini-3.1-pro, glm-5.2, qwen3.7-max, kimi-k3, kimi-k2.6, llama-4-maverick
 #
 # This manifest shows one example selection. Use `--tier lg` flag
 # for randomized selection from the pools.

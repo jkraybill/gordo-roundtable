@@ -5,7 +5,7 @@
 # Use case: High-stakes decisions, external-facing content, pre-publication
 #
 # List A pool: claude-opus-5, claude-opus-4.8, claude-opus-4.7
-# List B pool (weighted 2x): gpt-5.4, gemini-3.1-pro, qwen3.7-max; others 1x
+# List B pool (weighted 2x): gpt-5.4, gemini-3.1-pro, qwen3.7-max, kimi-k3; others 1x
 #
 # This manifest shows one example selection. Use `--tier xl` flag
 # for randomized weighted selection from the pools.

@@ -5,7 +5,7 @@
 # Use case: Normal review work, draft feedback, day-to-day use
 #
 # Pool (List B): claude-haiku-4.5, deepseek-v4-flash, deepseek-v4-pro, tencent-hy3,
-#                gpt-5.4, gemini-3.1-pro, glm-5.2, qwen3.7-max, kimi-k2.6, llama-4-maverick
+#                gpt-5.4, gemini-3.1-pro, glm-5.2, qwen3.7-max, kimi-k3, kimi-k2.6, llama-4-maverick
 #
 # This manifest shows one example selection. Use `--tier med` flag
 # for randomized selection from the pool.
