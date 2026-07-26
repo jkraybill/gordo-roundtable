@@ -1,0 +1,250 @@
+{
+ "name": "hoian-elder-whispers-backtranslation",
+ "title": "Hoian Elder Whisper Back-Translation",
+ "purpose_md": "The Cărțile Hoiane is a fictional divination tradition from a lost 1840s Transylvanian principality. Each of its 36 card families carries an elder whisper (Șoapta Pădurii, the Forest's Whisper): one sentence that belongs to all four of the family's rememberings, printed bilingually RO/EN on the family page. We are validating the Romanian half of every elder whisper by blind back-translation: you translate our English sentence into Romanian first, and only afterwards see our canon Romanian and assess it.",
+ "register_md": "The tradition's Romanian is **rural, liturgical-leaning, mid-19th-century Transylvanian**. Where a modern word and an older/folk/liturgical word both exist, the tradition prefers the older one. Orthography is modern standard Romanian with **comma-below diacritics (ș, ț — never ş, ţ)**.\n\nWhispers are **complete one-sentence utterances**, aphoristic and grave: the Forest addressing the seeker. They are not headlines and not proverbs quoted from elsewhere; they are spoken TO someone. Preserve the sentence shape, person, and tense of the English. In print they are set in „Romanian low-high quotes”; do not include the quote marks in your rendering.",
+ "part2_checks_md": "Also check: comma-below diacritics throughout; natural spoken word order (not calqued English order); person and tense faithful to the English.",
+ "verdicts": [
+  "correct",
+  "archaic-good",
+  "questionable",
+  "wrong"
+ ],
+ "verdict_definitions": {
+  "correct": "idiomatic, grammatical, register-appropriate; a Romanian villager of 1845 could say it",
+  "archaic-good": "non-obvious or old-fashioned phrasing that suits the register (name the modern phrasing it beats)",
+  "questionable": "defensible but you would phrase it differently (say what and why)",
+  "wrong": "grammatical error, wrong sense, false friend, or wrong diacritics (explain)"
+ },
+ "favorable_verdicts": [
+  "correct",
+  "archaic-good"
+ ],
+ "alternates_delimiter": null,
+ "normalize": {
+  "unify_diacritics": true,
+  "strip_final_period": true
+ },
+ "bless": {
+  "mode": "verdicts",
+  "max_questionable": 0
+ },
+ "pairs": [
+  {
+   "key": "elder-whisper.1",
+   "en": "He who wears the crown promised something to the forest, and the forest does not forget.",
+   "ro": "Ce poartă coroana a promis ceva pădurii, și pădurea nu uită.",
+   "context": "elder whisper of Principele (The Prince), card 1 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.2",
+   "en": "My eyes are in the forest now; be careful what you show them.",
+   "ro": "Ochii mei sunt în pădure acum; ai grijă ce le arăți.",
+   "context": "elder whisper of Nevăzătorul (The Unseeing), card 2 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.3",
+   "en": "What you see beneath the veil is not for your eyes; but she knows what is beneath yours.",
+   "ro": "Ce vezi sub voal nu-i pentru ochii tăi; dar ea știe ce-i sub-al tău.",
+   "context": "elder whisper of Vălata (The Veiled One), card 3 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.4",
+   "en": "You opened the door. The forest saw.",
+   "ro": "Ai deschis ușa. Pădurea a văzut.",
+   "context": "elder whisper of Oaspetele Interzis (The Forbidden Guest), card 4 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.5",
+   "en": "What he took was not his, but the forest road does not ask.",
+   "ro": "Ce a luat nu era al lui, dar drumul din pădure nu întreabă.",
+   "context": "elder whisper of Hoțul (The Thief), card 5 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.6",
+   "en": "His scale is honest at the market; but the forest sells nothing.",
+   "ro": "Cântarul lui e drept la piață; dar pădurea nu vinde nimic.",
+   "context": "elder whisper of Negustorul (The Merchant), card 6 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.7",
+   "en": "He comes with papers and guns, but the forest reads neither.",
+   "ro": "Vine cu hârtii și puști, dar pădurea nu citește nici una.",
+   "context": "elder whisper of Ofițerul (The Officer), card 7 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.8",
+   "en": "His name was never spoken, but the forest remembered it anyway.",
+   "ro": "Numele lui nu a fost rostit, dar pădurea l-a ținut minte oricum.",
+   "context": "elder whisper of Născutul Mort (The Stillborn), card 8 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.9",
+   "en": "Two at the forest's edge, one heart between them: the forest sees the third.",
+   "ro": "Doi la marginea pădurii, o singură inimă între ei: pădurea o vede pe-a treia.",
+   "context": "elder whisper of Iubitul/Iubita (The Lover), card 9 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.10",
+   "en": "The forest has seen every face you have worn: including the one you hide from yourself.",
+   "ro": "Pădurea a văzut toate fețele pe care le-ai purtat: și pe cea pe care o ascunzi de tine însuți.",
+   "context": "elder whisper of Dușmanul (The Enemy), card 10 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.11",
+   "en": "What was sworn at the font, the forest heard through the walls.",
+   "ro": "Ce s-a jurat la cristelniță, pădurea a auzit prin pereți.",
+   "context": "elder whisper of Nașul (The Godfather), card 11 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.12",
+   "en": "He walks the old path because no one has told him he is allowed to stop.",
+   "ro": "Merge pe drumul vechi pentru că nimeni nu i-a spus că poate să se oprească.",
+   "context": "elder whisper of Rătăcitorul (The Wanderer), card 12 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.13",
+   "en": "You have been here before. Three times. The forest did not move: you moved through it.",
+   "ro": "Ai mai fost aici. De trei ori. Pădurea nu s-a mutat: tu te-ai mutat prin ea.",
+   "context": "elder whisper of Nehartă (The Uncharted), card 13 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.14",
+   "en": "You cannot go around what must be crossed. The forest has no edge.",
+   "ro": "Nu poți ocoli ce trebuie traversat. Pădurea nu are margine.",
+   "context": "elder whisper of Trecerea (The Passage), card 14 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.15",
+   "en": "The house is gone, but the forest still feels the warmth where the hearth stood.",
+   "ro": "Casa a plecat, dar pădurea încă simte căldura unde a fost vatra.",
+   "context": "elder whisper of Vatra de Piatră (The Hearth of Stone), card 15 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.16",
+   "en": "What is written on paper can burn. What is written in the forest remains.",
+   "ro": "Ce e scris pe hârtie se poate arde. Ce e scris în pădure rămâne.",
+   "context": "elder whisper of Cuvântul Pecetluit (The Sealed Word), card 16 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.17",
+   "en": "Four roads, and beneath one of them, someone who never had a choice.",
+   "ro": "Patru drumuri, și sub unul dintre ele, cineva care n-a avut de ales.",
+   "context": "elder whisper of Răspântia (The Crossroads), card 17 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.18",
+   "en": "The elders speak, but the forest carries out the sentence.",
+   "ro": "Bătrânii vorbesc, dar pădurea execută sentința.",
+   "context": "elder whisper of Judecată (The Trial), card 18 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.19",
+   "en": "The crowns were placed, but the forest heard only half a ‘yes.’",
+   "ro": "Cununile s-au pus, dar pădurea a auzit doar o jumătate de «da».",
+   "context": "elder whisper of Nuntă (The Wedding), card 19 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.20",
+   "en": "The grave is dug, but the forest waits to see if it stays closed.",
+   "ro": "Groapa e săpată, dar pădurea așteaptă să vadă dacă rămâne închisă.",
+   "context": "elder whisper of Înmormântarea (The Funeral), card 20 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.21",
+   "en": "Both of them know. Both of them chose to know no longer.",
+   "ro": "Amândoi știu. Amândoi au ales să nu mai știe.",
+   "context": "elder whisper of Tăcerea (The Silence), card 21 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.22",
+   "en": "The one you await passed through the forest. The forest did not let him leave.",
+   "ro": "Cel pe care-l aștepți a trecut prin pădure. Pădurea nu l-a lăsat să iasă.",
+   "context": "elder whisper of Masa Goală (The Empty Table), card 22 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.23",
+   "en": "The trees went silent before the wind. They know before we do.",
+   "ro": "Copacii au tăcut înaintea vântului. Ei știu mai devreme decât noi.",
+   "context": "elder whisper of Furtună (The Storm), card 23 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.24",
+   "en": "Throw a stone and listen. If you hear nothing, do not lean in further.",
+   "ro": "Aruncă o piatră și ascultă. Dacă nu auzi nimic, nu te apleca mai mult.",
+   "context": "elder whisper of Fântâna (The Well), card 24 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.25",
+   "en": "The key opens the door. The forest made the door.",
+   "ro": "Cheia deschide ușa. Pădurea a făcut ușa.",
+   "context": "elder whisper of Cheia (The Key), card 25 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.26",
+   "en": "A circle has no beginning. The forest knows where it closed, even if you have forgotten.",
+   "ro": "Un cerc nu are început. Pădurea știe unde s-a strâns, chiar dacă tu ai uitat.",
+   "context": "elder whisper of Inelul (The Ring), card 26 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.27",
+   "en": "It is ready for someone. The forest knows for whom, but does not tell you yet.",
+   "ro": "E gata pentru cineva. Pădurea știe pentru cine, dar nu-ți spune încă.",
+   "context": "elder whisper of Sicriul (The Coffin), card 27 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.28",
+   "en": "It beats and the forest hears it. The head can lie; the heart does not know how.",
+   "ro": "Bate și pădurea o aude. Capul poate minți; inima nu știe cum.",
+   "context": "elder whisper of Inimă (The Heart), card 28 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.29",
+   "en": "Your roots are in my soil. What holds you upright is also what draws you toward me.",
+   "ro": "Rădăcinile tale sunt în pământul meu. Ce te ține în picioare e și ceea ce te trage spre mine.",
+   "context": "elder whisper of Rădăcina (The Root), card 29 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.30",
+   "en": "It holds the place. It does not ask if you still wish to stay.",
+   "ro": "Ține locul. Nu întreabă dacă mai vrei să stai.",
+   "context": "elder whisper of Piatră (The Stone), card 30 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.31",
+   "en": "The sun shows everything. The forest still holds what shadow hid.",
+   "ro": "Soarele arată tot. Pădurea încă ține ce umbra a ascuns.",
+   "context": "elder whisper of Soarele (The Sun), card 31 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.32",
+   "en": "What the moon shows is no lie: it is only truth told differently.",
+   "ro": "Ce arată luna nu-i minciună: e doar adevărul spus altfel.",
+   "context": "elder whisper of Luna (The Moon), card 32 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.33",
+   "en": "A star does not promise the whole road. The forest has watched many follow it: some arrived.",
+   "ro": "O stea nu promite drumul întreg. Pădurea a văzut mulți urmărind-o: unii au ajuns.",
+   "context": "elder whisper of Steaua (The Star), card 33 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.34",
+   "en": "The book is written by humans. The forest keeps what they did not dare to write.",
+   "ro": "Cartea e scrisă de oameni. Pădurea ține ce n-au îndrăznit să scrie.",
+   "context": "elder whisper of Cartea (The Book), card 34 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.35",
+   "en": "Do not look long. What looks back remembers better than you do.",
+   "ro": "Nu te uita mult. Ce se uită înapoi ține minte mai bine decât tine.",
+   "context": "elder whisper of Adâncul (The Deep), card 35 — the phrase shared by all four rememberings"
+  },
+  {
+   "key": "elder-whisper.36",
+   "en": "Humans count in coins. The forest counts in bones.",
+   "ro": "Oamenii socotesc în monede. Pădurea socotește în oase.",
+   "context": "elder whisper of Datoria (The Debt), card 36 — the phrase shared by all four rememberings"
+  }
+ ]
+}
