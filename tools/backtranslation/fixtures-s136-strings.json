@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "description": "Cărțile Hoiane bilingual string source — the single source of truth for every EN/RO pair the builders render. Book pages show 'ro / en'; the guidebook draws the en half alone.",
+    "consumers": ["publications/book/generate_book.py", "build/build_guidebook.py"],
+    "law": "card = archetype (the 36); remembering = individual of the 144"
+  },
+  "deck": {
+    "name": {"ro": "Cărțile Hoiane", "en": "The Cards of Hoia"}
+  },
+  "chapters": {
+    "introduction": {"ro": "Introducere", "en": "Introduction"},
+    "order": {"ro": "Rânduiala Cărților", "en": "The Order of the Cards"},
+    "threshold": {"ro": "Pragul", "en": "The Threshold"},
+    "four": {"ro": "Cele Patru Care Nu Se Întorc", "en": "The Four That Do Not Turn"},
+    "casting": {"ro": "Aruncarea", "en": "The Casting"},
+    "iconography": {"ro": "Iconografia", "en": "Iconography"},
+    "compendium_guide": {"ro": "Citirea Compendiului", "en": "Reading This Compendium"},
+    "cards_section": {"ro": "Cărțile", "en": "The Cards"}
+  },
+  "territories": {
+    "forest": {"key": "Pădurea", "ro": "Pădurea", "en": "The Forest"},
+    "blood": {"key": "Sângele", "ro": "Sângele", "en": "The Blood"},
+    "oath": {"key": "Jurământul", "ro": "Jurământul", "en": "The Oath"},
+    "craft": {"key": "Știința", "ro": "Știința", "en": "The Craft"},
+    "step": {"key": "Pasul", "ro": "Pasul", "en": "The Step"}
+  },
+  "terms": {
+    "feast": {"ro": "Sărbătoarea Nevăzutului", "en": "Feast of the Unseen"},
+    "deep": {"ro": "Adâncul", "en": "The Deep"},
+    "rememberings": {"ro": "amintiri", "en": "rememberings"},
+    "territories": {"ro": "ținuturi", "en": "territories"},
+    "moon_rule": {"ro": "Luna stăpânește bătaia", "en": "the moon governs the knocking"},
+    "none_territory": {"ro": "Nici unul", "en": "none"},
+    "two_faced_leu": {"ro": "Leul cu Două Fețe", "en": "the leu with two faces"},
+    "dead_knock": {"ro": "Morții bat de două ori", "en": "the dead knock twice"},
+    "strigoi": {"ro": "strigoi", "en": "the returning dead"}
+  },
+  "categories_definite": {
+    "Character": {"ro": "Personajul", "en": "The Character"},
+    "Situation": {"ro": "Starea", "en": "The Situation"},
+    "Object": {"ro": "Lucrul", "en": "The Object"}
+  },
+  "roles": {
+    "anchor": {"ro": "Ancoră", "en": "Anchor"},
+    "influencer": {"ro": "Influențător", "en": "Influencer"},
+    "neutral": {"ro": "Neutru", "en": "Neutral"}
+  },
+  "categories": {
+    "Character": {"ro": "Personaj", "en": "Character"},
+    "Situation": {"ro": "Situație", "en": "Situation"},
+    "Object": {"ro": "Obiect", "en": "Object"}
+  },
+  "categories_plural": {
+    "Character": {"ro": "Personajele", "en": "The Characters"},
+    "Situation": {"ro": "Stările", "en": "The Situations"},
+    "Object": {"ro": "Lucrurile", "en": "The Objects"}
+  },
+  "labels": {
+    "family_whisper": {"ro": "Șoapta Pădurii", "en": "The Forest's Whisper"},
+    "this_is": {"ro": "Aceasta Este", "en": "This Is"},
+    "rememberings": {"ro": "Amintirile", "en": "The Rememberings"},
+    "territory": {"ro": "Teritoriu", "en": "Territory"},
+    "role": {"ro": "Rol", "en": "Role"},
+    "category": {"ro": "Categorie", "en": "Category"},
+    "reversible": {"ro": "Reversibil", "en": "Reversible"},
+    "whisper": {"ro": "Șoapta", "en": "Whisper"},
+    "upright": {"ro": "Drept", "en": "Upright"},
+    "reversed": {"ro": "Inversat", "en": "Reversed"},
+    "yes": {"ro": "Da", "en": "Yes"},
+    "no": {"ro": "Nu", "en": "No"}
+  }
+}
