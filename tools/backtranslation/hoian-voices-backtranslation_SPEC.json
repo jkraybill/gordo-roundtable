@@ -1,0 +1,250 @@
+{
+ "name": "hoian-voices-backtranslation",
+ "title": "Hoian Voice Corpus Back-Translation",
+ "purpose_md": "The Cărțile Hoiane is a fictional divination tradition from a lost 1840s Transylvanian principality. Each of its 36 card families carries a voice (Vocea): the seer's spoken counsel when the card appears, a few plain sentences printed bilingually RO/EN on the family page. We are validating the Romanian half of every voice by blind back-translation: you translate our English paragraph into Romanian first, and only afterwards see our canon Romanian and assess it.",
+ "register_md": "The tradition's Romanian is **rural, liturgical-leaning, mid-19th-century Transylvanian**. Where a modern word and an older/folk/liturgical word both exist, the tradition prefers the older one. Orthography is modern standard Romanian with **comma-below diacritics (ș, ț — never ş, ţ)**.\n\nVoices are **the seer's counsel across the table**: several plain sentences spoken TO the seeker when the card appears — instructions, questions, warnings. They are not the Forest's aphorisms; they are a working seer's advice in her own mouth, practical and grave. Preserve sentence count, second-person address, imperatives, and tense. Card names inside a voice (e.g. Neharta, Vălata, Datoria) are proper names of this deck's cards; keep them exactly as given, never translate or modernize them. In print the voice is set as plain prose; include no quote marks.",
+ "part2_checks_md": "Also check: comma-below diacritics throughout; natural spoken word order (not calqued English order); person and tense faithful to the English.",
+ "verdicts": [
+  "correct",
+  "archaic-good",
+  "questionable",
+  "wrong"
+ ],
+ "verdict_definitions": {
+  "correct": "idiomatic, grammatical, register-appropriate; a Romanian villager of 1845 could say it",
+  "archaic-good": "non-obvious or old-fashioned phrasing that suits the register (name the modern phrasing it beats)",
+  "questionable": "defensible but you would phrase it differently (say what and why)",
+  "wrong": "grammatical error, wrong sense, false friend, or wrong diacritics (explain)"
+ },
+ "favorable_verdicts": [
+  "correct",
+  "archaic-good"
+ ],
+ "alternates_delimiter": null,
+ "normalize": {
+  "unify_diacritics": true,
+  "strip_final_period": true
+ },
+ "bless": {
+  "mode": "verdicts",
+  "max_questionable": 0
+ },
+ "pairs": [
+  {
+   "key": "voice.1",
+   "en": "When The Prince appears, examine your relationship to authority. Are you wielding it or subject to it? What was promised to acquire it? The forest does not forget whose name is missing from the ledger.",
+   "ro": "Când apare Principele, cercetează-ți relația cu autoritatea. O exerciți sau îi ești supus? Ce s-a promis pentru a o dobândi? Pădurea nu uită al cui nume lipsește din catastif.",
+   "context": "the seer's counsel for Principele (The Prince), card 1"
+  },
+  {
+   "key": "voice.2",
+   "en": "When true sight appears in a reading, respect what it cost.",
+   "ro": "Când vederea adevărată apare într-o citire, respectă ce a costat.",
+   "context": "the seer's counsel for Nevăzătorul (The Unseeing), card 2"
+  },
+  {
+   "key": "voice.3",
+   "en": "When The Veiled One appears, ask only the questions you are willing to bear the answers to. The color of the veil matters: white for transformation through burden, black for permanence, blue for separation. But all versions acknowledge that the veil exists for mutual necessity.",
+   "ro": "Când apare Vălata, pune doar întrebările ale căror răspunsuri ești pregătit să le porți. Culoarea vălului contează: alb pentru transformare prin povară, negru pentru permanență, albastru pentru despărțire. Dar toate versiunile recunosc că vălul există din necesitate reciprocă.",
+   "context": "the seer's counsel for Vălata (The Veiled One), card 3"
+  },
+  {
+   "key": "voice.4",
+   "en": "When The Forbidden Guest appears, the door has already been opened, or is about to be. You opened the door.",
+   "ro": "Când apare Oaspetele Interzis, ușa deja a fost deschisă, sau urmează să fie. Ai deschis ușa.",
+   "context": "the seer's counsel for Oaspetele Interzis (The Forbidden Guest), card 4"
+  },
+  {
+   "key": "voice.5",
+   "en": "The Thief is reversible, so orientation matters: upright, cunning is rewarded for now; reversed, the theft is discovered. What he took was not his, but the forest road does not ask.",
+   "ro": "Hoțul este reversibil, deci orientarea contează: drept, viclenia este răsplătită deocamdată; inversat, furtul este descoperit. Ce a luat nu era al lui, dar drumul din pădure nu întreabă.",
+   "context": "the seer's counsel for Hoțul (The Thief), card 5"
+  },
+  {
+   "key": "voice.6",
+   "en": "When The Merchant appears, examine the exchange carefully. The question is always whether the scales are honest. His scale is honest at market, but the forest sells nothing.",
+   "ro": "Când apare Negustorul, cercetează schimbul cu atenție. Întrebarea este mereu dacă cântarul e cinstit. Cântarul lui e drept la piață, dar pădurea nu vinde nimic.",
+   "context": "the seer's counsel for Negustorul (The Merchant), card 6"
+  },
+  {
+   "key": "voice.7",
+   "en": "When The Officer appears, examine whose orders are being followed and whether they serve the good.",
+   "ro": "Când apare Ofițerul, cercetează ale cui ordine sunt urmate și dacă servesc binelui.",
+   "context": "the seer's counsel for Ofițerul (The Officer), card 7"
+  },
+  {
+   "key": "voice.8",
+   "en": "When The Stillborn appears, something must be mourned before anything else can be tried again. His name was never spoken, but the forest remembered it anyway.",
+   "ro": "Când apare Născutul Mort, ceva trebuie jelit înainte să poți încerca din nou. Numele lui n-a fost rostit niciodată, dar pădurea l-a ținut minte oricum.",
+   "context": "the seer's counsel for Născutul Mort (The Stillborn), card 8"
+  },
+  {
+   "key": "voice.9",
+   "en": "When The Lover appears, examine whose heart and what it actually wants. Two at the forest's edge, one heart between them: the forest sees the third.",
+   "ro": "Când apare Iubitul, cercetează a cui inimă și ce își dorește cu adevărat. Doi la marginea pădurii, o singură inimă între ei: pădurea o vede pe-a treia.",
+   "context": "the seer's counsel for Iubitul/Iubita (The Lover), card 9"
+  },
+  {
+   "key": "voice.10",
+   "en": "When The Enemy appears, know your enemy and respect their competence. The forest has seen every face you have worn, including the one you hide from yourself.",
+   "ro": "Când apare Dușmanul, cunoaște-ți dușmanul și respectă-i competența. Pădurea a văzut toate fețele pe care le-ai purtat, inclusiv pe cea pe care o ascunzi de tine însuți.",
+   "context": "the seer's counsel for Dușmanul (The Enemy), card 10"
+  },
+  {
+   "key": "voice.11",
+   "en": "When The Godfather appears, honor old debts and keep old promises.",
+   "ro": "Când apare Nașul, cinstește datoriile vechi și ține promisiunile vechi.",
+   "context": "the seer's counsel for Nașul (The Godfather), card 11"
+  },
+  {
+   "key": "voice.12",
+   "en": "When The Wanderer appears, examine what the dead left unfinished.",
+   "ro": "Când apare Rătăcitorul, cercetează ce au lăsat morții neterminat.",
+   "context": "the seer's counsel for Rătăcitorul (The Wanderer), card 12"
+  },
+  {
+   "key": "voice.13",
+   "en": "When The Uncharted appears, trust instinct over instruments. The forest did not move: you moved through it.",
+   "ro": "Când apare Neharta, încrede-te în instinct peste instrumente. Pădurea nu s-a mișcat: tu te-ai mișcat prin ea. Ai mai fost aici. De trei ori.",
+   "context": "the seer's counsel for Neharta (The Uncharted), card 13"
+  },
+  {
+   "key": "voice.14",
+   "en": "When The Passage appears, endurance is the only available skill. You cannot go around what must be crossed.",
+   "ro": "Când apare Trecerea, răbdarea e singura abilitate disponibilă. Nu poți ocoli ce trebuie trecut.",
+   "context": "the seer's counsel for Trecerea (The Passage), card 14"
+  },
+  {
+   "key": "voice.15",
+   "en": "When The Hearth of Stone appears, examine what remains of home. The house is gone, but the forest still feels the warmth where the hearth stood.",
+   "ro": "Când apare Vatra de Piatră, cercetează ce a mai rămas din cămin. Casa s-a dus, dar pădurea încă simte căldura unde a fost vatra.",
+   "context": "the seer's counsel for Vatra de Piatră (The Hearth of Stone), card 15"
+  },
+  {
+   "key": "voice.16",
+   "en": "When The Sealed Word appears, weigh what opening it will cost. What is written on paper can burn; what is written in the forest remains.",
+   "ro": "Când apare Cuvântul Pecetluit, cântărește ce va costa să-l deschizi. Ce e scris pe hârtie poate arde; ce e scris în pădure rămâne.",
+   "context": "the seer's counsel for Cuvântul Pecetluit (The Sealed Word), card 16"
+  },
+  {
+   "key": "voice.17",
+   "en": "When The Crossroads appears, examine your paralysis or your progress. Four roads, and beneath one of them, someone who never had a choice.",
+   "ro": "Când apare Răspântia, cercetează-ți paralizia sau progresul. Patru drumuri, și sub unul dintre ele, cineva care n-a avut niciodată de ales.",
+   "context": "the seer's counsel for Răspântia (The Crossroads), card 17"
+  },
+  {
+   "key": "voice.18",
+   "en": "When The Trial appears, conduct yourself for the larger bench.",
+   "ro": "Când apare Judecata, poartă-te pentru tribuna mai mare.",
+   "context": "the seer's counsel for Judecata (The Trial), card 18"
+  },
+  {
+   "key": "voice.19",
+   "en": "When The Wedding appears, examine what was truly promised.",
+   "ro": "Când apare Nunta, cercetează ce s-a promis cu adevărat.",
+   "context": "the seer's counsel for Nunta (The Wedding), card 19"
+  },
+  {
+   "key": "voice.20",
+   "en": "When The Funeral appears, examine whether the ending is complete. The grave is dug, but the forest waits to see if it stays closed.",
+   "ro": "Când apare Înmormântarea, cercetează dacă sfârșitul e complet. Groapa e săpată, dar pădurea așteaptă să vadă dacă rămâne închisă.",
+   "context": "the seer's counsel for Înmormântarea (The Funeral), card 20"
+  },
+  {
+   "key": "voice.21",
+   "en": "When The Silence appears, consider whether it serves or harms.",
+   "ro": "Când apare Tăcerea, gândește-te dacă servește sau dăunează. Amândoi știu.",
+   "context": "the seer's counsel for Tăcerea (The Silence), card 21"
+  },
+  {
+   "key": "voice.22",
+   "en": "When The Empty Table appears, examine what you await. The one you await passed through the forest. The forest did not let him leave.",
+   "ro": "Când apare Masa Goală, cercetează ce aștepți. Cel pe care-l aștepți a trecut prin pădure. Pădurea nu l-a lăsat să iasă.",
+   "context": "the seer's counsel for Masa Goală (The Empty Table), card 22"
+  },
+  {
+   "key": "voice.23",
+   "en": "When The Storm appears, examine what can and cannot be sheltered. The trees went silent before the wind. They know before we do.",
+   "ro": "Când apare Furtuna, cercetează ce poate și ce nu poate fi adăpostit. Copacii au tăcut înaintea vântului. Ei știu înaintea noastră.",
+   "context": "the seer's counsel for Furtuna (The Storm), card 23"
+  },
+  {
+   "key": "voice.24",
+   "en": "When The Well appears, examine what you are drawing from. Throw a stone and listen. If you hear nothing, do not lean in further.",
+   "ro": "Când apare Fântâna, cercetează de unde bei. Aruncă o piatră și ascultă. Dacă nu auzi nimic, nu te apleca mai mult.",
+   "context": "the seer's counsel for Fântâna (The Well), card 24"
+  },
+  {
+   "key": "voice.25",
+   "en": "When The Key appears, examine what you are about to unlock. The key opens the door. The forest made the door.",
+   "ro": "Când apare Cheia, cercetează ce ești pe cale să descui. Cheia deschide ușa. Pădurea a făcut ușa.",
+   "context": "the seer's counsel for Cheia (The Key), card 25"
+  },
+  {
+   "key": "voice.26",
+   "en": "When The Ring appears, examine what circle has been closed. A circle has no beginning. The forest knows where it closed, even if you have forgotten.",
+   "ro": "Când apare Inelul, cercetează ce cerc s-a închis. Un cerc nu are început. Pădurea știe unde s-a închis, chiar dacă tu ai uitat.",
+   "context": "the seer's counsel for Inelul (The Ring), card 26"
+  },
+  {
+   "key": "voice.27",
+   "en": "When The Coffin appears, examine whether the ending is complete. It is ready for someone. The forest knows for whom, but does not tell you yet.",
+   "ro": "Când apare Sicriul, cercetează dacă sfârșitul e complet. E gata pentru cineva. Pădurea știe pentru cine, dar nu-ți spune încă.",
+   "context": "the seer's counsel for Sicriul (The Coffin), card 27"
+  },
+  {
+   "key": "voice.28",
+   "en": "When The Heart appears, examine the emotional core. It beats and the forest hears it. The head can lie; the heart does not know how.",
+   "ro": "Când apare Inima, cercetează miezul emoțional. Bate, și pădurea o aude. Capul poate minți; inima nu știe cum.",
+   "context": "the seer's counsel for Inima (The Heart), card 28"
+  },
+  {
+   "key": "voice.29",
+   "en": "When The Root appears, examine whether foundation nourishes or constrains. Your roots are in my soil. What holds you upright is also what draws you toward me.",
+   "ro": "Când apare Rădăcina, cercetează dacă temelia hrănește sau constrânge. Rădăcinile tale sunt în pământul meu. Ce te ține drept e și ce te trage spre mine.",
+   "context": "the seer's counsel for Rădăcina (The Root), card 29"
+  },
+  {
+   "key": "voice.30",
+   "en": "When The Stone appears, examine what the weight serves. It holds the place. It does not ask if you still wish to stay.",
+   "ro": "Când apare Piatra, cercetează cui servește greutatea. Ține locul. Nu întreabă dacă mai vrei să stai.",
+   "context": "the seer's counsel for Piatra (The Stone), card 30"
+  },
+  {
+   "key": "voice.31",
+   "en": "When The Sun appears, even reversed it merely dims rather than darkens. The sun shows everything. The forest still holds what shadow hid.",
+   "ro": "Când apare Soarele, chiar și inversat doar se întunecă, nu se stinge. Soarele arată tot. Pădurea încă ține ce umbra a ascuns.",
+   "context": "the seer's counsel for Soarele (The Sun), card 31"
+  },
+  {
+   "key": "voice.32",
+   "en": "When The Moon appears, trust the night register. What the moon shows is no lie: it is only truth told differently.",
+   "ro": "Când apare Luna, încrede-te în registrul nopții. Ce arată luna nu-i minciună: e doar adevărul spus altfel.",
+   "context": "the seer's counsel for Luna (The Moon), card 32"
+  },
+  {
+   "key": "voice.33",
+   "en": "When The Star appears, follow what light you have. A star does not promise the whole road. The forest has watched many follow it: some arrived.",
+   "ro": "Când apare Steaua, urmează ce lumină ai. O stea nu făgăduiește drumul întreg. Pădurea a văzut pe mulți urmând-o: unii au ajuns.",
+   "context": "the seer's counsel for Steaua (The Star), card 33"
+  },
+  {
+   "key": "voice.34",
+   "en": "When The Book appears, among other things this card is about this deck itself. The book is written by humans. The forest keeps what they did not dare to write.",
+   "ro": "Când apare Cartea, printre altele cartea aceasta e despre acest pachet însuși. Cartea e scrisă de oameni. Pădurea ține ce n-au îndrăznit să scrie.",
+   "context": "the seer's counsel for Cartea (The Book), card 34"
+  },
+  {
+   "key": "voice.35",
+   "en": "When The Deep appears, be careful what you look for. Do not look long. What looks back remembers better than you do.",
+   "ro": "Când apare Adâncul, ai grijă ce cauți. Nu te uita mult. Ce se uită înapoi ține minte mai bine decât tine.",
+   "context": "the seer's counsel for Adâncul (The Deep), card 35"
+  },
+  {
+   "key": "voice.36",
+   "en": "When The Debt appears, this card is also quietly a reading about the reading itself. Humans count in coins. The forest counts in bones.",
+   "ro": "Când apare Datoria, cartea aceasta este și o citire liniștită despre citirea însăși. Oamenii socotesc în arginți. Pădurea socotește în oase.",
+   "context": "the seer's counsel for Datoria (The Debt), card 36"
+  }
+ ]
+}
