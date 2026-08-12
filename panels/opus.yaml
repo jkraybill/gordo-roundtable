@@ -1,22 +1,19 @@
-# Default consensus panel — Opus models only
-# Per CONSENSUS_ROUNDTABLE_SPEC_DRAFT.md §2.1 (initial gate)
+# Opus consensus panel — current generation
+# Updated S465 per model-generation-drift discovery
+# Use --tier lg/xl for maintained tier system; this panel is a convenience alias
 
 name: opus
 description: Opus family — high-capability consensus panel
 
 participants:
+  - model: anthropic/claude-opus-5
+    provider: openrouter
+    reasoning_effort: high
+
   - model: anthropic/claude-opus-4-8
     provider: openrouter
     reasoning_effort: high
 
   - model: anthropic/claude-opus-4.7
-    provider: openrouter
-    reasoning_effort: high
-
-  - model: anthropic/claude-opus-4.6
-    provider: openrouter
-    reasoning_effort: high
-
-  - model: anthropic/claude-opus-4-5
     provider: openrouter
     reasoning_effort: high

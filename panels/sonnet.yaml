@@ -1,19 +1,17 @@
-# Sonnet panel — cost-effective consensus
-# Use for smoke tests and lower-stakes deliberation
-# NOTE: Uses same model multiple times for cost-effective testing
+# Fast consensus panel — cost-effective
+# Updated S465 per model-generation-drift discovery
+# Note: Sonnet 4.6 retired from Gauge rosters at S137; Haiku 4.5 is the fast tier now
+# Use --tier sm for maintained tier system; this panel is a convenience alias
 
 name: sonnet
-description: Sonnet 4.6 x3 — cost-effective consensus panel
+description: Fast consensus — Haiku tier (Sonnet 4.6 deprecated)
 
 participants:
-  - model: anthropic/claude-sonnet-4.6
+  - model: anthropic/claude-haiku-4-5
     provider: openrouter
-    reasoning_effort: high
 
-  - model: anthropic/claude-sonnet-4.6
+  - model: deepseek/deepseek-v4-flash
     provider: openrouter
-    reasoning_effort: high
 
-  - model: anthropic/claude-sonnet-4.6
+  - model: mistralai/mistral-medium-3
     provider: openrouter
-    reasoning_effort: high

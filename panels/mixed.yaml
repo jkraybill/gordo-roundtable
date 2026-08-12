@@ -1,23 +1,23 @@
-# Mixed panel — diverse perspectives
-# Combines Opus, Sonnet, and frontier models
+# Mixed consensus panel — diverse perspectives
+# Updated S465 per model-generation-drift discovery
+# Use --tier lg/xl for maintained tier system; this panel is a convenience alias
 
 name: mixed
 description: Mixed family — diverse model perspectives
 
 participants:
-  - model: anthropic/claude-opus-4-8
+  - model: anthropic/claude-opus-5
     provider: openrouter
     reasoning_effort: high
 
-  - model: anthropic/claude-sonnet-4-6
-    provider: openrouter
-    reasoning_effort: high
-
-  - model: openai/gpt-5
+  - model: openai/gpt-5.4
     provider: openrouter
 
-  - model: google/gemini-2.5-pro
+  - model: google/gemini-3.1-pro-preview
     provider: openrouter
 
   - model: deepseek/deepseek-v4-pro
+    provider: openrouter
+
+  - model: alibaba/qwen3.7-max
     provider: openrouter
