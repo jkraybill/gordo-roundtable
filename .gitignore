@@ -31,3 +31,7 @@ reviews/
 .gordo-memory/
 .ledger-index/
 config.json
+
+# gordo-ledger issue/commit layer (regenerable: sync-issue-commit-layers.sh)
+github-issues/
+git-commits/
