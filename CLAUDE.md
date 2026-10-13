@@ -55,7 +55,7 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 - **T0:** `~/project-gordo/`
 - **T1 siblings:** `~/gordo-seal/`, `~/gordo-ledger/`, Gauge (paused), Gate (envisioned)
 - **T2:** `~/gordo-forge/`
-- **Meta-layer:** `~/project-gordo-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated; bilateral ratification records for content not (yet) public-safe live there
+- **Meta-layer:** `~/hub-backchannel/` — private deliberation infrastructure where gordo-roundtable design originated; bilateral ratification records for content not (yet) public-safe live there
 
 ---
 
@@ -74,7 +74,7 @@ Ratification record at backchannel: `record-008.mcap` (substance-MCAP for T1 adm
 
 **Briefs and reviews belong in the hub, not here.**
 
-gordo-roundtable is a T1 primitive (methodology + tooling). Operational artifacts from specific deliberations -- briefs, review transcripts, roundtable.yaml configs for particular issues -- belong in the repo conducting the deliberation (typically the hub: `~/project-gordo-backchannel/`).
+gordo-roundtable is a T1 primitive (methodology + tooling). Operational artifacts from specific deliberations -- briefs, review transcripts, roundtable.yaml configs for particular issues -- belong in the repo conducting the deliberation (typically the hub: `~/hub-backchannel/`).
 
 Correct locations:
 - **This repo:** SPEC, implementation code, reference examples
