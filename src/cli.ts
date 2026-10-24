@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
 import { Command } from "commander";
+import { readFileSync as readImageFile } from "node:fs";
+import { extname as imageExt } from "node:path";
 import { loadBrief, inferRoundFromFilename, substituteReviewerId } from "./brief.js";
 import { loadManifest, resolveSystemPrompt } from "./manifest.js";
 import { dispatchOne } from "./runner.js";
@@ -26,6 +28,18 @@ interface RunFlags {
   lens?: string;
   privacy?: string;
   outputDir?: string;
+  image?: string[];
+}
+
+// --image files become data URLs in the user turn (OpenRouter vision models). The 4 MB concept art that motivated
+// this (evolution-aquarium-gpu S240) was downscaled to a 430 KB JPEG first; keep attachments small.
+function loadImages(paths: string[] | undefined): string[] {
+  const mime: Record<string, string> = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif" };
+  return (paths ?? []).map((p) => {
+    const m = mime[imageExt(p).toLowerCase()];
+    if (!m) throw new Error(`--image ${p}: unsupported extension (png, jpg, webp, gif)`);
+    return `data:${m};base64,${readImageFile(p).toString("base64")}`;
+  });
 }
 
 const program = new Command();
@@ -53,6 +67,7 @@ program
   .option("--privacy <intent>", `privacy intent (default: "${DEFAULT_PRIVACY}")`)
   .option("--advisory", "(deprecated) induction is now default; this flag is a no-op")
   .option("--output-dir <path>", "output directory for reviewer responses (overrides default)")
+  .option("--image <path...>", "image file(s) attached to the user turn as data URLs; manifest must name vision models")
   .action(async (flags: RunFlags) => {
     // Handle deprecated --advisory flag
     if (flags.advisory) {
@@ -86,6 +101,8 @@ program
     }
 
     let briefText = loadBrief(flags.brief);
+    const images = loadImages(flags.image);
+    if (images.length) console.log(`Images attached: ${images.length} (${images.reduce((n, u) => n + u.length, 0)} chars of data URL)`);
 
     // Apply reviewer orientation (default-on per S406 consensus)
     if (flags.raw) {
@@ -172,7 +189,7 @@ program
 
       const sp = resolveSystemPrompt(r, manifestDir);
       const userText = substituteReviewerId(briefText, r.id);
-      const result = await dispatchOne(r, userText, sp);
+      const result = await dispatchOne(r, userText, sp, images);
       const writeRes = writeReviewerOutput(result, writeOpts);
 
       inFlight.delete(r.id);

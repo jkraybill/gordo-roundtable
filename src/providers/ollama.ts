@@ -31,6 +31,7 @@ export async function dispatchOllama(
   reviewer: Reviewer,
   briefText: string,
   systemPrompt: string | undefined,
+  _images: string[] = [], // accepted for signature parity; not sent (text-only path)
 ): Promise<{ reasoning?: string; content: string; usage?: OpenRouterUsage }> {
   const host = process.env.OLLAMA_HOST ?? "http://localhost:11434";
   const numCtx = reviewer.num_ctx ?? DEFAULT_NUM_CTX;

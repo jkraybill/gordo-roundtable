@@ -15,6 +15,7 @@ export async function dispatchOpenRouter(
   reviewer: Reviewer,
   briefText: string,
   systemPrompt: string | undefined,
+  images: string[] = [],
 ): Promise<{ reasoning?: string; content: string; usage?: OpenRouterUsage }> {
   if (!process.env.OPENROUTER_API_KEY) {
     throw new Error("OPENROUTER_API_KEY env var not set");
@@ -30,9 +31,14 @@ export async function dispatchOpenRouter(
     },
   });
 
-  const messages: Array<{ role: "system" | "user"; content: string }> = [];
+  // Images (data URLs) ride in the user turn as OpenAI-style content parts; text-only models reject them, so
+  // the manifest must name vision models when --image is used.
+  const userContent: unknown = images.length
+    ? [{ type: "text", text: briefText }, ...images.map((url) => ({ type: "image_url", image_url: { url } }))]
+    : briefText;
+  const messages: Array<{ role: "system" | "user"; content: unknown }> = [];
   if (systemPrompt) messages.push({ role: "system", content: systemPrompt });
-  messages.push({ role: "user", content: briefText });
+  messages.push({ role: "user", content: userContent });
 
   const requestBody: Record<string, unknown> = {
     model: reviewer.model,

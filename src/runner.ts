@@ -9,6 +9,7 @@ export async function dispatchOne(
   reviewer: Reviewer,
   briefText: string,
   systemPrompt: string | undefined,
+  images: string[] = [],
 ): Promise<ReviewerResult> {
   const start = Date.now();
   let lastError: unknown;
@@ -16,7 +17,7 @@ export async function dispatchOne(
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     try {
       const fn = reviewer.provider === "openrouter" ? dispatchOpenRouter : dispatchOllama;
-      const result = await fn(reviewer, briefText, systemPrompt);
+      const result = await fn(reviewer, briefText, systemPrompt, images);
       return {
         reviewer_id: reviewer.id,
         status: "ok",
